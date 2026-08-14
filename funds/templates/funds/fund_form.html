@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+{% block title %}Record Fund Received | Vinayaka Youth Committee{% endblock %}
+{% block page_heading %}Record Fund Contribution{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Full-Width Extended Form Container -->
+    <div class="col-12">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header-clean bg-white border-bottom py-3 px-4">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="stat-icon-wrapper icon-gold" style="width:44px; height:44px; font-size:1.4rem;">
+                        <i class="bi bi-wallet2"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-0 fw-extrabold text-dark"><i class="bi bi-receipt text-danger me-2"></i>Contribution Voucher Entry</h5>
+                        <small class="text-secondary fw-semibold">Record donor contributions, youth funds, and digital payment receipts</small>
+                    </div>
+                </div>
+                <a href="/funds/" class="btn btn-outline-secondary btn-sm px-3"><i class="bi bi-arrow-left me-1"></i> Back to Ledger</a>
+            </div>
+
+            <div class="card-body-clean p-4 p-md-5">
+                <form action="/funds/">
+                    
+                    <!-- Section 1: Voucher & Financial Overview -->
+                    <div class="mb-5">
+                        <div class="d-flex align-items-center gap-2 mb-3 pb-2 border-bottom">
+                            <span class="badge badge-soft-danger px-2.5 py-1 rounded-circle fw-bold">1</span>
+                            <h6 class="mb-0 fw-bold text-dark fs-6">Voucher & Financial Details</h6>
+                        </div>
+                        <div class="row g-4">
+                            <div class="col-md-3">
+                                <label class="form-label text-dark fw-bold">Receipt Number</label>
+                                <input class="form-control bg-light fw-bold text-danger fs-6" value="RCPT-2026-004" readonly>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label text-dark fw-bold">Amount Paid (₹) *</label>
+                                <div class="input-group">
+                                    <span class="input-group-text fw-bold fs-6">₹</span>
+                                    <input type="number" class="form-control fw-bold fs-6" placeholder="0.00" step="0.01" required>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label text-dark fw-bold">Fund Source Category *</label>
+                                <select class="form-select fw-semibold" required>
+                                    <option value="" selected disabled>Select Fund Source</option>
+                                    <option>Youth Committee Contribution</option>
+                                    <option>Village Household Chanda</option>
+                                    <option>Outside Donors & NRI</option>
+                                    <option>Opening Balance / Last Year Carryover</option>
+                                    <option>Politician & Sponsor Contribution</option>
+                                    <option>Laddu Auction Funds</option>
+                                    <option>Other Donors</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label text-dark fw-bold">Date Received *</label>
+                                <input type="date" class="form-control fw-semibold" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 2: Donor Contact & Payment Info -->
+                    <div class="mb-5">
+                        <div class="d-flex align-items-center gap-2 mb-3 pb-2 border-bottom">
+                            <span class="badge badge-soft-warning px-2.5 py-1 rounded-circle fw-bold">2</span>
+                            <h6 class="mb-0 fw-bold text-dark fs-6">Contributor & Payment Information</h6>
+                        </div>
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <label class="form-label text-dark fw-bold">Received From (Donor Name) *</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
+                                    <input type="text" class="form-control fw-semibold" placeholder="Full name of contributor or organization" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-dark fw-bold">Mobile / Contact Number</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-telephone-fill"></i></span>
+                                    <input type="tel" class="form-control fw-semibold" placeholder="10-digit mobile number for SMS receipt">
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label text-dark fw-bold">Payment Method *</label>
+                                <select class="form-select fw-semibold" required>
+                                    <option value="" selected disabled>Select Payment Method</option>
+                                    <option>Cash</option>
+                                    <option>UPI / PhonePe / GPay</option>
+                                    <option>Bank Transfer (NEFT/IMPS)</option>
+                                    <option>Cheque</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-dark fw-bold">Transaction Reference # / Cheque No.</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-hash"></i></span>
+                                    <input type="text" class="form-control fw-semibold" placeholder="UPI Ref ID or Cheque No. (Optional for Cash)">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 3: Notes & Digital Receipt Attachment -->
+                    <div class="mb-4">
+                        <div class="d-flex align-items-center gap-2 mb-3 pb-2 border-bottom">
+                            <span class="badge badge-soft-info px-2.5 py-1 rounded-circle fw-bold">3</span>
+                            <h6 class="mb-0 fw-bold text-dark fs-6">Remarks & Payment Proof Attachment</h6>
+                        </div>
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <label class="form-label text-dark fw-bold">Remarks / Description</label>
+                                <textarea class="form-control fw-medium" rows="4" placeholder="Additional notes about the contribution or donor details..."></textarea>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-dark fw-bold">Upload Receipt / Payment Proof</label>
+                                <div class="file-dropzone h-100 d-flex flex-column align-items-center justify-content-center p-4" onclick="document.getElementById('receiptFileInput').click()">
+                                    <i class="bi bi-cloud-arrow-up-fill text-danger display-5 mb-2"></i>
+                                    <span class="fw-extrabold text-dark d-block fs-6">Click or Drag Receipt File Here</span>
+                                    <small class="text-secondary fw-semibold">Supports JPG, PNG or PDF (Max 5MB)</small>
+                                    <input type="file" id="receiptFileInput" class="d-none" accept=".pdf,.jpg,.jpeg,.png">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Footer -->
+                    <hr class="my-4">
+                    <div class="d-flex justify-content-end align-items-center gap-3">
+                        <a href="/funds/" class="btn btn-light px-4 py-2.5">Cancel</a>
+                        <button class="btn btn-primary px-5 py-2.5 fw-bold fs-6" type="submit">
+                            <i class="bi bi-check-circle-fill me-2"></i> Save Contribution Voucher
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

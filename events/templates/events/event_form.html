@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% block title %}Add Event | Vinayaka Youth Committee{% endblock %}
+{% block page_heading %}Create Festival Event{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Full-Width Extended Form Container -->
+    <div class="col-12">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header-clean bg-white border-bottom py-3 px-4">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="stat-icon-wrapper icon-gold" style="width:44px; height:44px; font-size:1.4rem;">
+                        <i class="bi bi-calendar-event-fill"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-0 fw-extrabold text-dark"><i class="bi bi-calendar-plus text-danger me-2"></i>Festival Program Setup</h5>
+                        <small class="text-secondary fw-semibold">Define festival schedule, venue location, and allocated budget</small>
+                    </div>
+                </div>
+                <a href="/events/" class="btn btn-outline-secondary btn-sm px-3"><i class="bi bi-arrow-left me-1"></i> Back to Events</a>
+            </div>
+
+            <div class="card-body-clean p-4 p-md-5">
+                <form action="/events/">
+                    
+                    <!-- Section 1: Event Title & Schedule Details -->
+                    <div class="mb-5">
+                        <div class="d-flex align-items-center gap-2 mb-3 pb-2 border-bottom">
+                            <span class="badge badge-soft-danger px-2.5 py-1 rounded-circle fw-bold">1</span>
+                            <h6 class="mb-0 fw-bold text-dark fs-6">Program Title & Schedule</h6>
+                        </div>
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <label class="form-label text-dark fw-bold">Event / Program Title *</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-bookmark-star-fill"></i></span>
+                                    <input type="text" class="form-control fw-semibold" placeholder="e.g. Laddu Auction & Nimajjanam Procession" required>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label text-dark fw-bold">Event Date *</label>
+                                <input type="date" class="form-control fw-semibold" required>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label text-dark fw-bold">Program Status</label>
+                                <select class="form-select fw-semibold">
+                                    <option selected>Planned</option>
+                                    <option>Ongoing / In Progress</option>
+                                    <option>Completed</option>
+                                    <option>Postponed / Cancelled</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 2: Timing, Venue & Budget Allocation -->
+                    <div class="mb-5">
+                        <div class="d-flex align-items-center gap-2 mb-3 pb-2 border-bottom">
+                            <span class="badge badge-soft-warning px-2.5 py-1 rounded-circle fw-bold">2</span>
+                            <h6 class="mb-0 fw-bold text-dark fs-6">Timing, Location & Budget Allocation</h6>
+                        </div>
+                        <div class="row g-4">
+                            <div class="col-md-3">
+                                <label class="form-label text-dark fw-bold">Start Time</label>
+                                <input type="time" class="form-control fw-semibold">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label text-dark fw-bold">End Time</label>
+                                <input type="time" class="form-control fw-semibold">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label text-dark fw-bold">Allocated Budget (₹)</label>
+                                <div class="input-group">
+                                    <span class="input-group-text fw-bold fs-6">₹</span>
+                                    <input type="number" class="form-control fw-bold fs-6" placeholder="0.00" step="0.01">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label text-dark fw-bold">Location / Venue</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-geo-alt-fill"></i></span>
+                                    <input type="text" class="form-control fw-semibold" placeholder="e.g. Main Temple Premises">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 3: Program Description & Highlights -->
+                    <div class="mb-4">
+                        <div class="d-flex align-items-center gap-2 mb-3 pb-2 border-bottom">
+                            <span class="badge badge-soft-info px-2.5 py-1 rounded-circle fw-bold">3</span>
+                            <h6 class="mb-0 fw-bold text-dark fs-6">Program Description & Key Activities</h6>
+                        </div>
+                        <div class="row g-4">
+                            <div class="col-12">
+                                <label class="form-label text-dark fw-bold">Event Description & Program Highlights</label>
+                                <textarea class="form-control fw-medium" rows="4" placeholder="Describe key rituals, chief guests, Annasantharpana details, sound/lighting arrangements, or volunteer assignments..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Footer -->
+                    <hr class="my-4">
+                    <div class="d-flex justify-content-end align-items-center gap-3">
+                        <a href="/events/" class="btn btn-light px-4 py-2.5">Cancel</a>
+                        <button class="btn btn-primary px-5 py-2.5 fw-bold fs-6" type="submit">
+                            <i class="bi bi-check-circle-fill me-2"></i> Save Festival Event
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

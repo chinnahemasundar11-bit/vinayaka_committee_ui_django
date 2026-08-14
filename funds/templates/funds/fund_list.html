@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+{% block title %}Funds Received | Vinayaka Youth Committee{% endblock %}
+{% block page_heading %}Funds Received Ledger{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
+    <div>
+        <h4 class="mb-1 fw-bold">Contributions & Income Receipts</h4>
+        <p class="text-muted small mb-0">Track all incoming contributions, donations, and festival collections</p>
+    </div>
+    <a href="/funds/add/" class="btn btn-primary">
+        <i class="bi bi-plus-lg"></i> Record New Contribution
+    </a>
+</div>
+
+<!-- Filter Toolbar Bar -->
+<div class="filter-box mb-4">
+    <div class="row g-3">
+        <div class="col-md-3">
+            <label class="form-label">Search Receipt / Donor</label>
+            <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-search"></i></span>
+                <input class="form-control" placeholder="Name, Receipt # or Phone">
+            </div>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Fund Source</label>
+            <select class="form-select">
+                <option selected>All Fund Sources</option>
+                <option>Youth Contribution</option>
+                <option>Village Contribution</option>
+                <option>Outside Donors</option>
+                <option>Opening Balance</option>
+                <option>Politician Contribution</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <label class="form-label">From Date</label>
+            <input type="date" class="form-control">
+        </div>
+        <div class="col-md-2">
+            <label class="form-label">To Date</label>
+            <input type="date" class="form-control">
+        </div>
+        <div class="col-md-2 d-flex align-items-end gap-2">
+            <button class="btn btn-primary w-100"><i class="bi bi-funnel"></i> Filter</button>
+            <button class="btn btn-outline-secondary"><i class="bi bi-arrow-counterclockwise"></i></button>
+        </div>
+    </div>
+</div>
+
+<!-- Funds Ledger Table Card -->
+<div class="card">
+    <div class="card-header-clean">
+        <h6 class="mb-0 fw-bold"><i class="bi bi-receipt text-danger me-2"></i>Fund Receipts List</h6>
+        <div class="d-flex gap-2">
+            <button class="btn btn-outline-secondary btn-sm"><i class="bi bi-file-earmark-pdf text-danger"></i> Export PDF</button>
+            <button class="btn btn-outline-secondary btn-sm"><i class="bi bi-file-earmark-excel text-success"></i> Export Excel</button>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Receipt No.</th>
+                    <th>Donor / Contributor Name</th>
+                    <th>Fund Source</th>
+                    <th>Date Received</th>
+                    <th>Payment Mode</th>
+                    <th class="text-end">Amount Paid</th>
+                    <th class="text-center">Receipt</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="fw-semibold">RCPT-2026-001</td>
+                    <td>
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="avatar-badge" style="width:32px; height:32px; font-size:11px;">RK</div>
+                            <div>
+                                <span class="d-block fw-semibold">Ramesh Kumar</span>
+                                <small class="text-muted">+91 98765 43210</small>
+                            </div>
+                        </div>
+                    </td>
+                    <td><span class="badge badge-soft-primary">Youth Contribution</span></td>
+                    <td class="text-muted">13 Aug 2026</td>
+                    <td><span class="badge badge-soft-info"><i class="bi bi-qr-code me-1"></i>UPI</span></td>
+                    <td class="text-end fw-bold text-success">₹ 10,000</td>
+                    <td class="text-center">
+                        <button class="btn btn-sm btn-light" title="View Digital Receipt"><i class="bi bi-file-earmark-text text-danger"></i></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="fw-semibold">RCPT-2026-002</td>
+                    <td>
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="avatar-badge" style="width:32px; height:32px; font-size:11px; background: linear-gradient(135deg, #2b2d42 0%, #8b1e24 100%);">VC</div>
+                            <div>
+                                <span class="d-block fw-semibold">Village Elders Committee</span>
+                                <small class="text-muted">Main Street Committee</small>
+                            </div>
+                        </div>
+                    </td>
+                    <td><span class="badge badge-soft-warning">Village Contribution</span></td>
+                    <td class="text-muted">12 Aug 2026</td>
+                    <td><span class="badge badge-soft-warning"><i class="bi bi-cash-stack me-1"></i>Cash</span></td>
+                    <td class="text-end fw-bold text-success">₹ 25,000</td>
+                    <td class="text-center">
+                        <button class="btn btn-sm btn-light" title="View Digital Receipt"><i class="bi bi-file-earmark-text text-danger"></i></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="fw-semibold">RCPT-2026-003</td>
+                    <td>
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="avatar-badge" style="width:32px; height:32px; font-size:11px; background: linear-gradient(135deg, #059669 0%, #10b981 100%);">SR</div>
+                            <div>
+                                <span class="d-block fw-semibold">Suresh Rao</span>
+                                <small class="text-muted">+91 98765 01234</small>
+                            </div>
+                        </div>
+                    </td>
+                    <td><span class="badge badge-soft-primary">Outside Donor</span></td>
+                    <td class="text-muted">10 Aug 2026</td>
+                    <td><span class="badge badge-soft-info"><i class="bi bi-bank me-1"></i>Bank Transfer</span></td>
+                    <td class="text-end fw-bold text-success">₹ 15,000</td>
+                    <td class="text-center">
+                        <button class="btn btn-sm btn-light" title="View Digital Receipt"><i class="bi bi-file-earmark-text text-danger"></i></button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

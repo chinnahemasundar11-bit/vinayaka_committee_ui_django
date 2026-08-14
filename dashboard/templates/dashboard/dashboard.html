@@ -1,0 +1,185 @@
+{% extends "base.html" %}
+{% block title %}Dashboard | Vinayaka Youth Committee{% endblock %}
+{% block page_heading %}Financial Dashboard{% endblock %}
+
+{% block content %}
+<!-- Pixel-Perfect Neat & Responsive Dashboard Header Card -->
+<div class="card p-3 p-md-4 border-0 shadow-sm mb-4 bg-white" style="border-left: 4px solid var(--primary) !important;">
+    <div class="row align-items-center g-3">
+        <!-- Left Side: Title & Subtitle -->
+        <div class="col-md-6 col-lg-6">
+            <div class="d-flex align-items-center gap-3">
+                <div class="stat-icon-wrapper icon-gold flex-shrink-0" style="width:48px; height:48px; font-size:1.4rem;">
+                    <i class="bi bi-grid-1x2-fill"></i>
+                </div>
+                <div>
+                    <h4 class="mb-0 fw-extrabold text-dark" style="font-family:'Outfit'; font-size: 1.3rem;">Festival Accounting Overview</h4>
+                    <span class="text-secondary small fw-semibold">Live financial ledger & real-time tracking for Vinayaka Chavithi 2026</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side: Search Input Bar & Financial Year Selector -->
+        <div class="col-md-6 col-lg-6">
+            <div class="d-flex flex-column flex-sm-row align-items-sm-center justify-content-md-end gap-3">
+                <!-- Search Input Field -->
+                <div class="search-input-group flex-grow-1 flex-sm-grow-0" style="max-width: 320px; width: 100%;">
+                    <i class="bi bi-search"></i>
+                    <input type="text" class="form-control fw-semibold" placeholder="Search receipt, member, expense..." style="height: 42px;">
+                </div>
+
+                <!-- Financial Year Selector Dropdown -->
+                <div class="dropdown flex-shrink-0">
+                    <button class="btn btn-outline-secondary dropdown-toggle d-flex align-items-center justify-content-center gap-2 fw-bold w-100" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="height: 42px;">
+                        <i class="bi bi-calendar3 text-danger"></i>
+                        <span>FY 2026-2027</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end shadow-md border-0">
+                        <li><h6 class="dropdown-header">Accounting Period</h6></li>
+                        <li><a class="dropdown-item active" href="#">2026 - 2027 (Current)</a></li>
+                        <li><a class="dropdown-item" href="#">2025 - 2026</a></li>
+                        <li><a class="dropdown-item" href="#">2024 - 2025</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Stat Cards Row -->
+<div class="row g-4 mb-4">
+    <div class="col-md-4">
+        <div class="card stat-card stat-gold h-100 border-0 shadow-sm">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <div class="stat-label">TOTAL FUNDS RECEIVED</div>
+                    <div class="stat-value">₹ 2,45,000</div>
+                    <span class="badge badge-soft-success fw-bold">
+                        <i class="bi bi-arrow-up-short"></i> +12.5% vs last week
+                    </span>
+                </div>
+                <div class="stat-icon-wrapper icon-gold">
+                    <i class="bi bi-wallet2"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card stat-card h-100 border-0 shadow-sm">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <div class="stat-label">TOTAL EXPENSES INCURRED</div>
+                    <div class="stat-value">₹ 86,500</div>
+                    <span class="badge badge-soft-danger fw-bold">
+                        <i class="bi bi-arrow-up-short"></i> +8.2% budget spend
+                    </span>
+                </div>
+                <div class="stat-icon-wrapper">
+                    <i class="bi bi-receipt"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card stat-card stat-success h-100 border-0 shadow-sm">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <div class="stat-label">NET AVAILABLE BALANCE</div>
+                    <div class="stat-value text-success">₹ 1,58,500</div>
+                    <span class="badge badge-soft-success fw-bold">
+                        <i class="bi bi-shield-check"></i> Healthy Fund Balance
+                    </span>
+                </div>
+                <div class="stat-icon-wrapper icon-success">
+                    <i class="bi bi-bank"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Interactive Charts Row -->
+<div class="row g-4 mb-4">
+    <div class="col-lg-5">
+        <div class="card h-100 border-0 shadow-sm">
+            <div class="card-header-clean bg-white border-bottom">
+                <h6 class="mb-0 fw-bold"><i class="bi bi-pie-chart-fill text-danger me-2"></i>Fund Sources Distribution</h6>
+                <span class="badge badge-soft-primary">FY 2026-27</span>
+            </div>
+            <div class="card-body-clean d-flex align-items-center justify-content-center" style="min-height: 280px;">
+                <canvas id="fundSourcesChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-7">
+        <div class="card h-100 border-0 shadow-sm">
+            <div class="card-header-clean bg-white border-bottom">
+                <h6 class="mb-0 fw-bold"><i class="bi bi-bar-chart-fill text-danger me-2"></i>Expenses by Category</h6>
+                <span class="badge badge-soft-info">Current Month</span>
+            </div>
+            <div class="card-body-clean" style="min-height: 280px;">
+                <canvas id="expenseCategoriesChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Transactions Table -->
+<div class="card border-0 shadow-sm">
+    <div class="card-header-clean bg-white border-bottom">
+        <div>
+            <h6 class="mb-0 fw-bold"><i class="bi bi-arrow-left-right text-danger me-2"></i>Recent Transactions</h6>
+            <small class="text-secondary fw-semibold">Latest contribution receipts and expense vouchers</small>
+        </div>
+        <a href="/reports/" class="btn btn-light btn-sm fw-bold">View Full Ledger <i class="bi bi-arrow-right ms-1"></i></a>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Transaction Ref</th>
+                    <th>Type</th>
+                    <th>Source / Description</th>
+                    <th>Payment Method</th>
+                    <th>Date</th>
+                    <th class="text-end">Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="fw-semibold">RCPT-2026-001</td>
+                    <td><span class="badge badge-soft-success"><i class="bi bi-arrow-down-left me-1"></i>Fund</span></td>
+                    <td>Village Contribution (Ramesh Kumar)</td>
+                    <td><span class="badge badge-soft-info">UPI / PhonePe</span></td>
+                    <td class="text-muted">13 Aug 2026</td>
+                    <td class="text-end fw-bold text-success">+ ₹15,000</td>
+                </tr>
+                <tr>
+                    <td class="fw-semibold">EXP-2026-012</td>
+                    <td><span class="badge badge-soft-danger"><i class="bi bi-arrow-up-right me-1"></i>Expense</span></td>
+                    <td>Mandapam Decoration Stage Lights</td>
+                    <td><span class="badge badge-soft-warning">Cash</span></td>
+                    <td class="text-muted">12 Aug 2026</td>
+                    <td class="text-end fw-bold text-danger">- ₹8,500</td>
+                </tr>
+                <tr>
+                    <td class="fw-semibold">RCPT-2026-002</td>
+                    <td><span class="badge badge-soft-success"><i class="bi bi-arrow-down-left me-1"></i>Fund</span></td>
+                    <td>Youth Member Annual Fee (Suresh Rao)</td>
+                    <td><span class="badge badge-soft-info">Google Pay</span></td>
+                    <td class="text-muted">11 Aug 2026</td>
+                    <td class="text-end fw-bold text-success">+ ₹5,000</td>
+                </tr>
+                <tr>
+                    <td class="fw-semibold">EXP-2026-011</td>
+                    <td><span class="badge badge-soft-danger"><i class="bi bi-arrow-up-right me-1"></i>Expense</span></td>
+                    <td>Main Temple Idol Advance Booking</td>
+                    <td><span class="badge badge-soft-primary">Bank Transfer</span></td>
+                    <td class="text-muted">10 Aug 2026</td>
+                    <td class="text-end fw-bold text-danger">- ₹12,000</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

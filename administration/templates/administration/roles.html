@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Roles & Permissions | Vinayaka Youth Committee{% endblock %}
+{% block page_heading %}Roles & Permissions{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h4 class="mb-1 fw-bold">System Privilege Roles</h4>
+        <p class="text-muted small mb-0">Configure module level create, read, update and approval rights</p>
+    </div>
+    <button class="btn btn-primary btn-sm"><i class="bi bi-shield-plus"></i> Add New Role</button>
+</div>
+
+<div class="card">
+    <div class="card-header-clean">
+        <h6 class="mb-0 fw-bold"><i class="bi bi-shield-lock text-danger me-2"></i>Defined Roles</h6>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Role Title</th>
+                    <th>Description</th>
+                    <th>Assigned Users</th>
+                    <th>Permissions Level</th>
+                    <th class="text-end">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="fw-bold">Super Admin</td>
+                    <td class="text-muted">Full administrative access across all modules and audit logs</td>
+                    <td><span class="badge badge-soft-primary">1 User</span></td>
+                    <td><span class="badge badge-soft-danger">Full Control</span></td>
+                    <td class="text-end"><button class="btn btn-sm btn-light"><i class="bi bi-pencil"></i></button></td>
+                </tr>
+                <tr>
+                    <td class="fw-bold">Treasurer</td>
+                    <td class="text-muted">Can record funds, create expenses, and generate reports</td>
+                    <td><span class="badge badge-soft-primary">2 Users</span></td>
+                    <td><span class="badge badge-soft-warning">Financial Write</span></td>
+                    <td class="text-end"><button class="btn btn-sm btn-light"><i class="bi bi-pencil"></i></button></td>
+                </tr>
+                <tr>
+                    <td class="fw-bold">Auditor / Viewer</td>
+                    <td class="text-muted">Read-only access for verification and audit inspection</td>
+                    <td><span class="badge badge-soft-primary">4 Users</span></td>
+                    <td><span class="badge badge-soft-info">Read Only</span></td>
+                    <td class="text-end"><button class="btn btn-sm btn-light"><i class="bi bi-pencil"></i></button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

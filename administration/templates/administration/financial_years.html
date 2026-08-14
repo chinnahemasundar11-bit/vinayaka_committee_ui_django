@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Financial Years | Vinayaka Youth Committee{% endblock %}
+{% block page_heading %}Financial Accounting Periods{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h4 class="mb-1 fw-bold">Financial Accounting Periods</h4>
+        <p class="text-muted small mb-0">Create, switch, and lock festival financial year books</p>
+    </div>
+    <button class="btn btn-primary btn-sm"><i class="bi bi-calendar-plus"></i> Create New FY</button>
+</div>
+
+<div class="card">
+    <div class="card-header-clean">
+        <h6 class="mb-0 fw-bold"><i class="bi bi-calendar-range text-danger me-2"></i>Accounting Years</h6>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Financial Year</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Status</th>
+                    <th class="text-end">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="fw-bold">FY 2026 - 2027</td>
+                    <td>01 Apr 2026</td>
+                    <td>31 Mar 2027</td>
+                    <td><span class="badge badge-soft-success"><i class="bi bi-check-circle-fill me-1"></i>Current Active</span></td>
+                    <td class="text-end"><button class="btn btn-sm btn-light"><i class="bi bi-lock"></i> Lock Year</button></td>
+                </tr>
+                <tr>
+                    <td class="fw-bold">FY 2025 - 2026</td>
+                    <td>01 Apr 2025</td>
+                    <td>31 Mar 2026</td>
+                    <td><span class="badge badge-soft-info">Closed & Locked</span></td>
+                    <td class="text-end"><button class="btn btn-sm btn-light" disabled><i class="bi bi-check-all"></i> Archived</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

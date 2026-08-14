@@ -1,0 +1,404 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vinayaka Chavithi Youth Committee | Official Portal & Login</title>
+    <!-- Google Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/app.css' %}">
+    <style>
+        .nav-landing-link {
+            color: #ffffff !important;
+            font-weight: 600;
+            font-size: 0.925rem;
+            text-decoration: none;
+            transition: color 0.2s ease;
+            padding: 6px 12px;
+            border-radius: 6px;
+        }
+        .nav-landing-link:hover {
+            color: var(--accent-gold-light) !important;
+            background: rgba(255, 255, 255, 0.08);
+        }
+        .hero-lead-text {
+            color: #e2e8f0 !important;
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        .committee-card-name {
+            color: #0f172a !important;
+            font-weight: 800 !important;
+            font-size: 1.05rem !important;
+        }
+        .committee-card-role {
+            color: #475569 !important;
+            font-weight: 600 !important;
+            font-size: 0.85rem;
+        }
+        .committee-card-phone {
+            color: #8b1e24 !important;
+            font-weight: 800 !important;
+            font-size: 0.9rem;
+            text-decoration: none;
+        }
+        .committee-card-phone:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body class="bg-light">
+
+    <!-- Responsive Landing Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark landing-navbar">
+        <div class="container">
+            <a href="#" class="navbar-brand d-flex align-items-center gap-3 me-0">
+                <div class="brand-icon" style="width:46px; height:46px; font-size:24px;">
+                    <i class="bi bi-flower1"></i>
+                </div>
+                <div>
+                    <h4 class="text-white mb-0 fw-bold" style="font-family:'Outfit'; font-size: 1.3rem;">Vinayaka Committee</h4>
+                    <span class="text-warning text-uppercase fw-bold" style="font-size:11px; letter-spacing:1.2px;">Youth Festival Portal</span>
+                </div>
+            </a>
+
+            <!-- Mobile Navbar Toggle Button -->
+            <button class="navbar-toggler border-secondary ms-auto my-1" type="button" data-bs-toggle="collapse" data-bs-target="#landingNavCollapse" aria-controls="landingNavCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Navbar Links -->
+            <div class="collapse navbar-collapse" id="landingNavCollapse">
+                <div class="navbar-nav ms-auto align-items-lg-center gap-2 gap-lg-3 pt-3 pt-lg-0">
+                    <a href="#about" class="nav-landing-link">About Portal</a>
+                    <a href="#features" class="nav-landing-link">Capabilities</a>
+                    <a href="#stats" class="nav-landing-link">Impact Stats</a>
+                    <a href="#events" class="nav-landing-link">Schedule</a>
+                    <a href="#contact" class="nav-landing-link">Committee Helpline</a>
+                    <div class="pt-2 pt-lg-0">
+                        <a href="#login-section" class="btn btn-gold px-4 py-2 w-100 w-lg-auto">
+                            <i class="bi bi-box-arrow-in-right me-1"></i> Portal Sign In
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Masterpiece Hero Section with Floating Glass Login Card -->
+    <section class="landing-hero-master" id="login-section">
+        <div class="container position-relative" style="z-index: 10;">
+            <div class="row align-items-center g-5">
+                
+                <!-- Left Hero Text & Overview -->
+                <div class="col-lg-7 text-center text-lg-start">
+                    <div class="mb-3">
+                        <span class="hero-pill-tag">
+                            <i class="bi bi-stars"></i> Vinayaka Chavithi Festival Celebrations 2026
+                        </span>
+                    </div>
+                    
+                    <h1 class="display-3 text-white fw-extrabold mb-4" style="font-family:'Outfit'; line-height: 1.15;">
+                        Sacred Tradition.<br>Uncompromising Financial Transparency.
+                    </h1>
+                    
+                    <p class="hero-lead-text mb-4" style="max-width: 620px;" id="about">
+                        Welcome to the official digital accounting portal of the Vinayaka Chavithi Youth Committee. Experience 100% transparent financial management, digital donor receipts, itemized vendor expense tracking, and live audit reports.
+                    </p>
+                    
+                    <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start gap-3 mt-4">
+                        <div class="d-flex align-items-center gap-2 bg-black bg-opacity-40 px-3 py-2.5 rounded-3 border border-secondary">
+                            <i class="bi bi-shield-check text-success fs-4"></i>
+                            <span class="text-white fw-semibold">100% Audited Accounts</span>
+                        </div>
+                        <div class="d-flex align-items-center gap-2 bg-black bg-opacity-40 px-3 py-2.5 rounded-3 border border-secondary">
+                            <i class="bi bi-qr-code text-warning fs-4"></i>
+                            <span class="text-white fw-semibold">Digital UPI & Cash Receipts</span>
+                        </div>
+                        <div class="d-flex align-items-center gap-2 bg-black bg-opacity-40 px-3 py-2.5 rounded-3 border border-secondary">
+                            <i class="bi bi-receipt text-info fs-4"></i>
+                            <span class="text-white fw-semibold">Vendor Bill Proofs</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Frosted Glass Portal Login Card -->
+                <div class="col-lg-5">
+                    <div class="glass-login-card m-auto">
+                        <div class="text-center mb-4">
+                            <div class="brand-icon mx-auto mb-3" style="width:52px; height:52px; font-size:26px;">
+                                <i class="bi bi-shield-lock-fill"></i>
+                            </div>
+                            <h3 class="fw-extrabold text-dark mb-1" style="font-family:'Outfit';">Committee Sign In</h3>
+                            <span class="text-secondary fw-semibold small">Enter mobile credentials to access dashboard</span>
+                        </div>
+
+                        <form action="/dashboard/">
+                            <div class="mb-3">
+                                <label class="form-label text-dark fw-bold">Mobile Number</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-phone"></i></span>
+                                    <input class="form-control text-dark fw-semibold" type="tel" placeholder="Enter 10-digit mobile number" required>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <label class="form-label text-dark fw-bold mb-0">Password</label>
+                                    <a href="/accounts/forgot-password/" class="small text-danger text-decoration-none fw-bold">Forgot?</a>
+                                </div>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                                    <input class="form-control text-dark fw-semibold" type="password" placeholder="Enter your password" required>
+                                </div>
+                            </div>
+
+                            <button class="btn btn-primary w-100 py-3 mt-2 fs-6 fw-bold" type="submit">
+                                <span>Sign In to Dashboard</span>
+                                <i class="bi bi-arrow-right ms-2"></i>
+                            </button>
+
+                            <div class="text-center mt-4 pt-3 border-top">
+                                <span class="small text-secondary fw-semibold">New Committee Member?</span>
+                                <a href="/accounts/register/" class="small text-danger text-decoration-none fw-extrabold ms-1">Register Account</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Impact & Statistics Section -->
+    <section class="py-5 bg-white border-bottom" id="stats">
+        <div class="container py-2">
+            <div class="row g-4">
+                <div class="col-sm-6 col-lg-3">
+                    <div class="stat-counter-card h-100">
+                        <h2 class="display-5 fw-extrabold text-danger mb-1" style="font-family:'Outfit';">₹ 5,42,000+</h2>
+                        <span class="text-dark fw-bold d-block mb-1">Total Contributions Collected</span>
+                        <small class="text-secondary d-block">100% Digitally Receipted</small>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                    <div class="stat-counter-card h-100">
+                        <h2 class="display-5 fw-extrabold text-warning mb-1" style="font-family:'Outfit';">6,500+</h2>
+                        <span class="text-dark fw-bold d-block mb-1">Devotees Served Meal</span>
+                        <small class="text-secondary d-block">Annasantharpana Feast</small>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                    <div class="stat-counter-card h-100">
+                        <h2 class="display-5 fw-extrabold text-success mb-1" style="font-family:'Outfit';">100%</h2>
+                        <span class="text-dark fw-bold d-block mb-1">Public Audit Accuracy</span>
+                        <small class="text-secondary d-block">Zero Discrepancy</small>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                    <div class="stat-counter-card h-100">
+                        <h2 class="display-5 fw-extrabold text-primary mb-1" style="font-family:'Outfit';">150+</h2>
+                        <span class="text-dark fw-bold d-block mb-1">Active Youth Volunteers</span>
+                        <small class="text-secondary d-block">Village Committee</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portal Capabilities & Features Section -->
+    <section class="py-5" id="features">
+        <div class="container py-4">
+            <div class="text-center mb-5 style-header" style="max-width: 680px; margin: auto;">
+                <span class="badge badge-soft-primary px-3 py-1.5 rounded-pill mb-2 text-danger fw-bold text-uppercase">Portal Features</span>
+                <h2 class="display-6 fw-bold text-dark mt-1 mb-2" style="font-family:'Outfit';">Comprehensive Financial Management</h2>
+                <p class="text-secondary fs-6 fw-medium">Purpose-built for village festival committees to manage every rupee with complete accountability.</p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-sm-6 col-lg-3">
+                    <div class="feature-card-master h-100">
+                        <div class="stat-icon-wrapper icon-gold mb-3" style="width:54px; height:54px; font-size:1.6rem;">
+                            <i class="bi bi-wallet2"></i>
+                        </div>
+                        <h5 class="fw-bold text-dark mb-2">Fund Receipts</h5>
+                        <p class="text-secondary small mb-0 fw-medium">Record youth contributions, village household funds, and outside donations with instant digital receipts.</p>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-lg-3">
+                    <div class="feature-card-master h-100">
+                        <div class="stat-icon-wrapper mb-3" style="width:54px; height:54px; font-size:1.6rem;">
+                            <i class="bi bi-receipt-cutoff"></i>
+                        </div>
+                        <h5 class="fw-bold text-dark mb-2">Expense Vouchers</h5>
+                        <p class="text-secondary small mb-0 fw-medium">Log Mandapam decorations, Annasantharpana groceries, sound/lighting bills with attached bill photos.</p>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-lg-3">
+                    <div class="feature-card-master h-100">
+                        <div class="stat-icon-wrapper icon-success mb-3" style="width:54px; height:54px; font-size:1.6rem;">
+                            <i class="bi bi-pie-chart-fill"></i>
+                        </div>
+                        <h5 class="fw-bold text-dark mb-2">Live Analytics</h5>
+                        <p class="text-secondary small mb-0 fw-medium">Real-time interactive dashboard charts showing budget vs actual spend and net balance position.</p>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-lg-3">
+                    <div class="feature-card-master h-100">
+                        <div class="stat-icon-wrapper icon-gold mb-3" style="width:54px; height:54px; font-size:1.6rem; background:#e0f2fe; color:#0369a1;">
+                            <i class="bi bi-shield-check"></i>
+                        </div>
+                        <h5 class="fw-bold text-dark mb-2">Audit Reports</h5>
+                        <p class="text-secondary small mb-0 fw-medium">Export complete financial statements, daily ledger logs, and audit trail records in PDF or Excel format.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Festival Events Timeline Preview -->
+    <section class="py-5 bg-white border-top border-bottom" id="events">
+        <div class="container py-3">
+            <div class="text-center mb-5" style="max-width: 650px; margin: auto;">
+                <span class="badge badge-soft-warning px-3 py-1.5 rounded-pill mb-2 text-dark fw-bold text-uppercase">Festival Schedule</span>
+                <h2 class="display-6 fw-bold text-dark mt-1 mb-2" style="font-family:'Outfit';">Upcoming Festival Programs</h2>
+                <p class="text-secondary fs-6 fw-medium">Key religious ceremonies, cultural programs, and community feasts planned for 2026.</p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-4">
+                    <div class="event-timeline-card h-100">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge badge-soft-primary fw-bold">Day 1 Program</span>
+                            <span class="text-danger fw-bold small"><i class="bi bi-calendar-event me-1"></i>20 Aug 2026</span>
+                        </div>
+                        <h5 class="fw-bold text-dark mb-2">Ganesh Idol Sthapana & Pooja</h5>
+                        <p class="text-secondary small mb-3">Grand installation of Lord Ganesha idol with Veda chanting and morning pooja ceremony.</p>
+                        <div class="p-3 bg-light rounded-3 d-flex justify-content-between align-items-center small">
+                            <span class="fw-bold text-dark"><i class="bi bi-geo-alt text-danger me-1"></i>Main Temple</span>
+                            <span class="badge badge-soft-success">Allocated: ₹25,000</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <div class="event-timeline-card h-100">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge badge-soft-warning fw-bold">Day 5 Program</span>
+                            <span class="text-danger fw-bold small"><i class="bi bi-calendar-event me-1"></i>24 Aug 2026</span>
+                        </div>
+                        <h5 class="fw-bold text-dark mb-2">Grand Annasantharpana Feast</h5>
+                        <p class="text-secondary small mb-3">Community meal distribution planned for over 5,000 village residents and visiting devotees.</p>
+                        <div class="p-3 bg-light rounded-3 d-flex justify-content-between align-items-center small">
+                            <span class="fw-bold text-dark"><i class="bi bi-geo-alt text-danger me-1"></i>Community Hall</span>
+                            <span class="badge badge-soft-success">Allocated: ₹40,000</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <div class="event-timeline-card h-100">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge badge-soft-info fw-bold">Grand Finale</span>
+                            <span class="text-danger fw-bold small"><i class="bi bi-calendar-event me-1"></i>30 Aug 2026</span>
+                        </div>
+                        <h5 class="fw-bold text-dark mb-2">Laddu Auction & Shobhayatra</h5>
+                        <p class="text-secondary small mb-3">Sacred Laddu auction followed by traditional music procession and lake Nimajjanam.</p>
+                        <div class="p-3 bg-light rounded-3 d-flex justify-content-between align-items-center small">
+                            <span class="fw-bold text-dark"><i class="bi bi-geo-alt text-danger me-1"></i>Village Lake</span>
+                            <span class="badge badge-soft-success">Allocated: ₹35,000</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Committee Leadership & Helpline Directory -->
+    <section class="py-5" id="contact">
+        <div class="container py-3">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-6">
+                    <span class="text-danger fw-bold text-uppercase small letter-spacing-1">Committee Leadership</span>
+                    <h2 class="display-6 fw-bold text-dark mt-1 mb-3" style="font-family:'Outfit';">Vinayaka Youth Committee Helpline</h2>
+                    <p class="text-secondary mb-4 fs-6 fw-medium">Have questions regarding festival donations, receipts, or upcoming events? Get in touch with our committee representatives.</p>
+                    
+                    <div class="d-flex flex-column gap-3">
+                        <div class="d-flex align-items-center gap-3 p-3.5 bg-white rounded-3 border shadow-sm">
+                            <div class="avatar-badge" style="width:48px; height:48px; font-size:15px; font-weight:800;">VR</div>
+                            <div>
+                                <h6 class="mb-0 committee-card-name">Sri V. Venkateswara Rao</h6>
+                                <span class="committee-card-role">Committee President</span> · 
+                                <a href="tel:+919876511223" class="committee-card-phone"><i class="bi bi-telephone-fill me-1"></i>+91 98765 11223</a>
+                            </div>
+                        </div>
+
+                        <div class="d-flex align-items-center gap-3 p-3.5 bg-white rounded-3 border shadow-sm">
+                            <div class="avatar-badge" style="width:48px; height:48px; font-size:15px; font-weight:800; background: linear-gradient(135deg, #2b2d42 0%, #8b1e24 100%);">RK</div>
+                            <div>
+                                <h6 class="mb-0 committee-card-name">Sri K. Ramesh Kumar</h6>
+                                <span class="committee-card-role">Chief Treasurer</span> · 
+                                <a href="tel:+919876543210" class="committee-card-phone"><i class="bi bi-telephone-fill me-1"></i>+91 98765 43210</a>
+                            </div>
+                        </div>
+
+                        <div class="d-flex align-items-center gap-3 p-3.5 bg-white rounded-3 border shadow-sm">
+                            <div class="avatar-badge" style="width:48px; height:48px; font-size:15px; font-weight:800; background: linear-gradient(135deg, #059669 0%, #10b981 100%);">SR</div>
+                            <div>
+                                <h6 class="mb-0 committee-card-name">Sri M. Suresh Rao</h6>
+                                <span class="committee-card-role">Youth Secretary</span> · 
+                                <a href="tel:+919876501234" class="committee-card-phone"><i class="bi bi-telephone-fill me-1"></i>+91 98765 01234</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="card p-4 border-0 shadow-md bg-white">
+                        <h4 class="fw-bold text-dark mb-3" style="font-family:'Outfit';"><i class="bi bi-geo-alt-fill text-danger me-2"></i>Festival Mandapam Location</h4>
+                        <p class="text-secondary small mb-4 fs-6 fw-medium">Vinayaka Chavithi Main Temple Mandapam & Community Center Premises, Main Street Village Square.</p>
+                        
+                        <div class="p-3 bg-light rounded-3 mb-4 border">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="small fw-bold text-dark"><i class="bi bi-calendar-check text-danger me-1"></i> Festival Period:</span>
+                                <span class="badge badge-soft-primary fs-6">20 Aug - 30 Aug 2026</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="small fw-bold text-dark"><i class="bi bi-clock text-danger me-1"></i> Daily Pooja Timings:</span>
+                                <span class="small text-dark fw-bold">07:00 AM & 07:00 PM Daily</span>
+                            </div>
+                        </div>
+
+                        <a href="#login-section" class="btn btn-primary w-100 py-3 fs-6 fw-bold">
+                            <i class="bi bi-box-arrow-in-right me-1"></i> Sign In to Festival Portal
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Masterpiece Footer -->
+    <footer class="py-4 bg-dark text-white text-center small border-top border-secondary">
+        <div class="container">
+            <div class="d-flex align-items-center justify-content-center gap-2 mb-2">
+                <div class="brand-icon" style="width:28px; height:28px; font-size:14px;">
+                    <i class="bi bi-flower1"></i>
+                </div>
+                <span class="fw-bold text-white fs-6" style="font-family:'Outfit';">Vinayaka Chavithi Youth Committee</span>
+            </div>
+            <p class="mb-0 text-white-50">© 2026 Vinayaka Youth Committee. Built for village community service and 100% transparent festival accounting.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap Script -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

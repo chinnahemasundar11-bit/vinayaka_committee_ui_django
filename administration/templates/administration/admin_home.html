@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% block title %}Master Administration | Vinayaka Youth Committee{% endblock %}
+{% block page_heading %}Master Administration{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <h4 class="mb-1 fw-bold">System Settings & Master Data Management</h4>
+    <p class="text-muted small mb-0">Configure users, roles, contribution sources, expense categories, and accounting periods</p>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-6 col-lg-4">
+        <a href="/administration/users/" class="text-decoration-none">
+            <div class="card h-100 p-4 stat-card">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="stat-icon-wrapper">
+                        <i class="bi bi-person-gear"></i>
+                    </div>
+                    <div>
+                        <h6 class="mb-1 fw-bold text-dark">User Access Control</h6>
+                        <small class="text-muted">Manage system users, login credentials & approvals</small>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-md-6 col-lg-4">
+        <a href="/administration/roles/" class="text-decoration-none">
+            <div class="card h-100 p-4 stat-card stat-gold">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="stat-icon-wrapper icon-gold">
+                        <i class="bi bi-shield-lock"></i>
+                    </div>
+                    <div>
+                        <h6 class="mb-1 fw-bold text-dark">Roles & Permissions</h6>
+                        <small class="text-muted">Define Treasurer, Admin and Auditor privileges</small>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-md-6 col-lg-4">
+        <a href="/administration/payment-methods/" class="text-decoration-none">
+            <div class="card h-100 p-4 stat-card stat-success">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="stat-icon-wrapper icon-success">
+                        <i class="bi bi-credit-card-2-front"></i>
+                    </div>
+                    <div>
+                        <h6 class="mb-1 fw-bold text-dark">Payment Methods</h6>
+                        <small class="text-muted">Configure Cash, UPI, Bank Transfer & Cheque settings</small>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-md-6 col-lg-4">
+        <a href="/administration/fund-sources/" class="text-decoration-none">
+            <div class="card h-100 p-4 stat-card stat-gold">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="stat-icon-wrapper icon-gold">
+                        <i class="bi bi-cash-stack"></i>
+                    </div>
+                    <div>
+                        <h6 class="mb-1 fw-bold text-dark">Fund Sources</h6>
+                        <small class="text-muted">Manage contribution channels and donor categories</small>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-md-6 col-lg-4">
+        <a href="/administration/expense-categories/" class="text-decoration-none">
+            <div class="card h-100 p-4 stat-card">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="stat-icon-wrapper">
+                        <i class="bi bi-tags"></i>
+                    </div>
+                    <div>
+                        <h6 class="mb-1 fw-bold text-dark">Expense Categories</h6>
+                        <small class="text-muted">Decorations, Prasadam, Lighting & Pooja heads</small>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-md-6 col-lg-4">
+        <a href="/administration/financial-years/" class="text-decoration-none">
+            <div class="card h-100 p-4 stat-card stat-success">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="stat-icon-wrapper icon-success">
+                        <i class="bi bi-calendar-range"></i>
+                    </div>
+                    <div>
+                        <h6 class="mb-1 fw-bold text-dark">Financial Years</h6>
+                        <small class="text-muted">Create & lock festival accounting years</small>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+{% endblock %}

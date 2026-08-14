@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% block title %}Expenses | Vinayaka Youth Committee{% endblock %}
+{% block page_heading %}Expense Voucher Ledger{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
+    <div>
+        <h4 class="mb-1 fw-bold">Festival Expenditure & Vouchers</h4>
+        <p class="text-muted small mb-0">Track all committee purchases, vendor bills, and operational expenses</p>
+    </div>
+    <a href="/expenses/add/" class="btn btn-primary">
+        <i class="bi bi-plus-lg"></i> Record New Expense
+    </a>
+</div>
+
+<!-- Filter Toolbar Bar -->
+<div class="filter-box mb-4">
+    <div class="row g-3">
+        <div class="col-md-3">
+            <label class="form-label">Search Expense / Paid To</label>
+            <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-search"></i></span>
+                <input class="form-control" placeholder="Vendor, Voucher # or Detail">
+            </div>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Expense Category</label>
+            <select class="form-select">
+                <option selected>All Categories</option>
+                <option>Decorations</option>
+                <option>Annasantharpana</option>
+                <option>Poojas</option>
+                <option>Events & Stage</option>
+                <option>Lighting & Sound</option>
+                <option>Prasadam & Cooking</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <label class="form-label">From Date</label>
+            <input type="date" class="form-control">
+        </div>
+        <div class="col-md-2">
+            <label class="form-label">To Date</label>
+            <input type="date" class="form-control">
+        </div>
+        <div class="col-md-2 d-flex align-items-end gap-2">
+            <button class="btn btn-primary w-100"><i class="bi bi-funnel"></i> Filter</button>
+            <button class="btn btn-outline-secondary"><i class="bi bi-arrow-counterclockwise"></i></button>
+        </div>
+    </div>
+</div>
+
+<!-- Expense Table Card -->
+<div class="card">
+    <div class="card-header-clean">
+        <h6 class="mb-0 fw-bold"><i class="bi bi-receipt-cutoff text-danger me-2"></i>Expense Vouchers List</h6>
+        <div class="d-flex gap-2">
+            <button class="btn btn-outline-secondary btn-sm"><i class="bi bi-file-earmark-pdf text-danger"></i> Export PDF</button>
+            <button class="btn btn-outline-secondary btn-sm"><i class="bi bi-file-earmark-excel text-success"></i> Export Excel</button>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Voucher No.</th>
+                    <th>Category</th>
+                    <th>Description</th>
+                    <th>Date</th>
+                    <th>Paid To / Vendor</th>
+                    <th class="text-end">Amount Spent</th>
+                    <th class="text-center">Receipt</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="fw-semibold">EXP-2026-001</td>
+                    <td><span class="badge badge-soft-danger">Decorations</span></td>
+                    <td>Stage & Mandapam Decoration Flowers & Cloth</td>
+                    <td class="text-muted">12 Aug 2026</td>
+                    <td class="fw-semibold">Royal Decorators & Events</td>
+                    <td class="text-end fw-bold text-danger">₹ 8,500</td>
+                    <td class="text-center">
+                        <button class="btn btn-sm btn-light" title="View Vendor Bill"><i class="bi bi-paperclip text-danger"></i></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="fw-semibold">EXP-2026-002</td>
+                    <td><span class="badge badge-soft-info">Lighting & Sound</span></td>
+                    <td>500W Sound System & Festival LED Lights</td>
+                    <td class="text-muted">11 Aug 2026</td>
+                    <td class="fw-semibold">ABC Electricals & Lights</td>
+                    <td class="text-end fw-bold text-danger">₹ 12,000</td>
+                    <td class="text-center">
+                        <button class="btn btn-sm btn-light" title="View Vendor Bill"><i class="bi bi-paperclip text-danger"></i></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="fw-semibold">EXP-2026-003</td>
+                    <td><span class="badge badge-soft-warning">Annasantharpana</span></td>
+                    <td>Grocery Purchase for Mahaprasadam Cooking</td>
+                    <td class="text-muted">09 Aug 2026</td>
+                    <td class="fw-semibold">Sri Laxmi WholeSale Mart</td>
+                    <td class="text-end fw-bold text-danger">₹ 35,000</td>
+                    <td class="text-center">
+                        <button class="btn btn-sm btn-light" title="View Vendor Bill"><i class="bi bi-paperclip text-danger"></i></button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Expense Categories | Vinayaka Youth Committee{% endblock %}
+{% block page_heading %}Expense Categories Master{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h4 class="mb-1 fw-bold">Expense Categories Master</h4>
+        <p class="text-muted small mb-0">Configure spending categories and voucher budget heads</p>
+    </div>
+    <button class="btn btn-primary btn-sm"><i class="bi bi-plus-lg"></i> Add Category</button>
+</div>
+
+<div class="card">
+    <div class="card-header-clean">
+        <h6 class="mb-0 fw-bold"><i class="bi bi-tags text-danger me-2"></i>Expense Budget Heads</h6>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Category Name</th>
+                    <th>Code / Tag</th>
+                    <th>Approval Required</th>
+                    <th>Status</th>
+                    <th class="text-end">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="fw-bold">Decorations & Mandapam</td>
+                    <td><code>EXP-DEC</code></td>
+                    <td><span class="badge badge-soft-warning">Above ₹5,000</span></td>
+                    <td><span class="badge badge-soft-success">Active</span></td>
+                    <td class="text-end"><button class="btn btn-sm btn-light"><i class="bi bi-pencil"></i></button></td>
+                </tr>
+                <tr>
+                    <td class="fw-bold">Annasantharpana / Food</td>
+                    <td><code>EXP-FOOD</code></td>
+                    <td><span class="badge badge-soft-danger">Mandatory</span></td>
+                    <td><span class="badge badge-soft-success">Active</span></td>
+                    <td class="text-end"><button class="btn btn-sm btn-light"><i class="bi bi-pencil"></i></button></td>
+                </tr>
+                <tr>
+                    <td class="fw-bold">Lighting & Sound System</td>
+                    <td><code>EXP-LGT</code></td>
+                    <td><span class="badge badge-soft-info">Standard</span></td>
+                    <td><span class="badge badge-soft-success">Active</span></td>
+                    <td class="text-end"><button class="btn btn-sm btn-light"><i class="bi bi-pencil"></i></button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

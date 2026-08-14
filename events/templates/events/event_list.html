@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block title %}Events | Vinayaka Youth Committee{% endblock %}
+{% block page_heading %}Festival Events & Programs{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
+    <div>
+        <h4 class="mb-1 fw-bold">Festival Schedule & Event Budgets</h4>
+        <p class="text-muted small mb-0">Plan, track budgets, and manage key cultural & religious festival events</p>
+    </div>
+    <a href="/events/add/" class="btn btn-primary">
+        <i class="bi bi-calendar-plus-fill"></i> Add New Event
+    </a>
+</div>
+
+<!-- Event Cards Grid -->
+<div class="row g-4">
+    <div class="col-lg-6">
+        <div class="card h-100">
+            <div class="card-header-clean">
+                <div class="d-flex align-items-center gap-2">
+                    <div class="avatar-badge" style="width:36px; height:36px; font-size:16px; background: linear-gradient(135deg, var(--primary) 0%, var(--accent-saffron) 100%);">
+                        <i class="bi bi-flower1"></i>
+                    </div>
+                    <div>
+                        <h6 class="mb-0 fw-bold">Ganesh Idol Installation & Sthapana</h6>
+                        <small class="text-muted"><i class="bi bi-geo-alt me-1 text-danger"></i>Main Mandapam Temple</small>
+                    </div>
+                </div>
+                <span class="badge badge-soft-success"><i class="bi bi-check-circle-fill me-1"></i>Planned</span>
+            </div>
+            <div class="card-body-clean">
+                <p class="text-muted small mb-3">Grand installation of Lord Ganesha idol with Veda chanting and grand pooja ceremony.</p>
+                <div class="d-flex align-items-center gap-3 text-muted small mb-3">
+                    <div><i class="bi bi-calendar-event me-1 text-danger"></i><strong>20 Aug 2026</strong></div>
+                    <div><i class="bi bi-clock me-1 text-danger"></i>08:30 AM - 12:30 PM</div>
+                </div>
+                <div class="p-3 bg-light rounded-3">
+                    <div class="d-flex justify-content-between small mb-1">
+                        <span>Event Budget vs Spend</span>
+                        <strong class="text-dark">₹ 0 / ₹ 25,000</strong>
+                    </div>
+                    <div class="progress" style="height: 8px;">
+                        <div class="progress-bar bg-danger" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer bg-transparent border-top-0 p-3 pt-0 text-end">
+                <button class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i> Edit Event</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="card h-100">
+            <div class="card-header-clean">
+                <div class="d-flex align-items-center gap-2">
+                    <div class="avatar-badge" style="width:36px; height:36px; font-size:16px; background: linear-gradient(135deg, #f4a261 0%, #e9c46a 100%); color:#1d2d44;">
+                        <i class="bi bi-cup-hot-fill"></i>
+                    </div>
+                    <div>
+                        <h6 class="mb-0 fw-bold">Grand Annasantharpana (Mahaprasadam)</h6>
+                        <small class="text-muted"><i class="bi bi-geo-alt me-1 text-danger"></i>Community Dining Hall</small>
+                    </div>
+                </div>
+                <span class="badge badge-soft-success"><i class="bi bi-check-circle-fill me-1"></i>Planned</span>
+            </div>
+            <div class="card-body-clean">
+                <p class="text-muted small mb-3">Free community feast organized for over 2,500 devotees and village residents.</p>
+                <div class="d-flex align-items-center gap-3 text-muted small mb-3">
+                    <div><i class="bi bi-calendar-event me-1 text-danger"></i><strong>24 Aug 2026</strong></div>
+                    <div><i class="bi bi-clock me-1 text-danger"></i>12:00 PM - 04:00 PM</div>
+                </div>
+                <div class="p-3 bg-light rounded-3">
+                    <div class="d-flex justify-content-between small mb-1">
+                        <span>Event Budget vs Spend</span>
+                        <strong class="text-dark">₹ 35,000 / ₹ 40,000</strong>
+                    </div>
+                    <div class="progress" style="height: 8px;">
+                        <div class="progress-bar bg-warning" role="progressbar" style="width: 87.5%" aria-valuenow="87.5" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer bg-transparent border-top-0 p-3 pt-0 text-end">
+                <button class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i> Edit Event</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

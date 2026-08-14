@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Payment Methods | Vinayaka Youth Committee{% endblock %}
+{% block page_heading %}Payment Methods Master{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h4 class="mb-1 fw-bold">Payment Methods Configuration</h4>
+        <p class="text-muted small mb-0">Manage cash, UPI, bank transfer, and cheque options</p>
+    </div>
+    <button class="btn btn-primary btn-sm"><i class="bi bi-plus-lg"></i> Add Payment Method</button>
+</div>
+
+<div class="card">
+    <div class="card-header-clean">
+        <h6 class="mb-0 fw-bold"><i class="bi bi-credit-card text-danger me-2"></i>Active Payment Channels</h6>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Channel Name</th>
+                    <th>Icon Type</th>
+                    <th>Requires Ref #</th>
+                    <th>Status</th>
+                    <th class="text-end">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="fw-bold">Cash</td>
+                    <td><i class="bi bi-cash-stack text-success fs-5"></i></td>
+                    <td><span class="badge badge-soft-info">Optional</span></td>
+                    <td><span class="badge badge-soft-success">Active</span></td>
+                    <td class="text-end"><button class="btn btn-sm btn-light"><i class="bi bi-pencil"></i></button></td>
+                </tr>
+                <tr>
+                    <td class="fw-bold">UPI / QR Code</td>
+                    <td><i class="bi bi-qr-code text-primary fs-5"></i></td>
+                    <td><span class="badge badge-soft-warning">Mandatory</span></td>
+                    <td><span class="badge badge-soft-success">Active</span></td>
+                    <td class="text-end"><button class="btn btn-sm btn-light"><i class="bi bi-pencil"></i></button></td>
+                </tr>
+                <tr>
+                    <td class="fw-bold">Bank Transfer (NEFT/IMPS)</td>
+                    <td><i class="bi bi-bank text-dark fs-5"></i></td>
+                    <td><span class="badge badge-soft-warning">Mandatory</span></td>
+                    <td><span class="badge badge-soft-success">Active</span></td>
+                    <td class="text-end"><button class="btn btn-sm btn-light"><i class="bi bi-pencil"></i></button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

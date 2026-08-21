@@ -1,0 +1,1215 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Site Settings & Enterprise Theme Customization | Vinayaka Youth Committee{% endblock %}
+{% block page_heading %}Site Settings & Theme Engine{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
+    <div>
+        <h4 class="mb-1 fw-bold text-dark"><i class="bi bi-sliders text-primary me-2"></i>Enterprise Site Settings & Theme Engine</h4>
+        <p class="text-muted small mb-0">Configure global themes, landing titles, fonts, sidebar nav, header, structural cards, tables, buttons, and footer styling with real-time live preview.</p>
+    </div>
+    <div class="d-flex align-items-center gap-2 flex-nowrap">
+        <button type="button" id="btnResetDefaults" class="btn btn-outline-secondary btn-sm text-nowrap"><i class="bi bi-arrow-counterclockwise me-1"></i> Reset Defaults</button>
+        <button type="submit" form="siteSettingsForm" class="btn btn-primary btn-sm px-3 text-nowrap"><i class="bi bi-check-circle-fill me-1"></i> Save All Settings</button>
+    </div>
+</div>
+
+{% if messages %}
+<div class="mb-3">
+    {% for message in messages %}
+    <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show shadow-sm" role="alert">
+        <i class="bi bi-check-circle-fill me-2"></i> {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<!-- Quick Theme Presets Header Banner -->
+<div class="card mb-4 border-0 shadow-sm bg-white">
+    <div class="card-body p-3 d-flex align-items-center justify-content-between flex-wrap gap-3">
+        <div class="d-flex align-items-center gap-2">
+            <span class="fw-bold text-dark small"><i class="bi bi-magic me-1 text-warning"></i> 1-Click Industry Theme Presets:</span>
+        </div>
+        <div class="d-flex gap-2 flex-wrap">
+            <button type="button" class="btn btn-sm btn-outline-danger preset-btn" data-preset="royal">
+                <span class="d-inline-block rounded-circle me-1" style="width:10px; height:10px; background:#8b1e24;"></span> Royal Maroon & Gold
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-primary preset-btn" data-preset="navy">
+                <span class="d-inline-block rounded-circle me-1" style="width:10px; height:10px; background:#1e3a8a;"></span> Modern Navy Corporate
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-success preset-btn" data-preset="emerald">
+                <span class="d-inline-block rounded-circle me-1" style="width:10px; height:10px; background:#059669;"></span> Cyber Emerald Green
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-dark preset-btn" data-preset="midnight">
+                <span class="d-inline-block rounded-circle me-1" style="width:10px; height:10px; background:#0f172a;"></span> Midnight Dark Deluxe
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-warning preset-btn" data-preset="amber">
+                <span class="d-inline-block rounded-circle me-1" style="width:10px; height:10px; background:#d97706;"></span> Sunset Amber & Purple
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-secondary preset-btn" data-preset="minimal">
+                <span class="d-inline-block rounded-circle me-1" style="width:10px; height:10px; background:#475569;"></span> Minimal Slate Light
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <!-- Left Column: Settings Configuration Tabs -->
+    <div class="col-xl-7 col-lg-6">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-white border-bottom p-0 overflow-hidden">
+                <ul class="nav nav-tabs card-header-tabs m-0 px-3 pt-2 flex-row flex-nowrap overflow-x-auto" id="settingsTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active fw-bold small text-nowrap" id="tab-brand-tab" data-bs-toggle="tab" data-bs-target="#tab-brand" type="button" role="tab">
+                            <i class="bi bi-building me-1 text-primary"></i> Branding
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link fw-bold small text-nowrap" id="tab-font-tab" data-bs-toggle="tab" data-bs-target="#tab-font" type="button" role="tab">
+                            <i class="bi bi-type me-1 text-primary"></i> Typography
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link fw-bold small text-nowrap" id="tab-sidebar-tab" data-bs-toggle="tab" data-bs-target="#tab-sidebar" type="button" role="tab">
+                            <i class="bi bi-layout-sidebar me-1 text-primary"></i> Sidebar
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link fw-bold small text-nowrap" id="tab-header-tab" data-bs-toggle="tab" data-bs-target="#tab-header" type="button" role="tab">
+                            <i class="bi bi-window-top me-1 text-primary"></i> Header
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link fw-bold small text-nowrap" id="tab-cards-tab" data-bs-toggle="tab" data-bs-target="#tab-cards" type="button" role="tab">
+                            <i class="bi bi-card-heading me-1 text-primary"></i> Cards & Layout
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link fw-bold small text-nowrap" id="tab-tables-tab" data-bs-toggle="tab" data-bs-target="#tab-tables" type="button" role="tab">
+                            <i class="bi bi-table me-1 text-primary"></i> Tables
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link fw-bold small text-nowrap" id="tab-buttons-tab" data-bs-toggle="tab" data-bs-target="#tab-buttons" type="button" role="tab">
+                            <i class="bi bi-hand-index-fill me-1 text-primary"></i> Buttons
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link fw-bold small text-nowrap" id="tab-footer-tab" data-bs-toggle="tab" data-bs-target="#tab-footer" type="button" role="tab">
+                            <i class="bi bi-window-dock me-1 text-primary"></i> Footer & Contact
+                        </button>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card-body p-4">
+                <form id="siteSettingsForm" method="POST" action="/administration/site-settings/">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="save">
+                    <input type="hidden" id="themePresetInput" name="THEME_PRESET" value="{{ site_settings.THEME_PRESET }}">
+                    
+                    <div class="tab-content" id="settingsTabsContent">
+                        
+                        <!-- TAB 1: BRANDING & LANDING PAGE -->
+                        <div class="tab-pane fade show active" id="tab-brand" role="tabpanel">
+                            <h6 class="fw-bold mb-3 text-primary"><i class="bi bi-info-circle me-1"></i> Site Identity & Landing Page Titles</h6>
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Site / Organization Name</label>
+                                    <input type="text" id="siteNameInput" name="SITE_NAME" class="form-control" value="{{ site_settings.SITE_NAME }}">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Site Tagline / Slogan</label>
+                                    <input type="text" id="siteSloganInput" name="SITE_SLOGAN" class="form-control" value="{{ site_settings.SITE_SLOGAN }}">
+                                </div>
+                            </div>
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Default Header Overview Title</label>
+                                    <input type="text" id="headerTitleInput" name="HEADER_TITLE" class="form-control" value="{{ site_settings.HEADER_TITLE }}">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Default Header Overview Subtitle</label>
+                                    <input type="text" id="headerSubtitleInput" name="HEADER_SUBTITLE" class="form-control" value="{{ site_settings.HEADER_SUBTITLE }}">
+                                </div>
+                            </div>
+
+                            <hr class="my-4 text-muted">
+                            <h6 class="fw-bold mb-3 text-primary"><i class="bi bi-image me-1"></i> Logo Branding & Currency Settings</h6>
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold">Logo Bootstrap Icon</label>
+                                    <select id="logoIconInput" name="SITE_LOGO_ICON" class="form-select">
+                                        <option value="bi-flower1" {% if site_settings.SITE_LOGO_ICON == "bi-flower1" %}selected{% endif %}>bi-flower1 (Flower/Lotus)</option>
+                                        <option value="bi-building" {% if site_settings.SITE_LOGO_ICON == "bi-building" %}selected{% endif %}>bi-building (Corporate)</option>
+                                        <option value="bi-shield-shaded" {% if site_settings.SITE_LOGO_ICON == "bi-shield-shaded" %}selected{% endif %}>bi-shield-shaded (Shield)</option>
+                                        <option value="bi-stars" {% if site_settings.SITE_LOGO_ICON == "bi-stars" %}selected{% endif %}>bi-stars (Sparkles)</option>
+                                        <option value="bi-rocket-takeoff" {% if site_settings.SITE_LOGO_ICON == "bi-rocket-takeoff" %}selected{% endif %}>bi-rocket-takeoff (Launch)</option>
+                                        <option value="bi-fire" {% if site_settings.SITE_LOGO_ICON == "bi-fire" %}selected{% endif %}>bi-fire (Pooja Flame)</option>
+                                        <option value="bi-gem" {% if site_settings.SITE_LOGO_ICON == "bi-gem" %}selected{% endif %}>bi-gem (Diamond)</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-5">
+                                    <label class="form-label fw-semibold">Custom Logo Image URL</label>
+                                    <input type="url" id="logoUrlInput" name="SITE_LOGO_URL" class="form-control" placeholder="https://example.com/logo.png" value="{{ site_settings.SITE_LOGO_URL }}">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label fw-semibold">Currency Symbol</label>
+                                    <input type="text" id="currencySymbolInput" name="CURRENCY_SYMBOL" class="form-control" value="{{ site_settings.CURRENCY_SYMBOL }}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TAB 2: TYPOGRAPHY & GOOGLE FONTS -->
+                        <div class="tab-pane fade" id="tab-font" role="tabpanel">
+                            <h6 class="fw-bold mb-3 text-primary"><i class="bi bi-fonts me-1"></i> Global Font Family & Sizes</h6>
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Body Font Family</label>
+                                    <select id="bodyFontInput" name="BODY_FONT_FAMILY" class="form-select">
+                                        <option value="'Inter', sans-serif" {% if site_settings.BODY_FONT_FAMILY == "'Inter', sans-serif" %}selected{% endif %}>Inter (Clean & Modern UI)</option>
+                                        <option value="'Outfit', sans-serif" {% if site_settings.BODY_FONT_FAMILY == "'Outfit', sans-serif" %}selected{% endif %}>Outfit (Geometric Premium)</option>
+                                        <option value="'Roboto', sans-serif" {% if site_settings.BODY_FONT_FAMILY == "'Roboto', sans-serif" %}selected{% endif %}>Roboto (Standard Tech)</option>
+                                        <option value="'Poppins', sans-serif" {% if site_settings.BODY_FONT_FAMILY == "'Poppins', sans-serif" %}selected{% endif %}>Poppins (Friendly Rounded)</option>
+                                        <option value="'Plus Jakarta Sans', sans-serif" {% if site_settings.BODY_FONT_FAMILY == "'Plus Jakarta Sans', sans-serif" %}selected{% endif %}>Plus Jakarta Sans (SaaS Favorite)</option>
+                                        <option value="'Montserrat', sans-serif" {% if site_settings.BODY_FONT_FAMILY == "'Montserrat', sans-serif" %}selected{% endif %}>Montserrat (Classic Editorial)</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Headings Font Family</label>
+                                    <select id="headingFontInput" name="HEADING_FONT_FAMILY" class="form-select">
+                                        <option value="'Outfit', sans-serif" {% if site_settings.HEADING_FONT_FAMILY == "'Outfit', sans-serif" %}selected{% endif %}>Outfit (Bold & Dynamic)</option>
+                                        <option value="'Cinzel', serif" {% if site_settings.HEADING_FONT_FAMILY == "'Cinzel', serif" %}selected{% endif %}>Cinzel (Royal Festival Serif)</option>
+                                        <option value="'Inter', sans-serif" {% if site_settings.HEADING_FONT_FAMILY == "'Inter', sans-serif" %}selected{% endif %}>Inter (Modern Slate)</option>
+                                        <option value="'Montserrat', sans-serif" {% if site_settings.HEADING_FONT_FAMILY == "'Montserrat', sans-serif" %}selected{% endif %}>Montserrat (Uppercase Elegance)</option>
+                                        <option value="'Poppins', sans-serif" {% if site_settings.HEADING_FONT_FAMILY == "'Poppins', sans-serif" %}selected{% endif %}>Poppins (Soft & Clean)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold">Body Font Size</label>
+                                    <select id="bodyFontSizeInput" name="BODY_FONT_SIZE" class="form-select">
+                                        <option value="0.875rem" {% if site_settings.BODY_FONT_SIZE == "0.875rem" %}selected{% endif %}>Small (14px)</option>
+                                        <option value="0.925rem" {% if site_settings.BODY_FONT_SIZE == "0.925rem" %}selected{% endif %}>Medium / Default (14.8px)</option>
+                                        <option value="1rem" {% if site_settings.BODY_FONT_SIZE == "1rem" %}selected{% endif %}>Large (16px)</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold">Body Font Weight</label>
+                                    <select id="bodyFontWeightInput" name="BODY_FONT_WEIGHT" class="form-select">
+                                        <option value="300" {% if site_settings.BODY_FONT_WEIGHT == "300" %}selected{% endif %}>300 - Light</option>
+                                        <option value="400" {% if site_settings.BODY_FONT_WEIGHT == "400" %}selected{% endif %}>400 - Normal</option>
+                                        <option value="500" {% if site_settings.BODY_FONT_WEIGHT == "500" %}selected{% endif %}>500 - Medium</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold">Headings Font Weight</label>
+                                    <select id="headingFontWeightInput" name="HEADING_FONT_WEIGHT" class="form-select">
+                                        <option value="600" {% if site_settings.HEADING_FONT_WEIGHT == "600" %}selected{% endif %}>600 - SemiBold</option>
+                                        <option value="700" {% if site_settings.HEADING_FONT_WEIGHT == "700" %}selected{% endif %}>700 - Bold</option>
+                                        <option value="800" {% if site_settings.HEADING_FONT_WEIGHT == "800" %}selected{% endif %}>800 - Extra Bold</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TAB 3: SIDEBAR & NAVIGATION -->
+                        <div class="tab-pane fade" id="tab-sidebar" role="tabpanel">
+                            <h6 class="fw-bold mb-3 text-primary"><i class="bi bi-sliders2 me-1"></i> Sidebar Colors, Fonts & Interactive States</h6>
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Sidebar Background Color</label>
+                                    <div class="input-group">
+                                        <input type="color" id="sidebarBgPicker" class="form-control form-control-color" value="{{ site_settings.SIDEBAR_BG }}">
+                                        <input type="text" id="sidebarBgInput" name="SIDEBAR_BG" class="form-control" value="{{ site_settings.SIDEBAR_BG }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Sidebar Header / Logo Div BG</label>
+                                    <div class="input-group">
+                                        <input type="color" id="sidebarBrandBgPicker" class="form-control form-control-color" value="{{ site_settings.SIDEBAR_BRAND_BG }}">
+                                        <input type="text" id="sidebarBrandBgInput" name="SIDEBAR_BRAND_BG" class="form-control" value="{{ site_settings.SIDEBAR_BRAND_BG }}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Nav Item Text Color</label>
+                                    <div class="input-group">
+                                        <input type="color" id="sidebarTextColorPicker" class="form-control form-control-color" value="{{ site_settings.SIDEBAR_TEXT_COLOR }}">
+                                        <input type="text" id="sidebarTextColorInput" name="SIDEBAR_TEXT_COLOR" class="form-control" value="{{ site_settings.SIDEBAR_TEXT_COLOR }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Nav Left Icon Color</label>
+                                    <div class="input-group">
+                                        <input type="color" id="sidebarIconColorPicker" class="form-control form-control-color" value="{{ site_settings.SIDEBAR_ICON_COLOR }}">
+                                        <input type="text" id="sidebarIconColorInput" name="SIDEBAR_ICON_COLOR" class="form-control" value="{{ site_settings.SIDEBAR_ICON_COLOR }}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Mouse Hover Background</label>
+                                    <div class="input-group">
+                                        <input type="text" id="sidebarHoverBgInput" name="SIDEBAR_HOVER_BG" class="form-control" value="{{ site_settings.SIDEBAR_HOVER_BG }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Mouse Hover Text Color</label>
+                                    <div class="input-group">
+                                        <input type="color" id="sidebarHoverTextColorPicker" class="form-control form-control-color" value="{{ site_settings.SIDEBAR_HOVER_TEXT_COLOR }}">
+                                        <input type="text" id="sidebarHoverTextColorInput" name="SIDEBAR_HOVER_TEXT_COLOR" class="form-control" value="{{ site_settings.SIDEBAR_HOVER_TEXT_COLOR }}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold">Active Item BG</label>
+                                    <input type="text" id="sidebarActiveBgInput" name="SIDEBAR_ACTIVE_BG" class="form-control" value="{{ site_settings.SIDEBAR_ACTIVE_BG }}">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold">Active Item Text Color</label>
+                                    <div class="input-group">
+                                        <input type="color" id="sidebarActiveTextColorPicker" class="form-control form-control-color" value="{{ site_settings.SIDEBAR_ACTIVE_TEXT_COLOR }}">
+                                        <input type="text" id="sidebarActiveTextColorInput" name="SIDEBAR_ACTIVE_TEXT_COLOR" class="form-control" value="{{ site_settings.SIDEBAR_ACTIVE_TEXT_COLOR }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold">Active Accent Border</label>
+                                    <div class="input-group">
+                                        <input type="color" id="sidebarActiveBorderPicker" class="form-control form-control-color" value="{{ site_settings.SIDEBAR_ACTIVE_BORDER }}">
+                                        <input type="text" id="sidebarActiveBorderInput" name="SIDEBAR_ACTIVE_BORDER" class="form-control" value="{{ site_settings.SIDEBAR_ACTIVE_BORDER }}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Sidebar Font Size</label>
+                                    <select id="sidebarFontSizeInput" name="SIDEBAR_FONT_SIZE" class="form-select">
+                                        <option value="0.85rem" {% if site_settings.SIDEBAR_FONT_SIZE == "0.85rem" %}selected{% endif %}>Compact (13.6px)</option>
+                                        <option value="0.9rem" {% if site_settings.SIDEBAR_FONT_SIZE == "0.9rem" %}selected{% endif %}>Standard (14.4px)</option>
+                                        <option value="0.95rem" {% if site_settings.SIDEBAR_FONT_SIZE == "0.95rem" %}selected{% endif %}>Comfortable (15.2px)</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Sidebar Font Weight</label>
+                                    <select id="sidebarFontWeightInput" name="SIDEBAR_FONT_WEIGHT" class="form-select">
+                                        <option value="400" {% if site_settings.SIDEBAR_FONT_WEIGHT == "400" %}selected{% endif %}>400 - Regular</option>
+                                        <option value="500" {% if site_settings.SIDEBAR_FONT_WEIGHT == "500" %}selected{% endif %}>500 - Medium</option>
+                                        <option value="600" {% if site_settings.SIDEBAR_FONT_WEIGHT == "600" %}selected{% endif %}>600 - SemiBold</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TAB 4: TOPBAR & HEADER -->
+                        <div class="tab-pane fade" id="tab-header" role="tabpanel">
+                            <h6 class="fw-bold mb-3 text-primary"><i class="bi bi-window-top me-1"></i> Top Navigation Bar Styling</h6>
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Header Topbar Background</label>
+                                    <div class="input-group">
+                                        <input type="color" id="headerBgPicker" class="form-control form-control-color" value="{{ site_settings.HEADER_BG }}">
+                                        <input type="text" id="headerBgInput" name="HEADER_BG" class="form-control" value="{{ site_settings.HEADER_BG }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Header Title Text Color</label>
+                                    <div class="input-group">
+                                        <input type="color" id="headerTextColorPicker" class="form-control form-control-color" value="{{ site_settings.HEADER_TEXT_COLOR }}">
+                                        <input type="text" id="headerTextColorInput" name="HEADER_TEXT_COLOR" class="form-control" value="{{ site_settings.HEADER_TEXT_COLOR }}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Header Bottom Border Color</label>
+                                    <div class="input-group">
+                                        <input type="color" id="headerBorderColorPicker" class="form-control form-control-color" value="{{ site_settings.HEADER_BORDER_COLOR }}">
+                                        <input type="text" id="headerBorderColorInput" name="HEADER_BORDER_COLOR" class="form-control" value="{{ site_settings.HEADER_BORDER_COLOR }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label fw-semibold">Title Font Size</label>
+                                    <select id="headerFontSizeInput" name="HEADER_FONT_SIZE" class="form-select">
+                                        <option value="1.1rem" {% if site_settings.HEADER_FONT_SIZE == "1.1rem" %}selected{% endif %}>Compact (17.6px)</option>
+                                        <option value="1.25rem" {% if site_settings.HEADER_FONT_SIZE == "1.25rem" %}selected{% endif %}>Default (20px)</option>
+                                        <option value="1.4rem" {% if site_settings.HEADER_FONT_SIZE == "1.4rem" %}selected{% endif %}>Large (22.4px)</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label fw-semibold">Title Font Weight</label>
+                                    <select id="headerFontWeightInput" name="HEADER_FONT_WEIGHT" class="form-select">
+                                        <option value="600" {% if site_settings.HEADER_FONT_WEIGHT == "600" %}selected{% endif %}>600 - SemiBold</option>
+                                        <option value="700" {% if site_settings.HEADER_FONT_WEIGHT == "700" %}selected{% endif %}>700 - Bold</option>
+                                        <option value="800" {% if site_settings.HEADER_FONT_WEIGHT == "800" %}selected{% endif %}>800 - Heavy</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TAB 5: CARDS & CONTAINERS -->
+                        <div class="tab-pane fade" id="tab-cards" role="tabpanel">
+                            <h6 class="fw-bold mb-3 text-primary"><i class="bi bi-box me-1"></i> Main Containers, Cards & Layout Structural Styling</h6>
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">App Background Color</label>
+                                    <div class="input-group">
+                                        <input type="color" id="mainBgPicker" class="form-control form-control-color" value="{{ site_settings.MAIN_BG }}">
+                                        <input type="text" id="mainBgInput" name="MAIN_BG" class="form-control" value="{{ site_settings.MAIN_BG }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Card Body Background</label>
+                                    <div class="input-group">
+                                        <input type="color" id="cardBgPicker" class="form-control form-control-color" value="{{ site_settings.CARD_BG }}">
+                                        <input type="text" id="cardBgInput" name="CARD_BG" class="form-control" value="{{ site_settings.CARD_BG }}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Card Header BG</label>
+                                    <div class="input-group">
+                                        <input type="color" id="cardHeaderBgPicker" class="form-control form-control-color" value="{{ site_settings.CARD_HEADER_BG }}">
+                                        <input type="text" id="cardHeaderBgInput" name="CARD_HEADER_BG" class="form-control" value="{{ site_settings.CARD_HEADER_BG }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Card Header Text Color</label>
+                                    <div class="input-group">
+                                        <input type="color" id="cardHeaderTextColorPicker" class="form-control form-control-color" value="{{ site_settings.CARD_HEADER_TEXT_COLOR }}">
+                                        <input type="text" id="cardHeaderTextColorInput" name="CARD_HEADER_TEXT_COLOR" class="form-control" value="{{ site_settings.CARD_HEADER_TEXT_COLOR }}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold">Card Border Color</label>
+                                    <div class="input-group">
+                                        <input type="color" id="cardBorderColorPicker" class="form-control form-control-color" value="{{ site_settings.CARD_BORDER_COLOR }}">
+                                        <input type="text" id="cardBorderColorInput" name="CARD_BORDER_COLOR" class="form-control" value="{{ site_settings.CARD_BORDER_COLOR }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold">Card Border Radius</label>
+                                    <select id="cardBorderRadiusInput" name="CARD_BORDER_RADIUS" class="form-select">
+                                        <option value="6px" {% if site_settings.CARD_BORDER_RADIUS == "6px" %}selected{% endif %}>6px - Crisp</option>
+                                        <option value="12px" {% if site_settings.CARD_BORDER_RADIUS == "12px" %}selected{% endif %}>12px - Modern Rounded</option>
+                                        <option value="16px" {% if site_settings.CARD_BORDER_RADIUS == "16px" %}selected{% endif %}>16px - Soft Pill</option>
+                                        <option value="20px" {% if site_settings.CARD_BORDER_RADIUS == "20px" %}selected{% endif %}>20px - Extra Curved</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold">Card Box Shadow</label>
+                                    <select id="cardShadowInput" name="CARD_SHADOW" class="form-select">
+                                        <option value="none" {% if site_settings.CARD_SHADOW == "none" %}selected{% endif %}>None (Flat Bordered)</option>
+                                        <option value="0 2px 8px rgba(0, 0, 0, 0.04)" {% if site_settings.CARD_SHADOW == "0 2px 8px rgba(0, 0, 0, 0.04)" %}selected{% endif %}>Subtle Drop Shadow</option>
+                                        <option value="0 4px 16px rgba(0, 0, 0, 0.03)" {% if site_settings.CARD_SHADOW == "0 4px 16px rgba(0, 0, 0, 0.03)" %}selected{% endif %}>Standard Elevation</option>
+                                        <option value="0 10px 30px rgba(0, 0, 0, 0.08)" {% if site_settings.CARD_SHADOW == "0 10px 30px rgba(0, 0, 0, 0.08)" %}selected{% endif %}>High Floating Shadow</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Container Max Width</label>
+                                    <select id="containerMaxWidthInput" name="CONTAINER_MAX_WIDTH" class="form-select">
+                                        <option value="100%" {% if site_settings.CONTAINER_MAX_WIDTH == "100%" %}selected{% endif %}>100% - Fluid Full Width</option>
+                                        <option value="1600px" {% if site_settings.CONTAINER_MAX_WIDTH == "1600px" %}selected{% endif %}>1600px - Ultra Wide</option>
+                                        <option value="1400px" {% if site_settings.CONTAINER_MAX_WIDTH == "1400px" %}selected{% endif %}>1400px - Desktop Balanced</option>
+                                        <option value="1200px" {% if site_settings.CONTAINER_MAX_WIDTH == "1200px" %}selected{% endif %}>1200px - Compact Centered</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Container Padding</label>
+                                    <select id="containerPaddingInput" name="CONTAINER_PADDING" class="form-select">
+                                        <option value="1rem" {% if site_settings.CONTAINER_PADDING == "1rem" %}selected{% endif %}>1rem - Tight</option>
+                                        <option value="1.5rem" {% if site_settings.CONTAINER_PADDING == "1.5rem" %}selected{% endif %}>1.5rem - Standard</option>
+                                        <option value="2rem" {% if site_settings.CONTAINER_PADDING == "2rem" %}selected{% endif %}>2rem - Spacious</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TAB 6: TABLES & DATA GRIDS -->
+                        <div class="tab-pane fade" id="tab-tables" role="tabpanel">
+                            <h6 class="fw-bold mb-3 text-primary"><i class="bi bi-grid-3x3-gap me-1"></i> Data Table Headers (`th`), Rows (`tr`), Cells (`td`)</h6>
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Table Header (`th`) Background</label>
+                                    <div class="input-group">
+                                        <input type="color" id="tableHeaderBgPicker" class="form-control form-control-color" value="{{ site_settings.TABLE_HEADER_BG }}">
+                                        <input type="text" id="tableHeaderBgInput" name="TABLE_HEADER_BG" class="form-control" value="{{ site_settings.TABLE_HEADER_BG }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Table Header (`th`) Text Color</label>
+                                    <div class="input-group">
+                                        <input type="color" id="tableHeaderTextColorPicker" class="form-control form-control-color" value="{{ site_settings.TABLE_HEADER_TEXT_COLOR }}">
+                                        <input type="text" id="tableHeaderTextColorInput" name="TABLE_HEADER_TEXT_COLOR" class="form-control" value="{{ site_settings.TABLE_HEADER_TEXT_COLOR }}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Row Hover (`tr:hover`) Background</label>
+                                    <div class="input-group">
+                                        <input type="color" id="tableRowHoverBgPicker" class="form-control form-control-color" value="{{ site_settings.TABLE_ROW_HOVER_BG }}">
+                                        <input type="text" id="tableRowHoverBgInput" name="TABLE_ROW_HOVER_BG" class="form-control" value="{{ site_settings.TABLE_ROW_HOVER_BG }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Table Border Color</label>
+                                    <div class="input-group">
+                                        <input type="color" id="tableBorderColorPicker" class="form-control form-control-color" value="{{ site_settings.TABLE_BORDER_COLOR }}">
+                                        <input type="text" id="tableBorderColorInput" name="TABLE_BORDER_COLOR" class="form-control" value="{{ site_settings.TABLE_BORDER_COLOR }}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Table Data Font Size</label>
+                                    <select id="tableFontSizeInput" name="TABLE_FONT_SIZE" class="form-select">
+                                        <option value="0.8rem" {% if site_settings.TABLE_FONT_SIZE == "0.8rem" %}selected{% endif %}>Compact (12.8px)</option>
+                                        <option value="0.875rem" {% if site_settings.TABLE_FONT_SIZE == "0.875rem" %}selected{% endif %}>Standard (14px)</option>
+                                        <option value="0.95rem" {% if site_settings.TABLE_FONT_SIZE == "0.95rem" %}selected{% endif %}>Comfortable (15.2px)</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Table Cell Padding (`td` / `th`)</label>
+                                    <select id="tableCellPaddingInput" name="TABLE_CELL_PADDING" class="form-select">
+                                        <option value="0.5rem 0.75rem" {% if site_settings.TABLE_CELL_PADDING == "0.5rem 0.75rem" %}selected{% endif %}>Compact (8px 12px)</option>
+                                        <option value="0.75rem 1rem" {% if site_settings.TABLE_CELL_PADDING == "0.75rem 1rem" %}selected{% endif %}>Standard (12px 16px)</option>
+                                        <option value="1rem 1.25rem" {% if site_settings.TABLE_CELL_PADDING == "1rem 1.25rem" %}selected{% endif %}>Spacious (16px 20px)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TAB 7: BUTTONS & INTERACTIVE HOVERS -->
+                        <div class="tab-pane fade" id="tab-buttons" role="tabpanel">
+                            <h6 class="fw-bold mb-3 text-primary"><i class="bi bi-cursor-fill me-1"></i> Buttons & Action Element Customization</h6>
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Primary Brand Color</label>
+                                    <div class="input-group">
+                                        <input type="color" id="primaryColorPicker" class="form-control form-control-color" value="{{ site_settings.PRIMARY_COLOR }}">
+                                        <input type="text" id="primaryColorInput" name="PRIMARY_COLOR" class="form-control" value="{{ site_settings.PRIMARY_COLOR }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Primary Button Hover Color</label>
+                                    <div class="input-group">
+                                        <input type="color" id="primaryHoverBgPicker" class="form-control form-control-color" value="{{ site_settings.PRIMARY_HOVER_BG }}">
+                                        <input type="text" id="primaryHoverBgInput" name="PRIMARY_HOVER_BG" class="form-control" value="{{ site_settings.PRIMARY_HOVER_BG }}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Accent / Gold Highlight Color</label>
+                                    <div class="input-group">
+                                        <input type="color" id="accentColorPicker" class="form-control form-control-color" value="{{ site_settings.ACCENT_COLOR }}">
+                                        <input type="text" id="accentColorInput" name="ACCENT_COLOR" class="form-control" value="{{ site_settings.ACCENT_COLOR }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Button Corner Radius</label>
+                                    <select id="btnBorderRadiusInput" name="BTN_BORDER_RADIUS" class="form-select">
+                                        <option value="4px" {% if site_settings.BTN_BORDER_RADIUS == "4px" %}selected{% endif %}>4px - Sharp Square</option>
+                                        <option value="8px" {% if site_settings.BTN_BORDER_RADIUS == "8px" %}selected{% endif %}>8px - Standard Round</option>
+                                        <option value="12px" {% if site_settings.BTN_BORDER_RADIUS == "12px" %}selected{% endif %}>12px - Soft Curve</option>
+                                        <option value="50px" {% if site_settings.BTN_BORDER_RADIUS == "50px" %}selected{% endif %}>50px - Full Pill Button</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Button Font Weight</label>
+                                    <select id="btnFontWeightInput" name="BTN_FONT_WEIGHT" class="form-select">
+                                        <option value="500" {% if site_settings.BTN_FONT_WEIGHT == "500" %}selected{% endif %}>500 - Medium</option>
+                                        <option value="600" {% if site_settings.BTN_FONT_WEIGHT == "600" %}selected{% endif %}>600 - SemiBold</option>
+                                        <option value="700" {% if site_settings.BTN_FONT_WEIGHT == "700" %}selected{% endif %}>700 - Bold</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Button Hover Micro-Animation</label>
+                                    <select id="btnHoverTransformInput" name="BTN_HOVER_TRANSFORM" class="form-select">
+                                        <option value="none" {% if site_settings.BTN_HOVER_TRANSFORM == "none" %}selected{% endif %}>None (Static)</option>
+                                        <option value="translateY(-1px)" {% if site_settings.BTN_HOVER_TRANSFORM == "translateY(-1px)" %}selected{% endif %}>Lift Up Subtle (-1px)</option>
+                                        <option value="translateY(-3px)" {% if site_settings.BTN_HOVER_TRANSFORM == "translateY(-3px)" %}selected{% endif %}>Lift Up Prominent (-3px)</option>
+                                        <option value="scale(1.02)" {% if site_settings.BTN_HOVER_TRANSFORM == "scale(1.02)" %}selected{% endif %}>Scale Pop (+2%)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TAB 8: FOOTER & CONTACT -->
+                        <div class="tab-pane fade" id="tab-footer" role="tabpanel">
+                            <h6 class="fw-bold mb-3 text-primary"><i class="bi bi-window-dock me-1"></i> Footer & Contact Details</h6>
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Footer Background Color</label>
+                                    <div class="input-group">
+                                        <input type="color" id="footerBgPicker" class="form-control form-control-color" value="{{ site_settings.FOOTER_BG }}">
+                                        <input type="text" id="footerBgInput" name="FOOTER_BG" class="form-control" value="{{ site_settings.FOOTER_BG }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Footer Text Color</label>
+                                    <div class="input-group">
+                                        <input type="color" id="footerTextColorPicker" class="form-control form-control-color" value="{{ site_settings.FOOTER_TEXT_COLOR }}">
+                                        <input type="text" id="footerTextColorInput" name="FOOTER_TEXT_COLOR" class="form-control" value="{{ site_settings.FOOTER_TEXT_COLOR }}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Contact Phone Number</label>
+                                    <input type="text" id="contactPhoneInput" name="CONTACT_PHONE" class="form-control" value="{{ site_settings.CONTACT_PHONE }}">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Contact Email</label>
+                                    <input type="email" id="contactEmailInput" name="CONTACT_EMAIL" class="form-control" value="{{ site_settings.CONTACT_EMAIL }}">
+                                </div>
+                            </div>
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-12">
+                                    <label class="form-label fw-semibold">Footer Copyright Text</label>
+                                    <input type="text" id="footerTextInput" name="FOOTER_TEXT" class="form-control" value="{{ site_settings.FOOTER_TEXT }}">
+                                </div>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Footer Target Website URL</label>
+                                    <input type="url" id="footerUrlInput" name="FOOTER_URL" class="form-control" value="{{ site_settings.FOOTER_URL }}">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Footer Link Button Label</label>
+                                    <input type="text" id="footerUrlLabelInput" name="FOOTER_URL_LABEL" class="form-control" value="{{ site_settings.FOOTER_URL_LABEL }}">
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+            
+            <div class="card-footer bg-light p-3 text-end">
+                <button type="submit" form="siteSettingsForm" class="btn btn-primary px-4"><i class="bi bi-save me-1"></i> Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Column: Interactive Real-Time Live Preview -->
+    <div class="col-xl-5 col-lg-6 align-self-start">
+        <div class="card border-0 shadow-sm sticky-top overflow-y-auto" style="top: 90px; max-height: calc(100vh - 170px); z-index: 5 !important;">
+            <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
+                <h6 class="m-0 fw-bold text-dark d-flex align-items-center gap-2">
+                    <i class="bi bi-eye-fill text-success fs-5"></i> Real-Time Live Preview Engine
+                </h6>
+                <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2 py-1 small">
+                    <i class="bi bi-record-fill text-success animate-pulse me-1"></i> Synchronized
+                </span>
+            </div>
+
+            <div class="card-body p-3 bg-light">
+                <div id="previewCanvas" class="border rounded-3 shadow-sm overflow-hidden" style="background-color: #f8fafc; transition: all 0.3s ease;">
+                    
+                    <!-- Preview Top Header -->
+                    <div id="previewHeader" class="p-3 border-bottom d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center gap-2">
+                            <div id="previewBrandIcon" class="p-2 rounded text-white d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+                                <i id="previewLogoIconElem" class="bi bi-flower1 fs-5"></i>
+                                <img id="previewLogoImgElem" src="" alt="Logo" class="d-none" style="max-height: 28px; max-width: 28px; object-fit: contain;">
+                            </div>
+                            <div>
+                                <div id="previewSiteName" class="fw-bold leading-tight" style="font-size: 16px;">Vinayaka</div>
+                                <div id="previewSiteSlogan" class="small opacity-75" style="font-size: 11px;">Youth Committee</div>
+                            </div>
+                        </div>
+                        <div>
+                            <span id="previewHeaderTitleElem" class="fw-bold small me-2">Dashboard</span>
+                            <span class="badge bg-primary-subtle text-primary rounded-pill small px-2 py-1">Admin</span>
+                        </div>
+                    </div>
+
+                    <!-- Preview Sidebar Navigation Bar -->
+                    <div id="previewNavbar" class="px-3 py-2 border-bottom d-flex align-items-center gap-2 overflow-x-auto" style="font-size: 13px;">
+                        <span id="previewNavActive" class="px-2 py-1 rounded d-flex align-items-center gap-1">
+                            <i id="previewNavActiveIcon" class="bi bi-grid-1x2-fill"></i> Dashboard
+                        </span>
+                        <span id="previewNavHover" class="px-2 py-1 rounded d-flex align-items-center gap-1">
+                            <i id="previewNavHoverIcon" class="bi bi-wallet2"></i> Finance
+                        </span>
+                        <span id="previewNavNormal" class="px-2 py-1 rounded d-flex align-items-center gap-1 opacity-75">
+                            <i id="previewNavNormalIcon" class="bi bi-people-fill"></i> Members
+                        </span>
+                    </div>
+
+                    <!-- Preview Body Content Mockup -->
+                    <div id="previewBodyContent" class="p-3">
+                        <!-- Preview Card -->
+                        <div id="previewCard" class="card border p-3 mb-3">
+                            <div id="previewCardHeader" class="card-header border-0 bg-transparent p-0 mb-2 d-flex justify-content-between align-items-center">
+                                <span class="fw-bold small">FINANCIAL SUMMARY CARD</span>
+                                <i class="bi bi-graph-up-arrow text-success"></i>
+                            </div>
+                            <div id="previewCardBody" class="card-body p-0">
+                                <h4 id="previewCardVal" class="fw-bold mb-1">₹ 50,000.00</h4>
+                                <small class="text-success"><i class="bi bi-check-circle me-1"></i> Real-time structure updated</small>
+                            </div>
+                        </div>
+
+                        <!-- Preview Table (th, tr, td) -->
+                        <div class="table-responsive rounded border mb-3">
+                            <table id="previewTable" class="table table-hover mb-0">
+                                <thead>
+                                    <tr id="previewTableHeadRow">
+                                        <th>Date</th>
+                                        <th>Source</th>
+                                        <th>Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr id="previewTableRow">
+                                        <td>21 Aug 2026</td>
+                                        <td>General Fund</td>
+                                        <td class="fw-bold text-success">₹ 5,000</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Preview Button -->
+                        <div class="text-end">
+                            <button id="previewBtnPrimary" type="button" class="btn btn-primary btn-sm px-3">
+                                <i class="bi bi-check2-circle me-1"></i> Action Button
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Preview Footer -->
+                    <div id="previewFooter" class="p-3 border-top d-flex align-items-center justify-content-between flex-wrap gap-2" style="font-size: 11px;">
+                        <div>
+                            <div id="previewFooterText" class="opacity-75">© 2026 Vinayaka Youth Committee</div>
+                        </div>
+                        <div>
+                            <a id="previewFooterBtn" href="#" class="btn btn-xs fw-bold px-2 py-1" style="font-size: 10px;">
+                                <span id="previewFooterBtnLabel">Visit Official Portal</span> <i class="bi bi-box-arrow-up-right ms-1"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+                
+                <div class="text-center mt-3">
+                    <small class="text-muted"><i class="bi bi-info-circle me-1"></i> The interactive live preview reflects color pickers, typography fonts, sidebar states, cards, tables, and buttons instantly.</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // Inputs & Elements
+    const siteNameInput = document.getElementById("siteNameInput");
+    const siteSloganInput = document.getElementById("siteSloganInput");
+    const headerTitleInput = document.getElementById("headerTitleInput");
+    const headerSubtitleInput = document.getElementById("headerSubtitleInput");
+    const logoIconInput = document.getElementById("logoIconInput");
+    const logoUrlInput = document.getElementById("logoUrlInput");
+    const currencySymbolInput = document.getElementById("currencySymbolInput");
+
+    const bodyFontInput = document.getElementById("bodyFontInput");
+    const headingFontInput = document.getElementById("headingFontInput");
+    const bodyFontSizeInput = document.getElementById("bodyFontSizeInput");
+    const bodyFontWeightInput = document.getElementById("bodyFontWeightInput");
+    const headingFontWeightInput = document.getElementById("headingFontWeightInput");
+
+    const primaryColorInput = document.getElementById("primaryColorInput");
+    const primaryColorPicker = document.getElementById("primaryColorPicker");
+    const primaryHoverBgInput = document.getElementById("primaryHoverBgInput");
+    const primaryHoverBgPicker = document.getElementById("primaryHoverBgPicker");
+    const accentColorInput = document.getElementById("accentColorInput");
+    const accentColorPicker = document.getElementById("accentColorPicker");
+    const mainBgInput = document.getElementById("mainBgInput");
+    const mainBgPicker = document.getElementById("mainBgPicker");
+
+    const sidebarBgInput = document.getElementById("sidebarBgInput");
+    const sidebarBgPicker = document.getElementById("sidebarBgPicker");
+    const sidebarBrandBgInput = document.getElementById("sidebarBrandBgInput");
+    const sidebarBrandBgPicker = document.getElementById("sidebarBrandBgPicker");
+    const sidebarTextColorInput = document.getElementById("sidebarTextColorInput");
+    const sidebarTextColorPicker = document.getElementById("sidebarTextColorPicker");
+    const sidebarIconColorInput = document.getElementById("sidebarIconColorInput");
+    const sidebarIconColorPicker = document.getElementById("sidebarIconColorPicker");
+    const sidebarHoverBgInput = document.getElementById("sidebarHoverBgInput");
+    const sidebarHoverTextColorInput = document.getElementById("sidebarHoverTextColorInput");
+    const sidebarHoverTextColorPicker = document.getElementById("sidebarHoverTextColorPicker");
+    const sidebarActiveBgInput = document.getElementById("sidebarActiveBgInput");
+    const sidebarActiveTextColorInput = document.getElementById("sidebarActiveTextColorInput");
+    const sidebarActiveTextColorPicker = document.getElementById("sidebarActiveTextColorPicker");
+    const sidebarActiveBorderInput = document.getElementById("sidebarActiveBorderInput");
+    const sidebarActiveBorderPicker = document.getElementById("sidebarActiveBorderPicker");
+    const sidebarFontSizeInput = document.getElementById("sidebarFontSizeInput");
+    const sidebarFontWeightInput = document.getElementById("sidebarFontWeightInput");
+
+    const headerBgInput = document.getElementById("headerBgInput");
+    const headerBgPicker = document.getElementById("headerBgPicker");
+    const headerTextColorInput = document.getElementById("headerTextColorInput");
+    const headerTextColorPicker = document.getElementById("headerTextColorPicker");
+    const headerBorderColorInput = document.getElementById("headerBorderColorInput");
+    const headerBorderColorPicker = document.getElementById("headerBorderColorPicker");
+    const headerFontSizeInput = document.getElementById("headerFontSizeInput");
+    const headerFontWeightInput = document.getElementById("headerFontWeightInput");
+
+    const cardBgInput = document.getElementById("cardBgInput");
+    const cardBgPicker = document.getElementById("cardBgPicker");
+    const cardHeaderBgInput = document.getElementById("cardHeaderBgInput");
+    const cardHeaderBgPicker = document.getElementById("cardHeaderBgPicker");
+    const cardHeaderTextColorInput = document.getElementById("cardHeaderTextColorInput");
+    const cardHeaderTextColorPicker = document.getElementById("cardHeaderTextColorPicker");
+    const cardBorderColorInput = document.getElementById("cardBorderColorInput");
+    const cardBorderColorPicker = document.getElementById("cardBorderColorPicker");
+    const cardBorderRadiusInput = document.getElementById("cardBorderRadiusInput");
+    const cardShadowInput = document.getElementById("cardShadowInput");
+
+    const tableHeaderBgInput = document.getElementById("tableHeaderBgInput");
+    const tableHeaderBgPicker = document.getElementById("tableHeaderBgPicker");
+    const tableHeaderTextColorInput = document.getElementById("tableHeaderTextColorInput");
+    const tableHeaderTextColorPicker = document.getElementById("tableHeaderTextColorPicker");
+    const tableRowHoverBgInput = document.getElementById("tableRowHoverBgInput");
+    const tableRowHoverBgPicker = document.getElementById("tableRowHoverBgPicker");
+    const tableBorderColorInput = document.getElementById("tableBorderColorInput");
+    const tableBorderColorPicker = document.getElementById("tableBorderColorPicker");
+    const tableFontSizeInput = document.getElementById("tableFontSizeInput");
+    const tableCellPaddingInput = document.getElementById("tableCellPaddingInput");
+
+    const btnBorderRadiusInput = document.getElementById("btnBorderRadiusInput");
+    const btnFontWeightInput = document.getElementById("btnFontWeightInput");
+    const btnHoverTransformInput = document.getElementById("btnHoverTransformInput");
+
+    const footerBgInput = document.getElementById("footerBgInput");
+    const footerBgPicker = document.getElementById("footerBgPicker");
+    const footerTextColorInput = document.getElementById("footerTextColorInput");
+    const footerTextColorPicker = document.getElementById("footerTextColorPicker");
+    const footerTextInput = document.getElementById("footerTextInput");
+    const footerUrlInput = document.getElementById("footerUrlInput");
+    const footerUrlLabelInput = document.getElementById("footerUrlLabelInput");
+
+    // Preview Targets
+    const previewCanvas = document.getElementById("previewCanvas");
+    const previewHeader = document.getElementById("previewHeader");
+    const previewBrandIcon = document.getElementById("previewBrandIcon");
+    const previewLogoIconElem = document.getElementById("previewLogoIconElem");
+    const previewLogoImgElem = document.getElementById("previewLogoImgElem");
+    const previewSiteName = document.getElementById("previewSiteName");
+    const previewSiteSlogan = document.getElementById("previewSiteSlogan");
+    const previewHeaderTitleElem = document.getElementById("previewHeaderTitleElem");
+
+    const previewNavbar = document.getElementById("previewNavbar");
+    const previewNavActive = document.getElementById("previewNavActive");
+    const previewNavActiveIcon = document.getElementById("previewNavActiveIcon");
+    const previewNavHover = document.getElementById("previewNavHover");
+    const previewNavHoverIcon = document.getElementById("previewNavHoverIcon");
+    const previewNavNormal = document.getElementById("previewNavNormal");
+    const previewNavNormalIcon = document.getElementById("previewNavNormalIcon");
+
+    const previewCard = document.getElementById("previewCard");
+    const previewCardHeader = document.getElementById("previewCardHeader");
+    const previewCardVal = document.getElementById("previewCardVal");
+
+    const previewTable = document.getElementById("previewTable");
+    const previewTableHeadRow = document.getElementById("previewTableHeadRow");
+    const previewTableRow = document.getElementById("previewTableRow");
+
+    const previewBtnPrimary = document.getElementById("previewBtnPrimary");
+    const previewFooter = document.getElementById("previewFooter");
+    const previewFooterText = document.getElementById("previewFooterText");
+    const previewFooterBtn = document.getElementById("previewFooterBtn");
+    const previewFooterBtnLabel = document.getElementById("previewFooterBtnLabel");
+
+    // Sync Helper
+    function bindSync(picker, input) {
+        if (!picker || !input) return;
+        picker.addEventListener("input", function() {
+            input.value = picker.value;
+            updatePreview();
+        });
+        input.addEventListener("input", function() {
+            if (/^#[0-9A-F]{6}$/i.test(input.value)) {
+                picker.value = input.value;
+            }
+            updatePreview();
+        });
+    }
+
+    bindSync(primaryColorPicker, primaryColorInput);
+    bindSync(primaryHoverBgPicker, primaryHoverBgInput);
+    bindSync(accentColorPicker, accentColorInput);
+    bindSync(mainBgPicker, mainBgInput);
+    bindSync(sidebarBgPicker, sidebarBgInput);
+    bindSync(sidebarBrandBgPicker, sidebarBrandBgInput);
+    bindSync(sidebarTextColorPicker, sidebarTextColorInput);
+    bindSync(sidebarIconColorPicker, sidebarIconColorInput);
+    bindSync(sidebarHoverTextColorPicker, sidebarHoverTextColorInput);
+    bindSync(sidebarActiveTextColorPicker, sidebarActiveTextColorInput);
+    bindSync(sidebarActiveBorderPicker, sidebarActiveBorderInput);
+    bindSync(headerBgPicker, headerBgInput);
+    bindSync(headerTextColorPicker, headerTextColorInput);
+    bindSync(headerBorderColorPicker, headerBorderColorInput);
+    bindSync(cardBgPicker, cardBgInput);
+    bindSync(cardHeaderBgPicker, cardHeaderBgInput);
+    bindSync(cardHeaderTextColorPicker, cardHeaderTextColorInput);
+    bindSync(cardBorderColorPicker, cardBorderColorInput);
+    bindSync(tableHeaderBgPicker, tableHeaderBgInput);
+    bindSync(tableHeaderTextColorPicker, tableHeaderTextColorInput);
+    bindSync(tableRowHoverBgPicker, tableRowHoverBgInput);
+    bindSync(tableBorderColorPicker, tableBorderColorInput);
+    bindSync(footerBgPicker, footerBgInput);
+    bindSync(footerTextColorPicker, footerTextColorInput);
+
+    function updatePreview() {
+        if (previewSiteName) previewSiteName.textContent = siteNameInput.value || "Vinayaka";
+        if (previewSiteSlogan) previewSiteSlogan.textContent = siteSloganInput.value || "Youth Committee";
+        if (previewHeaderTitleElem) previewHeaderTitleElem.textContent = headerTitleInput.value || "Dashboard";
+
+        if (logoUrlInput.value.trim() !== "") {
+            previewLogoImgElem.src = logoUrlInput.value.trim();
+            previewLogoImgElem.classList.remove("d-none");
+            previewLogoIconElem.classList.add("d-none");
+        } else {
+            previewLogoImgElem.classList.add("d-none");
+            previewLogoIconElem.classList.remove("d-none");
+            previewLogoIconElem.className = "bi " + logoIconInput.value + " fs-5";
+        }
+
+        // Fonts
+        previewCanvas.style.fontFamily = bodyFontInput.value;
+        previewCanvas.style.fontSize = bodyFontSizeInput.value;
+        previewCanvas.style.fontWeight = bodyFontWeightInput.value;
+        previewSiteName.style.fontFamily = headingFontInput.value;
+        previewSiteName.style.fontWeight = headingFontWeightInput.value;
+
+        // Canvas BG
+        previewCanvas.style.backgroundColor = mainBgInput.value;
+
+        // Brand & Header
+        if (previewHeader) {
+            previewHeader.style.backgroundColor = headerBgInput.value;
+            previewHeader.style.color = headerTextColorInput.value;
+            previewHeader.style.borderBottomColor = headerBorderColorInput.value;
+        }
+        if (previewBrandIcon) previewBrandIcon.style.backgroundColor = primaryColorInput.value;
+
+        // Sidebar Nav
+        if (previewNavbar) {
+            previewNavbar.style.backgroundColor = sidebarBgInput.value;
+            previewNavbar.style.fontSize = sidebarFontSizeInput.value;
+            previewNavbar.style.fontWeight = sidebarFontWeightInput.value;
+        }
+        if (previewNavNormal) previewNavNormal.style.color = sidebarTextColorInput.value;
+        if (previewNavNormalIcon) previewNavNormalIcon.style.color = sidebarIconColorInput.value;
+        
+        if (previewNavHover) {
+            previewNavHover.style.backgroundColor = sidebarHoverBgInput.value;
+            previewNavHover.style.color = sidebarHoverTextColorInput.value;
+        }
+        if (previewNavHoverIcon) previewNavHoverIcon.style.color = sidebarIconColorInput.value;
+
+        if (previewNavActive) {
+            previewNavActive.style.backgroundColor = sidebarActiveBgInput.value;
+            previewNavActive.style.color = sidebarActiveTextColorInput.value;
+            previewNavActive.style.borderLeft = "3px solid " + sidebarActiveBorderInput.value;
+        }
+        if (previewNavActiveIcon) previewNavActiveIcon.style.color = sidebarActiveTextColorInput.value;
+
+        // Card
+        if (previewCard) {
+            previewCard.style.backgroundColor = cardBgInput.value;
+            previewCard.style.borderColor = cardBorderColorInput.value;
+            previewCard.style.borderRadius = cardBorderRadiusInput.value;
+            previewCard.style.boxShadow = cardShadowInput.value === "none" ? "none" : cardShadowInput.value;
+        }
+        if (previewCardHeader) {
+            previewCardHeader.style.backgroundColor = cardHeaderBgInput.value;
+            previewCardHeader.style.color = cardHeaderTextColorInput.value;
+        }
+        if (previewCardVal) {
+            previewCardVal.style.color = primaryColorInput.value;
+            previewCardVal.textContent = (currencySymbolInput.value || "₹") + " 50,000.00";
+        }
+
+        // Table
+        if (previewTable) {
+            previewTable.style.fontSize = tableFontSizeInput.value;
+            previewTable.style.borderColor = tableBorderColorInput.value;
+        }
+        if (previewTableHeadRow) {
+            Array.from(previewTableHeadRow.children).forEach(th => {
+                th.style.backgroundColor = tableHeaderBgInput.value;
+                th.style.color = tableHeaderTextColorInput.value;
+                th.style.padding = tableCellPaddingInput.value;
+            });
+        }
+        if (previewTableRow) {
+            Array.from(previewTableRow.children).forEach(td => {
+                td.style.padding = tableCellPaddingInput.value;
+            });
+        }
+
+        // Button
+        if (previewBtnPrimary) {
+            previewBtnPrimary.style.backgroundColor = primaryColorInput.value;
+            previewBtnPrimary.style.borderColor = primaryColorInput.value;
+            previewBtnPrimary.style.borderRadius = btnBorderRadiusInput.value;
+            previewBtnPrimary.style.fontWeight = btnFontWeightInput.value;
+        }
+
+        // Footer
+        if (previewFooter) {
+            previewFooter.style.backgroundColor = footerBgInput.value;
+            previewFooter.style.color = footerTextColorInput.value;
+        }
+        if (previewFooterText) previewFooterText.textContent = footerTextInput.value || "© 2026 Vinayaka Youth Committee";
+        if (previewFooterBtn) {
+            previewFooterBtn.style.backgroundColor = primaryColorInput.value;
+            previewFooterBtn.style.color = "#ffffff";
+            previewFooterBtn.style.borderRadius = btnBorderRadiusInput.value;
+        }
+        if (previewFooterBtnLabel) previewFooterBtnLabel.textContent = footerUrlLabelInput.value || "Visit Official Portal";
+    }
+
+    document.querySelectorAll("#siteSettingsForm input, #siteSettingsForm select").forEach(el => {
+        el.addEventListener("input", updatePreview);
+        el.addEventListener("change", updatePreview);
+    });
+
+    // Theme Presets Engine
+    const presets = {
+        royal: {
+            THEME_PRESET: "royal",
+            PRIMARY_COLOR: "#8b1e24",
+            PRIMARY_HOVER_BG: "#6c1419",
+            ACCENT_COLOR: "#f59e0b",
+            MAIN_BG: "#f8fafc",
+            SIDEBAR_BG: "#0b0f19",
+            SIDEBAR_BRAND_BG: "#111827",
+            SIDEBAR_TEXT_COLOR: "#cbd5e1",
+            SIDEBAR_HOVER_BG: "rgba(255, 255, 255, 0.06)",
+            SIDEBAR_HOVER_TEXT_COLOR: "#ffffff",
+            SIDEBAR_ACTIVE_BG: "rgba(245, 158, 11, 0.14)",
+            SIDEBAR_ACTIVE_TEXT_COLOR: "#f59e0b",
+            SIDEBAR_ACTIVE_BORDER: "#f59e0b",
+            SIDEBAR_ICON_COLOR: "#94a3b8",
+            HEADER_BG: "#ffffff",
+            HEADER_TEXT_COLOR: "#0f172a",
+            HEADER_BORDER_COLOR: "#e2e8f0",
+            CARD_BG: "#ffffff",
+            CARD_HEADER_BG: "#ffffff",
+            CARD_HEADER_TEXT_COLOR: "#0f172a",
+            CARD_BORDER_COLOR: "#e2e8f0",
+            TABLE_HEADER_BG: "#f8fafc",
+            TABLE_HEADER_TEXT_COLOR: "#475569",
+            TABLE_ROW_HOVER_BG: "#f1f5f9",
+            FOOTER_BG: "#ffffff",
+            FOOTER_TEXT_COLOR: "#64748b"
+        },
+        navy: {
+            THEME_PRESET: "navy",
+            PRIMARY_COLOR: "#1e3a8a",
+            PRIMARY_HOVER_BG: "#1e40af",
+            ACCENT_COLOR: "#3b82f6",
+            MAIN_BG: "#f1f5f9",
+            SIDEBAR_BG: "#0f172a",
+            SIDEBAR_BRAND_BG: "#1e293b",
+            SIDEBAR_TEXT_COLOR: "#94a3b8",
+            SIDEBAR_HOVER_BG: "rgba(59, 130, 246, 0.1)",
+            SIDEBAR_HOVER_TEXT_COLOR: "#ffffff",
+            SIDEBAR_ACTIVE_BG: "rgba(59, 130, 246, 0.2)",
+            SIDEBAR_ACTIVE_TEXT_COLOR: "#60a5fa",
+            SIDEBAR_ACTIVE_BORDER: "#3b82f6",
+            SIDEBAR_ICON_COLOR: "#64748b",
+            HEADER_BG: "#ffffff",
+            HEADER_TEXT_COLOR: "#0f172a",
+            HEADER_BORDER_COLOR: "#cbd5e1",
+            CARD_BG: "#ffffff",
+            CARD_HEADER_BG: "#ffffff",
+            CARD_HEADER_TEXT_COLOR: "#1e293b",
+            CARD_BORDER_COLOR: "#cbd5e1",
+            TABLE_HEADER_BG: "#f8fafc",
+            TABLE_HEADER_TEXT_COLOR: "#334155",
+            TABLE_ROW_HOVER_BG: "#e2e8f0",
+            FOOTER_BG: "#ffffff",
+            FOOTER_TEXT_COLOR: "#475569"
+        },
+        emerald: {
+            THEME_PRESET: "emerald",
+            PRIMARY_COLOR: "#059669",
+            PRIMARY_HOVER_BG: "#047857",
+            ACCENT_COLOR: "#10b981",
+            MAIN_BG: "#f0fdf4",
+            SIDEBAR_BG: "#022c22",
+            SIDEBAR_BRAND_BG: "#064e3b",
+            SIDEBAR_TEXT_COLOR: "#a7f3d0",
+            SIDEBAR_HOVER_BG: "rgba(16, 185, 129, 0.12)",
+            SIDEBAR_HOVER_TEXT_COLOR: "#ffffff",
+            SIDEBAR_ACTIVE_BG: "rgba(16, 185, 129, 0.22)",
+            SIDEBAR_ACTIVE_TEXT_COLOR: "#34d399",
+            SIDEBAR_ACTIVE_BORDER: "#10b981",
+            SIDEBAR_ICON_COLOR: "#6ee7b7",
+            HEADER_BG: "#ffffff",
+            HEADER_TEXT_COLOR: "#064e3b",
+            HEADER_BORDER_COLOR: "#a7f3d0",
+            CARD_BG: "#ffffff",
+            CARD_HEADER_BG: "#f0fdf4",
+            CARD_HEADER_TEXT_COLOR: "#065f46",
+            CARD_BORDER_COLOR: "#bbf7d0",
+            TABLE_HEADER_BG: "#f0fdf4",
+            TABLE_HEADER_TEXT_COLOR: "#047857",
+            TABLE_ROW_HOVER_BG: "#dcfce7",
+            FOOTER_BG: "#ffffff",
+            FOOTER_TEXT_COLOR: "#065f46"
+        },
+        midnight: {
+            THEME_PRESET: "midnight",
+            PRIMARY_COLOR: "#6366f1",
+            PRIMARY_HOVER_BG: "#4f46e5",
+            ACCENT_COLOR: "#818cf8",
+            MAIN_BG: "#090d16",
+            SIDEBAR_BG: "#030712",
+            SIDEBAR_BRAND_BG: "#0b0f19",
+            SIDEBAR_TEXT_COLOR: "#9ca3af",
+            SIDEBAR_HOVER_BG: "rgba(99, 102, 241, 0.15)",
+            SIDEBAR_HOVER_TEXT_COLOR: "#ffffff",
+            SIDEBAR_ACTIVE_BG: "rgba(99, 102, 241, 0.25)",
+            SIDEBAR_ACTIVE_TEXT_COLOR: "#818cf8",
+            SIDEBAR_ACTIVE_BORDER: "#6366f1",
+            SIDEBAR_ICON_COLOR: "#6b7280",
+            HEADER_BG: "#0f172a",
+            HEADER_TEXT_COLOR: "#f9fafb",
+            HEADER_BORDER_COLOR: "#1e293b",
+            CARD_BG: "#111827",
+            CARD_HEADER_BG: "#1f2937",
+            CARD_HEADER_TEXT_COLOR: "#f3f4f6",
+            CARD_BORDER_COLOR: "#1f2937",
+            TABLE_HEADER_BG: "#1f2937",
+            TABLE_HEADER_TEXT_COLOR: "#9ca3af",
+            TABLE_ROW_HOVER_BG: "#1e293b",
+            FOOTER_BG: "#0f172a",
+            FOOTER_TEXT_COLOR: "#9ca3af"
+        },
+        amber: {
+            THEME_PRESET: "amber",
+            PRIMARY_COLOR: "#d97706",
+            PRIMARY_HOVER_BG: "#b45309",
+            ACCENT_COLOR: "#7c3aed",
+            MAIN_BG: "#fffbeb",
+            SIDEBAR_BG: "#2e1065",
+            SIDEBAR_BRAND_BG: "#3b0764",
+            SIDEBAR_TEXT_COLOR: "#ddd6fe",
+            SIDEBAR_HOVER_BG: "rgba(217, 119, 6, 0.15)",
+            SIDEBAR_HOVER_TEXT_COLOR: "#ffffff",
+            SIDEBAR_ACTIVE_BG: "rgba(217, 119, 6, 0.25)",
+            SIDEBAR_ACTIVE_TEXT_COLOR: "#fbbf24",
+            SIDEBAR_ACTIVE_BORDER: "#f59e0b",
+            SIDEBAR_ICON_COLOR: "#c4b5fd",
+            HEADER_BG: "#ffffff",
+            HEADER_TEXT_COLOR: "#4c1d95",
+            HEADER_BORDER_COLOR: "#fde68a",
+            CARD_BG: "#ffffff",
+            CARD_HEADER_BG: "#fff8e1",
+            CARD_HEADER_TEXT_COLOR: "#78350f",
+            CARD_BORDER_COLOR: "#fef3c7",
+            TABLE_HEADER_BG: "#fff8e1",
+            TABLE_HEADER_TEXT_COLOR: "#92400e",
+            TABLE_ROW_HOVER_BG: "#fef3c7",
+            FOOTER_BG: "#ffffff",
+            FOOTER_TEXT_COLOR: "#78350f"
+        },
+        minimal: {
+            THEME_PRESET: "minimal",
+            PRIMARY_COLOR: "#475569",
+            PRIMARY_HOVER_BG: "#334155",
+            ACCENT_COLOR: "#0ea5e9",
+            MAIN_BG: "#f8fafc",
+            SIDEBAR_BG: "#1e293b",
+            SIDEBAR_BRAND_BG: "#0f172a",
+            SIDEBAR_TEXT_COLOR: "#94a3b8",
+            SIDEBAR_HOVER_BG: "rgba(255, 255, 255, 0.05)",
+            SIDEBAR_HOVER_TEXT_COLOR: "#f8fafc",
+            SIDEBAR_ACTIVE_BG: "rgba(14, 165, 233, 0.15)",
+            SIDEBAR_ACTIVE_TEXT_COLOR: "#38bdf8",
+            SIDEBAR_ACTIVE_BORDER: "#0ea5e9",
+            SIDEBAR_ICON_COLOR: "#64748b",
+            HEADER_BG: "#ffffff",
+            HEADER_TEXT_COLOR: "#0f172a",
+            HEADER_BORDER_COLOR: "#e2e8f0",
+            CARD_BG: "#ffffff",
+            CARD_HEADER_BG: "#f8fafc",
+            CARD_HEADER_TEXT_COLOR: "#334155",
+            CARD_BORDER_COLOR: "#e2e8f0",
+            TABLE_HEADER_BG: "#f1f5f9",
+            TABLE_HEADER_TEXT_COLOR: "#475569",
+            TABLE_ROW_HOVER_BG: "#f1f5f9",
+            FOOTER_BG: "#ffffff",
+            FOOTER_TEXT_COLOR: "#64748b"
+        }
+    };
+
+    function applyPreset(p) {
+        if (!p) return;
+        document.getElementById("themePresetInput").value = p.THEME_PRESET || "custom";
+        if (p.PRIMARY_COLOR) { primaryColorInput.value = p.PRIMARY_COLOR; primaryColorPicker.value = p.PRIMARY_COLOR; }
+        if (p.PRIMARY_HOVER_BG) { primaryHoverBgInput.value = p.PRIMARY_HOVER_BG; primaryHoverBgPicker.value = p.PRIMARY_HOVER_BG; }
+        if (p.ACCENT_COLOR) { accentColorInput.value = p.ACCENT_COLOR; accentColorPicker.value = p.ACCENT_COLOR; }
+        if (p.MAIN_BG) { mainBgInput.value = p.MAIN_BG; mainBgPicker.value = p.MAIN_BG; }
+        if (p.SIDEBAR_BG) { sidebarBgInput.value = p.SIDEBAR_BG; sidebarBgPicker.value = p.SIDEBAR_BG; }
+        if (p.SIDEBAR_BRAND_BG) { sidebarBrandBgInput.value = p.SIDEBAR_BRAND_BG; sidebarBrandBgPicker.value = p.SIDEBAR_BRAND_BG; }
+        if (p.SIDEBAR_TEXT_COLOR) { sidebarTextColorInput.value = p.SIDEBAR_TEXT_COLOR; sidebarTextColorPicker.value = p.SIDEBAR_TEXT_COLOR; }
+        if (p.SIDEBAR_HOVER_BG) sidebarHoverBgInput.value = p.SIDEBAR_HOVER_BG;
+        if (p.SIDEBAR_HOVER_TEXT_COLOR) { sidebarHoverTextColorInput.value = p.SIDEBAR_HOVER_TEXT_COLOR; sidebarHoverTextColorPicker.value = p.SIDEBAR_HOVER_TEXT_COLOR; }
+        if (p.SIDEBAR_ACTIVE_BG) sidebarActiveBgInput.value = p.SIDEBAR_ACTIVE_BG;
+        if (p.SIDEBAR_ACTIVE_TEXT_COLOR) { sidebarActiveTextColorInput.value = p.SIDEBAR_ACTIVE_TEXT_COLOR; sidebarActiveTextColorPicker.value = p.SIDEBAR_ACTIVE_TEXT_COLOR; }
+        if (p.SIDEBAR_ACTIVE_BORDER) { sidebarActiveBorderInput.value = p.SIDEBAR_ACTIVE_BORDER; sidebarActiveBorderPicker.value = p.SIDEBAR_ACTIVE_BORDER; }
+        if (p.SIDEBAR_ICON_COLOR) { sidebarIconColorInput.value = p.SIDEBAR_ICON_COLOR; sidebarIconColorPicker.value = p.SIDEBAR_ICON_COLOR; }
+        if (p.HEADER_BG) { headerBgInput.value = p.HEADER_BG; headerBgPicker.value = p.HEADER_BG; }
+        if (p.HEADER_TEXT_COLOR) { headerTextColorInput.value = p.HEADER_TEXT_COLOR; headerTextColorPicker.value = p.HEADER_TEXT_COLOR; }
+        if (p.HEADER_BORDER_COLOR) { headerBorderColorInput.value = p.HEADER_BORDER_COLOR; headerBorderColorPicker.value = p.HEADER_BORDER_COLOR; }
+        if (p.CARD_BG) { cardBgInput.value = p.CARD_BG; cardBgPicker.value = p.CARD_BG; }
+        if (p.CARD_HEADER_BG) { cardHeaderBgInput.value = p.CARD_HEADER_BG; cardHeaderBgPicker.value = p.CARD_HEADER_BG; }
+        if (p.CARD_HEADER_TEXT_COLOR) { cardHeaderTextColorInput.value = p.CARD_HEADER_TEXT_COLOR; cardHeaderTextColorPicker.value = p.CARD_HEADER_TEXT_COLOR; }
+        if (p.CARD_BORDER_COLOR) { cardBorderColorInput.value = p.CARD_BORDER_COLOR; cardBorderColorPicker.value = p.CARD_BORDER_COLOR; }
+        if (p.TABLE_HEADER_BG) { tableHeaderBgInput.value = p.TABLE_HEADER_BG; tableHeaderBgPicker.value = p.TABLE_HEADER_BG; }
+        if (p.TABLE_HEADER_TEXT_COLOR) { tableHeaderTextColorInput.value = p.TABLE_HEADER_TEXT_COLOR; tableHeaderTextColorPicker.value = p.TABLE_HEADER_TEXT_COLOR; }
+        if (p.TABLE_ROW_HOVER_BG) { tableRowHoverBgInput.value = p.TABLE_ROW_HOVER_BG; tableRowHoverBgPicker.value = p.TABLE_ROW_HOVER_BG; }
+        if (p.FOOTER_BG) { footerBgInput.value = p.FOOTER_BG; footerBgPicker.value = p.FOOTER_BG; }
+        if (p.FOOTER_TEXT_COLOR) { footerTextColorInput.value = p.FOOTER_TEXT_COLOR; footerTextColorPicker.value = p.FOOTER_TEXT_COLOR; }
+        updatePreview();
+    }
+
+    document.querySelectorAll(".preset-btn").forEach(btn => {
+        btn.addEventListener("click", function() {
+            const key = this.getAttribute("data-preset");
+            applyPreset(presets[key]);
+        });
+    });
+
+    document.getElementById("btnResetDefaults")?.addEventListener("click", function() {
+        if (confirm("Reset all site settings and theme engine tokens to factory defaults?")) {
+            applyPreset(presets.royal);
+        }
+    });
+
+    updatePreview();
+});
+</script>
+{% endblock %}

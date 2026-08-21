@@ -1,7 +1,7 @@
-from . import views
 from django.urls import path
+from . import views
 
 urlpatterns = [
-    path("", views.index, name="index"),
-    path("add/", views.add, name="add"),
+    path("", views.member_list, name="member_list"),
+    path("add/", views.member_add, name="member_add"),
 ]

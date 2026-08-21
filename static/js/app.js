@@ -14,6 +14,23 @@ document.addEventListener("click", function(e) {
     }
 });
 
+// Relocate all modal elements to document.body so they are never trapped in low stacking contexts
+function relocateModalsToBody() {
+    document.querySelectorAll(".modal").forEach(function(modal) {
+        if (modal.parentNode !== document.body) {
+            document.body.appendChild(modal);
+        }
+    });
+}
+
+document.addEventListener("DOMContentLoaded", relocateModalsToBody);
+document.addEventListener("show.bs.modal", relocateModalsToBody);
+document.addEventListener("click", function(e) {
+    if (e.target && e.target.closest('[data-bs-toggle="modal"]')) {
+        relocateModalsToBody();
+    }
+});
+
 // Auto-expand active sidebar collapse dropdown menu based on URL
 document.addEventListener("DOMContentLoaded", function() {
     const currentPath = window.location.pathname;
@@ -112,3 +129,110 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 });
+
+// Global Checkbox Selection & Bulk Toolbar Handler
+document.addEventListener("change", function(e) {
+    // Select All Checkbox Handler
+    if (e.target && e.target.id === "selectAll") {
+        const checkboxes = document.querySelectorAll(".row-checkbox");
+        checkboxes.forEach(cb => cb.checked = e.target.checked);
+        updateBulkToolbar();
+    }
+    
+    // Row Checkbox Handler
+    if (e.target && e.target.classList.contains("row-checkbox")) {
+        const selectAll = document.getElementById("selectAll");
+        const checkboxes = document.querySelectorAll(".row-checkbox");
+        const checkedCount = document.querySelectorAll(".row-checkbox:checked").length;
+        if (selectAll) {
+            selectAll.checked = (checkedCount === checkboxes.length && checkboxes.length > 0);
+        }
+        updateBulkToolbar();
+    }
+});
+
+function updateBulkToolbar() {
+    const checkedCount = document.querySelectorAll(".row-checkbox:checked").length;
+    const toolbar = document.getElementById("bulkActionsToolbar");
+    const countBadge = document.getElementById("selectedCount");
+    
+    if (toolbar) {
+        if (checkedCount > 0) {
+            toolbar.classList.add("show");
+            if (countBadge) countBadge.textContent = checkedCount;
+        } else {
+            toolbar.classList.remove("show");
+        }
+    }
+}
+
+// Trigger Print Dialog for Modal
+function triggerPrint() {
+    window.print();
+}
+
+// Client-Side Form Validation & Live Error Text Removal
+document.addEventListener("submit", function(e) {
+    const form = e.target;
+    if (!form || form.tagName !== "FORM") return;
+
+    let isFormValid = true;
+    const requiredInputs = form.querySelectorAll("input[required], select[required], textarea[required]");
+
+    requiredInputs.forEach(input => {
+        const val = input.value ? input.value.trim() : "";
+        let feedback = input.nextElementSibling;
+        if (feedback && !feedback.classList.contains("invalid-feedback")) {
+            feedback = input.parentElement.querySelector(".invalid-feedback");
+        }
+
+        if (!val) {
+            isFormValid = false;
+            input.classList.add("is-invalid");
+            if (!feedback) {
+                feedback = document.createElement("div");
+                feedback.className = "invalid-feedback d-block text-danger small mt-1";
+                feedback.innerHTML = "* This field is required";
+                input.parentNode.appendChild(feedback);
+            } else {
+                feedback.style.display = "block";
+                feedback.innerHTML = "* This field is required";
+            }
+        } else {
+            input.classList.remove("is-invalid");
+            if (feedback && feedback.classList.contains("invalid-feedback")) {
+                feedback.style.display = "none";
+            }
+        }
+    });
+
+    if (!isFormValid) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+});
+
+// Live input/change listener to hide error text per field as soon as user types or selects
+document.addEventListener("input", handleLiveFieldValidation);
+document.addEventListener("change", handleLiveFieldValidation);
+
+function handleLiveFieldValidation(e) {
+    const field = e.target;
+    if (!field || !["INPUT", "SELECT", "TEXTAREA"].includes(field.tagName)) return;
+
+    if (field.hasAttribute("required")) {
+        const val = field.value ? field.value.trim() : "";
+        let feedback = field.nextElementSibling;
+        if (feedback && !feedback.classList.contains("invalid-feedback")) {
+            feedback = field.parentElement.querySelector(".invalid-feedback");
+        }
+
+        if (val) {
+            field.classList.remove("is-invalid");
+            if (feedback && feedback.classList.contains("invalid-feedback")) {
+                feedback.style.display = "none";
+            }
+        }
+    }
+}
+

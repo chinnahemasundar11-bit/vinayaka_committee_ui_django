@@ -4,7 +4,7 @@
 
 {% block content %}
 <!-- Pixel-Perfect Neat & Responsive Dashboard Header Card -->
-<div class="card p-3 p-md-4 border-0 shadow-sm mb-4 bg-white" style="border-left: 4px solid var(--primary) !important;">
+<div class="card p-3 p-md-4 border-0 shadow-sm mb-4 bg-white position-relative" style="border-left: 4px solid var(--primary) !important; z-index: 10;">
     <div class="row align-items-center g-3">
         <!-- Left Side: Title & Subtitle -->
         <div class="col-md-6 col-lg-6">
@@ -25,7 +25,7 @@
                 <!-- Search Input Field -->
                 <div class="search-input-group flex-grow-1 flex-sm-grow-0" style="max-width: 320px; width: 100%;">
                     <i class="bi bi-search"></i>
-                    <input type="text" class="form-control fw-semibold" placeholder="Search receipt, member, expense..." style="height: 42px;">
+                    <input type="text" class="form-control fw-semibold" style="height: 42px;">
                 </div>
 
                 <!-- Financial Year Selector Dropdown -->
@@ -53,9 +53,9 @@
             <div class="d-flex justify-content-between align-items-start">
                 <div>
                     <div class="stat-label">TOTAL FUNDS RECEIVED</div>
-                    <div class="stat-value">₹ 2,45,000</div>
+                    <div class="stat-value">{{ CURRENCY_SYMBOL }} {{ total_funds|floatformat:2 }}</div>
                     <span class="badge badge-soft-success fw-bold">
-                        <i class="bi bi-arrow-up-short"></i> +12.5% vs last week
+                        <i class="bi bi-shield-check"></i> Total Receipts Collected
                     </span>
                 </div>
                 <div class="stat-icon-wrapper icon-gold">
@@ -69,9 +69,9 @@
             <div class="d-flex justify-content-between align-items-start">
                 <div>
                     <div class="stat-label">TOTAL EXPENSES INCURRED</div>
-                    <div class="stat-value">₹ 86,500</div>
+                    <div class="stat-value">{{ CURRENCY_SYMBOL }} {{ total_expenses|floatformat:2 }}</div>
                     <span class="badge badge-soft-danger fw-bold">
-                        <i class="bi bi-arrow-up-short"></i> +8.2% budget spend
+                        <i class="bi bi-receipt"></i> Total Outflow Expenses
                     </span>
                 </div>
                 <div class="stat-icon-wrapper">
@@ -85,9 +85,9 @@
             <div class="d-flex justify-content-between align-items-start">
                 <div>
                     <div class="stat-label">NET AVAILABLE BALANCE</div>
-                    <div class="stat-value text-success">₹ 1,58,500</div>
+                    <div class="stat-value text-success">{{ CURRENCY_SYMBOL }} {{ net_balance|floatformat:2 }}</div>
                     <span class="badge badge-soft-success fw-bold">
-                        <i class="bi bi-shield-check"></i> Healthy Fund Balance
+                        <i class="bi bi-bank"></i> Healthy Net Position
                     </span>
                 </div>
                 <div class="stat-icon-wrapper icon-success">
@@ -115,7 +115,7 @@
         <div class="card h-100 border-0 shadow-sm">
             <div class="card-header-clean bg-white border-bottom">
                 <h6 class="mb-0 fw-bold"><i class="bi bi-bar-chart-fill text-danger me-2"></i>Expenses by Category</h6>
-                <span class="badge badge-soft-info">Current Month</span>
+                <span class="badge badge-soft-info">Current Period</span>
             </div>
             <div class="card-body-clean" style="min-height: 280px;">
                 <canvas id="expenseCategoriesChart"></canvas>
@@ -128,8 +128,8 @@
 <div class="card border-0 shadow-sm">
     <div class="card-header-clean bg-white border-bottom">
         <div>
-            <h6 class="mb-0 fw-bold"><i class="bi bi-arrow-left-right text-danger me-2"></i>Recent Transactions</h6>
-            <small class="text-secondary fw-semibold">Latest contribution receipts and expense vouchers</small>
+            <h6 class="mb-0 fw-bold"><i class="bi bi-arrow-left-right text-danger me-2"></i>Recent Receipts & Expenses</h6>
+            <small class="text-secondary fw-semibold">Latest contribution receipts recorded in database</small>
         </div>
         <a href="/reports/" class="btn btn-light btn-sm fw-bold">View Full Ledger <i class="bi bi-arrow-right ms-1"></i></a>
     </div>
@@ -137,47 +137,42 @@
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th>Transaction Ref</th>
+                    <th>Ref No.</th>
                     <th>Type</th>
-                    <th>Source / Description</th>
-                    <th>Payment Method</th>
+                    <th>Contributor / Vendor Name</th>
+                    <th>Category / Source</th>
+                    <th>Payment Channel</th>
                     <th>Date</th>
                     <th class="text-end">Amount</th>
                 </tr>
             </thead>
             <tbody>
+                {% for receipt in recent_receipts %}
                 <tr>
-                    <td class="fw-semibold">RCPT-2026-001</td>
+                    <td class="fw-semibold">{{ receipt.receipt_number }}</td>
                     <td><span class="badge badge-soft-success"><i class="bi bi-arrow-down-left me-1"></i>Fund</span></td>
-                    <td>Village Contribution (Ramesh Kumar)</td>
-                    <td><span class="badge badge-soft-info">UPI / PhonePe</span></td>
-                    <td class="text-muted">13 Aug 2026</td>
-                    <td class="text-end fw-bold text-success">+ ₹15,000</td>
+                    <td class="fw-bold">{{ receipt.donor_name }}</td>
+                    <td><span class="badge badge-soft-primary">{{ receipt.fund_source.name }}</span></td>
+                    <td><span class="badge badge-soft-info">{{ receipt.payment_method.name }}</span></td>
+                    <td class="text-muted">{{ receipt.date_received|date:"d M Y" }}</td>
+                    <td class="text-end fw-bold text-success">+ {{ CURRENCY_SYMBOL }} {{ receipt.amount|floatformat:2 }}</td>
                 </tr>
+                {% empty %}
                 <tr>
-                    <td class="fw-semibold">EXP-2026-012</td>
+                    <td colspan="7" class="text-center text-muted py-3">No fund receipts recorded yet.</td>
+                </tr>
+                {% endfor %}
+                {% for expense in recent_expenses %}
+                <tr>
+                    <td class="fw-semibold">{{ expense.voucher_number }}</td>
                     <td><span class="badge badge-soft-danger"><i class="bi bi-arrow-up-right me-1"></i>Expense</span></td>
-                    <td>Mandapam Decoration Stage Lights</td>
-                    <td><span class="badge badge-soft-warning">Cash</span></td>
-                    <td class="text-muted">12 Aug 2026</td>
-                    <td class="text-end fw-bold text-danger">- ₹8,500</td>
+                    <td class="fw-bold">{{ expense.vendor_name }}</td>
+                    <td><span class="badge badge-soft-danger">{{ expense.category.name }}</span></td>
+                    <td><span class="badge badge-soft-warning">{{ expense.payment_method.name }}</span></td>
+                    <td class="text-muted">{{ expense.expense_date|date:"d M Y" }}</td>
+                    <td class="text-end fw-bold text-danger">- {{ CURRENCY_SYMBOL }} {{ expense.amount_spent|floatformat:2 }}</td>
                 </tr>
-                <tr>
-                    <td class="fw-semibold">RCPT-2026-002</td>
-                    <td><span class="badge badge-soft-success"><i class="bi bi-arrow-down-left me-1"></i>Fund</span></td>
-                    <td>Youth Member Annual Fee (Suresh Rao)</td>
-                    <td><span class="badge badge-soft-info">Google Pay</span></td>
-                    <td class="text-muted">11 Aug 2026</td>
-                    <td class="text-end fw-bold text-success">+ ₹5,000</td>
-                </tr>
-                <tr>
-                    <td class="fw-semibold">EXP-2026-011</td>
-                    <td><span class="badge badge-soft-danger"><i class="bi bi-arrow-up-right me-1"></i>Expense</span></td>
-                    <td>Main Temple Idol Advance Booking</td>
-                    <td><span class="badge badge-soft-primary">Bank Transfer</span></td>
-                    <td class="text-muted">10 Aug 2026</td>
-                    <td class="text-end fw-bold text-danger">- ₹12,000</td>
-                </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>

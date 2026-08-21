@@ -8,20 +8,181 @@
     <!-- Google Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@300;400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/app.css' %}">
+    <style id="dynamic-theme-styles">
+        :root {
+            --primary: {{ site_settings.PRIMARY_COLOR|default:"#8b1e24" }};
+            --primary-hover: {{ site_settings.PRIMARY_HOVER_BG|default:"#6c1419" }};
+            --accent-gold: {{ site_settings.ACCENT_COLOR|default:"#f59e0b" }};
+            --bg-main: {{ site_settings.MAIN_BG|default:"#f8fafc" }};
+            
+            /* Sidebar Navigation Tokens */
+            --sidebar-bg: {{ site_settings.SIDEBAR_BG|default:"#0b0f19" }};
+            --sidebar-brand-bg: {{ site_settings.SIDEBAR_BRAND_BG|default:"#111827" }};
+            --sidebar-link: {{ site_settings.SIDEBAR_TEXT_COLOR|default:"#cbd5e1" }};
+            --sidebar-link-hover: {{ site_settings.SIDEBAR_HOVER_TEXT_COLOR|default:"#ffffff" }};
+            --sidebar-hover-bg: {{ site_settings.SIDEBAR_HOVER_BG|default:"rgba(255, 255, 255, 0.06)" }};
+            --sidebar-active-bg: {{ site_settings.SIDEBAR_ACTIVE_BG|default:"rgba(245, 158, 11, 0.14)" }};
+            --sidebar-active-text: {{ site_settings.SIDEBAR_ACTIVE_TEXT_COLOR|default:"#f59e0b" }};
+            --sidebar-active-border: {{ site_settings.SIDEBAR_ACTIVE_BORDER|default:"#f59e0b" }};
+            --sidebar-icon: {{ site_settings.SIDEBAR_ICON_COLOR|default:"#94a3b8" }};
+            
+            /* Header & Topbar */
+            --header-bg: {{ site_settings.HEADER_BG|default:"#ffffff" }};
+            --header-text: {{ site_settings.HEADER_TEXT_COLOR|default:"#0f172a" }};
+            --header-border: {{ site_settings.HEADER_BORDER_COLOR|default:"#e2e8f0" }};
+            
+            /* Containers & Cards */
+            --card-bg: {{ site_settings.CARD_BG|default:"#ffffff" }};
+            --card-header-bg: {{ site_settings.CARD_HEADER_BG|default:"#ffffff" }};
+            --card-header-text: {{ site_settings.CARD_HEADER_TEXT_COLOR|default:"#0f172a" }};
+            --card-border: {{ site_settings.CARD_BORDER_COLOR|default:"#e2e8f0" }};
+            
+            /* Tables & Grids */
+            --table-header-bg: {{ site_settings.TABLE_HEADER_BG|default:"#f8fafc" }};
+            --table-header-text: {{ site_settings.TABLE_HEADER_TEXT_COLOR|default:"#475569" }};
+            --table-row-hover: {{ site_settings.TABLE_ROW_HOVER_BG|default:"#f1f5f9" }};
+            --table-border: {{ site_settings.TABLE_BORDER_COLOR|default:"#e2e8f0" }};
+            
+            /* Footer */
+            --footer-bg: {{ site_settings.FOOTER_BG|default:"#ffffff" }};
+            --footer-text: {{ site_settings.FOOTER_TEXT_COLOR|default:"#64748b" }};
+            --footer-link: {{ site_settings.FOOTER_LINK_COLOR|default:"#8b1e24" }};
+            
+            /* Fonts */
+            --body-font: {{ site_settings.BODY_FONT_FAMILY|safe|default:"'Inter', sans-serif" }};
+            --heading-font: {{ site_settings.HEADING_FONT_FAMILY|safe|default:"'Outfit', sans-serif" }};
+        }
+
+        body {
+            font-family: var(--body-font) !important;
+            font-size: {{ site_settings.BODY_FONT_SIZE|default:"0.925rem" }} !important;
+            font-weight: {{ site_settings.BODY_FONT_WEIGHT|default:"400" }} !important;
+            background-color: var(--bg-main) !important;
+        }
+
+        h1, h2, h3, h4, h5, h6, .brand-title, .page-heading, .stat-value {
+            font-family: var(--heading-font) !important;
+            font-weight: {{ site_settings.HEADING_FONT_WEIGHT|default:"700" }} !important;
+        }
+
+        /* Sidebar Dynamic Styling */
+        .sidebar {
+            background: var(--sidebar-bg) !important;
+            font-size: {{ site_settings.SIDEBAR_FONT_SIZE|default:"0.9rem" }} !important;
+            font-weight: {{ site_settings.SIDEBAR_FONT_WEIGHT|default:"500" }} !important;
+        }
+        .sidebar .brand {
+            background: var(--sidebar-brand-bg) !important;
+        }
+        .sidebar .nav-link {
+            color: var(--sidebar-link) !important;
+        }
+        .sidebar .nav-link .menu-icon {
+            color: var(--sidebar-icon) !important;
+        }
+        .sidebar .nav-link:hover {
+            background-color: var(--sidebar-hover-bg) !important;
+            color: var(--sidebar-link-hover) !important;
+        }
+        .sidebar .nav-link.active, .sidebar .submenu-link.active {
+            background-color: var(--sidebar-active-bg) !important;
+            color: var(--sidebar-active-text) !important;
+            border-left: 3px solid var(--sidebar-active-border) !important;
+        }
+
+        /* Topbar & Header Dynamic Styling */
+        .topbar {
+            background-color: var(--header-bg) !important;
+            border-bottom: 1px solid var(--header-border) !important;
+        }
+        .topbar .page-heading {
+            color: var(--header-text) !important;
+            font-size: {{ site_settings.HEADER_FONT_SIZE|default:"1.25rem" }} !important;
+            font-weight: {{ site_settings.HEADER_FONT_WEIGHT|default:"700" }} !important;
+        }
+
+        /* Content Container Layout */
+        .content-area, .container, .container-fluid {
+            max-width: {{ site_settings.CONTAINER_MAX_WIDTH|default:"100%" }} !important;
+            padding: {{ site_settings.CONTAINER_PADDING|default:"1.5rem" }} !important;
+        }
+
+        /* Cards & Structural Divs */
+        .card {
+            background-color: var(--card-bg) !important;
+            border-color: var(--card-border) !important;
+            border-radius: {{ site_settings.CARD_BORDER_RADIUS|default:"12px" }} !important;
+            box-shadow: {{ site_settings.CARD_SHADOW|default:"0 4px 16px rgba(0,0,0,0.03)" }} !important;
+        }
+        .card-header {
+            background-color: var(--card-header-bg) !important;
+            color: var(--card-header-text) !important;
+            border-bottom: 1px solid var(--card-border) !important;
+            font-size: {{ site_settings.CARD_HEADER_FONT_SIZE|default:"1rem" }} !important;
+            font-weight: {{ site_settings.CARD_HEADER_FONT_WEIGHT|default:"600" }} !important;
+        }
+
+        /* Tables (th, tr, td) */
+        .table {
+            font-size: {{ site_settings.TABLE_FONT_SIZE|default:"0.875rem" }} !important;
+            border-color: var(--table-border) !important;
+        }
+        .table th {
+            background-color: var(--table-header-bg) !important;
+            color: var(--table-header-text) !important;
+        }
+        .table td, .table th {
+            padding: {{ site_settings.TABLE_CELL_PADDING|default:"0.75rem 1rem" }} !important;
+        }
+        .table-hover tbody tr:hover {
+            background-color: var(--table-row-hover) !important;
+        }
+
+        /* Buttons & Interactive Elements */
+        .btn-primary {
+            background-color: var(--primary) !important;
+            border-color: var(--primary) !important;
+            border-radius: {{ site_settings.BTN_BORDER_RADIUS|default:"8px" }} !important;
+            font-weight: {{ site_settings.BTN_FONT_WEIGHT|default:"600" }} !important;
+        }
+        .btn-primary:hover {
+            background-color: var(--primary-hover) !important;
+            border-color: var(--primary-hover) !important;
+            transform: {{ site_settings.BTN_HOVER_TRANSFORM|default:"translateY(-1px)" }};
+        }
+
+        /* Footer */
+        .app-footer {
+            background-color: var(--footer-bg) !important;
+            color: var(--footer-text) !important;
+            position: relative !important;
+            z-index: 1030 !important;
+            clear: both !important;
+        }
+        .app-footer a {
+            color: var(--footer-link) !important;
+        }
+    </style>
 </head>
 <body>
 <div class="app-shell">
     <!-- Clean Sidebar Navigation (No Scrollbar Noise, Collapsible Accordion Dropdowns) -->
     <aside class="sidebar" id="sidebar">
         <div class="brand">
-            <div class="brand-icon"><i class="bi bi-flower1"></i></div>
+            <div class="brand-icon">
+                {% if site_settings.SITE_LOGO_URL %}
+                    <img src="{{ site_settings.SITE_LOGO_URL }}" alt="Logo" style="max-height: 26px; max-width: 26px; object-fit: contain;">
+                {% else %}
+                    <i class="bi {{ site_settings.SITE_LOGO_ICON|default:'bi-flower1' }}"></i>
+                {% endif %}
+            </div>
             <div>
-                <h1 class="brand-title">Vinayaka</h1>
-                <span class="brand-subtitle">Youth Committee</span>
+                <h1 class="brand-title">{{ site_settings.SITE_NAME|default:"Vinayaka" }}</h1>
+                <span class="brand-subtitle">{{ site_settings.SITE_SLOGAN|default:"Youth Committee" }}</span>
             </div>
         </div>
 
@@ -82,6 +243,7 @@
                     <a href="/administration/fund-sources/" class="submenu-link"><i class="bi bi-circle-fill" style="font-size: 5px;"></i> Fund Sources</a>
                     <a href="/administration/expense-categories/" class="submenu-link"><i class="bi bi-circle-fill" style="font-size: 5px;"></i> Expense Categories</a>
                     <a href="/administration/financial-years/" class="submenu-link"><i class="bi bi-circle-fill" style="font-size: 5px;"></i> Financial Years</a>
+                    <a href="/administration/site-settings/" class="submenu-link"><i class="bi bi-circle-fill" style="font-size: 5px;"></i> Site Settings UI</a>
                 </div>
             </div>
 
@@ -116,9 +278,9 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0">
                         <li><a class="dropdown-item py-2" href="/administration/users/"><i class="bi bi-person me-2 text-primary"></i> User Profile</a></li>
-                        <li><a class="dropdown-item py-2" href="/administration/"><i class="bi bi-sliders me-2 text-primary"></i> Settings</a></li>
+                        <li><a class="dropdown-item py-2" href="/administration/site-settings/"><i class="bi bi-sliders me-2 text-primary"></i> Site Settings UI</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item py-2 text-danger fw-semibold" href="/accounts/login/"><i class="bi bi-box-arrow-right me-2"></i> Sign Out</a></li>
+                        <li><a class="dropdown-item py-2 text-danger fw-semibold" href="{% url 'logout' %}"><i class="bi bi-box-arrow-right me-2"></i> Sign Out</a></li>
                     </ul>
                 </div>
             </div>
@@ -128,6 +290,22 @@
         <div class="content-area">
             {% block content %}{% endblock %}
         </div>
+
+        <!-- MNC Standard Dynamic Footer -->
+        <footer class="app-footer px-4 py-3 border-top mt-auto bg-white d-flex flex-column flex-md-row align-items-center justify-content-between gap-2 text-muted small">
+            <div>
+                <span>{{ site_settings.FOOTER_TEXT|default:"© 2026 Vinayaka Youth Committee. All Rights Reserved." }}</span>
+            </div>
+            <div class="d-flex align-items-center gap-3 flex-wrap">
+                {% if site_settings.CONTACT_PHONE %}<span class="me-2"><i class="bi bi-telephone text-primary me-1"></i> {{ site_settings.CONTACT_PHONE }}</span>{% endif %}
+                {% if site_settings.CONTACT_EMAIL %}<span class="me-2"><i class="bi bi-envelope text-primary me-1"></i> {{ site_settings.CONTACT_EMAIL }}</span>{% endif %}
+                {% if site_settings.FOOTER_URL %}
+                <a href="{{ site_settings.FOOTER_URL }}" target="_blank" class="btn btn-xs btn-outline-primary fw-semibold" style="font-size: 0.75rem; padding: 2px 10px;">
+                    {{ site_settings.FOOTER_URL_LABEL|default:"Official Portal" }} <i class="bi bi-box-arrow-up-right ms-1"></i>
+                </a>
+                {% endif %}
+            </div>
+        </footer>
     </main>
 </div>
 

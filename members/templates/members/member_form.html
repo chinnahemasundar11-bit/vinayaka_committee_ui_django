@@ -4,7 +4,6 @@
 
 {% block content %}
 <div class="row">
-    <!-- Full-Width Extended Form Container -->
     <div class="col-12">
         <div class="card border-0 shadow-sm">
             <div class="card-header-clean bg-white border-bottom py-3 px-4">
@@ -21,7 +20,10 @@
             </div>
 
             <div class="card-body-clean p-4 p-md-5">
-                <form action="/members/">
+                <form method="POST" action="/members/add/">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="create">
+                    <input type="hidden" name="member_id" value="{{ next_member_id }}">
                     
                     <!-- Section 1: Member Contact Information -->
                     <div class="mb-5">
@@ -31,17 +33,17 @@
                         </div>
                         <div class="row g-4">
                             <div class="col-md-6">
-                                <label class="form-label text-dark fw-bold">Member Full Name *</label>
+                                <label class="form-label text-dark fw-bold">Member Full Name <span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
-                                    <input type="text" class="form-control fw-semibold" placeholder="Enter member's full name" required>
+                                    <input type="text" name="full_name" class="form-control fw-semibold" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label text-dark fw-bold">Mobile Contact Number *</label>
+                                <label class="form-label text-dark fw-bold">Mobile Contact Number <span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="bi bi-telephone-fill"></i></span>
-                                    <input type="tel" class="form-control fw-semibold" placeholder="10-digit primary mobile number" required>
+                                    <input type="tel" name="mobile_number" class="form-control fw-semibold" required>
                                 </div>
                             </div>
                         </div>
@@ -55,32 +57,34 @@
                         </div>
                         <div class="row g-4">
                             <div class="col-md-4">
-                                <label class="form-label text-dark fw-bold">Committee Position / Designation *</label>
-                                <select class="form-select fw-semibold" required>
+                                <label class="form-label text-dark fw-bold">Committee Position / Designation <span class="text-danger">*</span></label>
+                                <select name="committee_position" class="form-select fw-semibold" required>
                                     <option value="" selected disabled>Select Position</option>
-                                    <option>President</option>
-                                    <option>Vice President</option>
-                                    <option>Secretary</option>
-                                    <option>Joint Secretary</option>
-                                    <option>Chief Treasurer</option>
-                                    <option>Joint Treasurer</option>
-                                    <option>Event Coordinator</option>
-                                    <option>Volunteer Leader</option>
-                                    <option>Youth Committee Member</option>
+                                    {% for pos in positions %}
+                                    <option value="{{ pos.value }}">{{ pos.value }}</option>
+                                    {% empty %}
+                                    <option value="Chief Treasurer">Chief Treasurer</option>
+                                    <option value="Event Coordinator">Event Coordinator</option>
+                                    <option value="Youth President">Youth President</option>
+                                    {% endfor %}
                                 </select>
                             </div>
                             <div class="col-md-4">
-                                <label class="form-label text-dark fw-bold">System Access Role *</label>
-                                <select class="form-select fw-semibold" required>
+                                <label class="form-label text-dark fw-bold">System Access Role <span class="text-danger">*</span></label>
+                                <select name="system_role" class="form-select fw-semibold" required>
                                     <option value="" selected disabled>Select Access Role</option>
-                                    <option>Committee Member (Voucher Entry)</option>
-                                    <option>Treasurer (Full Financial Access)</option>
-                                    <option>Viewer / Public Auditor (Read-Only)</option>
+                                    {% for role in roles %}
+                                    <option value="{{ role.value }}">{{ role.value }}</option>
+                                    {% empty %}
+                                    <option value="Treasurer">Treasurer (Full Financial Access)</option>
+                                    <option value="Committee Member">Committee Member</option>
+                                    <option value="Viewer">Viewer / Public Auditor</option>
+                                    {% endfor %}
                                 </select>
                             </div>
                             <div class="col-md-4">
-                                <label class="form-label text-dark fw-bold">Committee Joining Date</label>
-                                <input type="date" class="form-control fw-semibold">
+                                <label class="form-label text-dark fw-bold">Committee Joining Date <span class="text-danger">*</span></label>
+                                <input type="date" name="joining_date" class="form-control fw-semibold" value="{{ today_date }}" required>
                             </div>
                         </div>
                     </div>
@@ -94,9 +98,9 @@
                         <div class="row g-4">
                             <div class="col-md-6">
                                 <label class="form-label text-dark fw-bold">Membership Status</label>
-                                <select class="form-select fw-semibold">
-                                    <option selected>Active Member</option>
-                                    <option>Inactive / Past Member</option>
+                                <select name="status" class="form-select fw-semibold">
+                                    <option value="Active" selected>Active Member</option>
+                                    <option value="Inactive">Inactive / Past Member</option>
                                 </select>
                             </div>
                             <div class="col-md-6">

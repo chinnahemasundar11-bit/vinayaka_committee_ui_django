@@ -4,7 +4,6 @@
 
 {% block content %}
 <div class="row">
-    <!-- Full-Width Extended Form Container -->
     <div class="col-12">
         <div class="card border-0 shadow-sm">
             <div class="card-header-clean bg-white border-bottom py-3 px-4">
@@ -21,7 +20,9 @@
             </div>
 
             <div class="card-body-clean p-4 p-md-5">
-                <form action="/expenses/">
+                <form method="POST" action="/expenses/add/">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="create">
                     
                     <!-- Section 1: Voucher & Category Information -->
                     <div class="mb-5">
@@ -31,37 +32,28 @@
                         </div>
                         <div class="row g-4">
                             <div class="col-md-3">
-                                <label class="form-label text-dark fw-bold">Voucher Number</label>
-                                <input class="form-control bg-light fw-bold text-danger fs-6" value="EXP-2026-004" readonly>
+                                <label class="form-label text-dark fw-bold">Voucher Number <span class="text-danger">*</span></label>
+                                <input class="form-control bg-light fw-bold text-danger fs-6" name="voucher_number" value="{{ next_voucher_no }}" readonly>
                             </div>
                             <div class="col-md-3">
-                                <label class="form-label text-dark fw-bold">Expense Category *</label>
-                                <select class="form-select fw-semibold" required>
+                                <label class="form-label text-dark fw-bold">Expense Category <span class="text-danger">*</span></label>
+                                <select name="category" class="form-select fw-semibold" required>
                                     <option value="" selected disabled>Select Category</option>
-                                    <option>Decorations & Mandapam</option>
-                                    <option>Annasantharpana / Food</option>
-                                    <option>Poojas & Priests</option>
-                                    <option>Events & Cultural Programs</option>
-                                    <option>Sound System Rental</option>
-                                    <option>Lighting & Electricity</option>
-                                    <option>Flex, Banners & Promotion</option>
-                                    <option>Flowers & Garlands</option>
-                                    <option>Prasadam Materials</option>
-                                    <option>Transportation & Tent House</option>
-                                    <option>Cleaning & Waste Management</option>
-                                    <option>Other Expenses</option>
+                                    {% for cat in categories %}
+                                    <option value="{{ cat.id }}">{{ cat.name }}</option>
+                                    {% endfor %}
                                 </select>
                             </div>
                             <div class="col-md-3">
-                                <label class="form-label text-dark fw-bold">Amount Spent (₹) *</label>
+                                <label class="form-label text-dark fw-bold">Amount Spent ({{ CURRENCY_SYMBOL }}) <span class="text-danger">*</span></label>
                                 <div class="input-group">
-                                    <span class="input-group-text fw-bold fs-6">₹</span>
-                                    <input type="number" class="form-control fw-bold fs-6" placeholder="0.00" step="0.01" required>
+                                    <span class="input-group-text fw-bold fs-6">{{ CURRENCY_SYMBOL }}</span>
+                                    <input type="number" name="amount_spent" class="form-control fw-bold fs-6" step="0.01" required>
                                 </div>
                             </div>
                             <div class="col-md-3">
-                                <label class="form-label text-dark fw-bold">Expense Date *</label>
-                                <input type="date" class="form-control fw-semibold" required>
+                                <label class="form-label text-dark fw-bold">Expense Date <span class="text-danger">*</span></label>
+                                <input type="date" name="expense_date" class="form-control fw-semibold" value="{{ today_date }}" required>
                             </div>
                         </div>
                     </div>
@@ -74,35 +66,34 @@
                         </div>
                         <div class="row g-4">
                             <div class="col-md-6">
-                                <label class="form-label text-dark fw-bold">Expense Description / Purpose *</label>
+                                <label class="form-label text-dark fw-bold">Expense Description / Purpose <span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="bi bi-card-text"></i></span>
-                                    <input type="text" class="form-control fw-semibold" placeholder="e.g. Mandapam stage lighting setup and diesel generator rental" required>
+                                    <input type="text" name="description" class="form-control fw-semibold" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label text-dark fw-bold">Paid To / Vendor Name *</label>
+                                <label class="form-label text-dark fw-bold">Paid To / Vendor Name <span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="bi bi-shop"></i></span>
-                                    <input type="text" class="form-control fw-semibold" placeholder="Vendor, Shop or Service Provider Name" required>
+                                    <input type="text" name="vendor_name" class="form-control fw-semibold" required>
                                 </div>
                             </div>
 
                             <div class="col-md-6">
-                                <label class="form-label text-dark fw-bold">Payment Method *</label>
-                                <select class="form-select fw-semibold" required>
+                                <label class="form-label text-dark fw-bold">Payment Method <span class="text-danger">*</span></label>
+                                <select name="payment_method" class="form-select fw-semibold" required>
                                     <option value="" selected disabled>Select Payment Method</option>
-                                    <option>Cash</option>
-                                    <option>UPI / PhonePe / GPay</option>
-                                    <option>Bank Transfer (NEFT/IMPS)</option>
-                                    <option>Cheque</option>
+                                    {% for pm in payment_methods %}
+                                    <option value="{{ pm.id }}">{{ pm.name }}</option>
+                                    {% endfor %}
                                 </select>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label text-dark fw-bold">Transaction Reference # / Cheque No.</label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="bi bi-hash"></i></span>
-                                    <input type="text" class="form-control fw-semibold" placeholder="Reference number if paid online or via cheque">
+                                    <input type="text" name="reference_number" class="form-control fw-semibold">
                                 </div>
                             </div>
                         </div>
@@ -117,7 +108,7 @@
                         <div class="row g-4">
                             <div class="col-md-6">
                                 <label class="form-label text-dark fw-bold">Remarks / Committee Notes</label>
-                                <textarea class="form-control fw-medium" rows="4" placeholder="Approval notes, committee member remarks, or cash receipt details..."></textarea>
+                                <textarea name="remarks" class="form-control fw-medium" rows="4"></textarea>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label text-dark fw-bold">Attach Bill / Vendor Invoice Receipt</label>

@@ -9,4 +9,5 @@ urlpatterns = [
     path("fund-sources/", views.fund_sources, name="fund_sources"),
     path("expense-categories/", views.expense_categories, name="expense_categories"),
     path("financial-years/", views.financial_years, name="financial_years"),
+    path("site-settings/", views.site_settings, name="site_settings"),
 ]

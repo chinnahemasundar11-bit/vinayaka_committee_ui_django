@@ -1,75 +1,88 @@
 {% extends "base.html" %}
 {% block title %}Reports | Vinayaka Committee{% endblock %}
-{% block page_heading %}Reports{% endblock %}
+{% block page_heading %}Reports & Balance Sheet{% endblock %}
 
 {% block content %}
-<div class="mb-4">
-    <h5 class="mb-1">Financial Reports</h5>
-    <small class="text-muted">Generate and export committee financial reports.</small>
+<!-- Page Header -->
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
+    <div>
+        <h4 class="mb-1 fw-bold">Financial Reports & Audit Statements</h4>
+        <p class="text-muted small mb-0">Generate and print committee financial balance sheets and category breakdowns</p>
+    </div>
+    <button class="btn btn-outline-secondary" onclick="triggerPrint()"><i class="bi bi-printer me-1"></i> Print Balance Sheet</button>
 </div>
 
-<div class="filter-box mb-4">
-    <div class="row g-3">
-        <div class="col-md-3"><label class="form-label">From Date</label><input type="date" class="form-control"></div>
-        <div class="col-md-3"><label class="form-label">To Date</label><input type="date" class="form-control"></div>
-        <div class="col-md-3"><label class="form-label">Fund Source</label><select class="form-select"><option>All Sources</option></select></div>
-        <div class="col-md-3"><label class="form-label">Expense Category</label><select class="form-select"><option>All Categories</option></select></div>
-        <div class="col-md-3"><label class="form-label">Payment Method</label><select class="form-select"><option>All Methods</option></select></div>
-        <div class="col-md-3"><label class="form-label">Event</label><select class="form-select"><option>All Events</option></select></div>
-        <div class="col-md-6 d-flex align-items-end gap-2">
-            <button class="btn btn-primary">Apply Filters</button>
-            <button class="btn btn-outline-secondary">Reset</button>
+<!-- Summary Metric Cards -->
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="stat-card border-0 shadow-sm p-4 rounded-3 bg-white">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="text-muted small fw-bold">TOTAL FUNDS COLLECTED</span>
+                <i class="bi bi-wallet2 text-success fs-4"></i>
+            </div>
+            <h3 class="fw-extrabold text-success mb-0">{{ CURRENCY_SYMBOL }} {{ total_funds|floatformat:2 }}</h3>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="stat-card border-0 shadow-sm p-4 rounded-3 bg-white">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="text-muted small fw-bold">TOTAL EXPENSES INCURRED</span>
+                <i class="bi bi-receipt text-danger fs-4"></i>
+            </div>
+            <h3 class="fw-extrabold text-danger mb-0">{{ CURRENCY_SYMBOL }} {{ total_expenses|floatformat:2 }}</h3>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="stat-card border-0 shadow-sm p-4 rounded-3 bg-white">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="text-muted small fw-bold">NET CASH SURPLUS</span>
+                <i class="bi bi-piggy-bank text-warning fs-4"></i>
+            </div>
+            <h3 class="fw-extrabold text-primary mb-0">{{ CURRENCY_SYMBOL }} {{ net_surplus|floatformat:2 }}</h3>
         </div>
     </div>
 </div>
 
-<div class="row g-3">
-    <div class="col-md-6 col-lg-4">
-        <div class="card p-3">
-            <i class="bi bi-cash-stack fs-3 text-danger"></i>
-            <h6 class="mt-3">Fund Collection Report</h6>
-            <p class="small text-muted">Collection details by date and source.</p>
-            <button class="btn btn-sm btn-outline-secondary">Generate</button>
+<div class="row g-4 mb-4">
+    <!-- Receipts by Source -->
+    <div class="col-md-6">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-white border-bottom py-3">
+                <h6 class="mb-0 fw-bold"><i class="bi bi-pie-chart-fill text-success me-2"></i>Funds Collection by Source</h6>
+            </div>
+            <div class="card-body p-0">
+                <ul class="list-group list-group-flush">
+                    {% for item in receipts_by_source %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center py-3">
+                        <span class="fw-semibold">{{ item.fund_source__name|default:"General Contribution" }}</span>
+                        <span class="fw-bold text-success">{{ CURRENCY_SYMBOL }} {{ item.total|floatformat:2 }}</span>
+                    </li>
+                    {% empty %}
+                    <li class="list-group-item text-center text-muted py-4">No fund collection records found.</li>
+                    {% endfor %}
+                </ul>
+            </div>
         </div>
     </div>
-    <div class="col-md-6 col-lg-4">
-        <div class="card p-3">
-            <i class="bi bi-receipt fs-3 text-danger"></i>
-            <h6 class="mt-3">Expense Report</h6>
-            <p class="small text-muted">Expense details by date and category.</p>
-            <button class="btn btn-sm btn-outline-secondary">Generate</button>
-        </div>
-    </div>
-    <div class="col-md-6 col-lg-4">
-        <div class="card p-3">
-            <i class="bi bi-file-earmark-bar-graph fs-3 text-danger"></i>
-            <h6 class="mt-3">Complete Financial Statement</h6>
-            <p class="small text-muted">Funds, expenses and balance summary.</p>
-            <button class="btn btn-sm btn-outline-secondary">Generate</button>
-        </div>
-    </div>
-    <div class="col-md-6 col-lg-4">
-        <div class="card p-3">
-            <i class="bi bi-calendar3 fs-3 text-danger"></i>
-            <h6 class="mt-3">Monthly Report</h6>
-            <p class="small text-muted">Monthly financial activity.</p>
-            <button class="btn btn-sm btn-outline-secondary">Generate</button>
-        </div>
-    </div>
-    <div class="col-md-6 col-lg-4">
-        <div class="card p-3">
-            <i class="bi bi-calendar-event fs-3 text-danger"></i>
-            <h6 class="mt-3">Event-wise Report</h6>
-            <p class="small text-muted">Financial summary by event.</p>
-            <button class="btn btn-sm btn-outline-secondary">Generate</button>
-        </div>
-    </div>
-    <div class="col-md-6 col-lg-4">
-        <div class="card p-3">
-            <i class="bi bi-shield-check fs-3 text-danger"></i>
-            <h6 class="mt-3">Audit Report</h6>
-            <p class="small text-muted">Financial activity and audit records.</p>
-            <button class="btn btn-sm btn-outline-secondary">Generate</button>
+
+    <!-- Expenses by Category -->
+    <div class="col-md-6">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-white border-bottom py-3">
+                <h6 class="mb-0 fw-bold"><i class="bi bi-bar-chart-fill text-danger me-2"></i>Expenditure by Category Head</h6>
+            </div>
+            <div class="card-body p-0">
+                <ul class="list-group list-group-flush">
+                    {% for item in vouchers_by_category %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center py-3">
+                        <span class="fw-semibold">{{ item.category__name|default:"General Expense" }}</span>
+                        <span class="fw-bold text-danger">{{ CURRENCY_SYMBOL }} {{ item.total|floatformat:2 }}</span>
+                    </li>
+                    {% empty %}
+                    <li class="list-group-item text-center text-muted py-4">No expense records found.</li>
+                    {% endfor %}
+                </ul>
+            </div>
         </div>
     </div>
 </div>

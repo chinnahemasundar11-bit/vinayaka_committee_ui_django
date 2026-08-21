@@ -14,43 +14,37 @@
 
 <!-- Filter Box -->
 <div class="filter-box mb-4">
-    <div class="row g-3">
-        <div class="col-md-3">
-            <label class="form-label">Search User / Action</label>
-            <div class="input-group">
-                <span class="input-group-text"><i class="bi bi-search"></i></span>
-                <input class="form-control" placeholder="User, Action or Record ID">
+    <form method="GET" action="/audit/">
+        <div class="row g-3">
+            <div class="col-md-5">
+                <label class="form-label">Search Action / Model / User</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-search"></i></span>
+                    <input type="text" name="q" class="form-control" value="{{ search_query }}" placeholder="e.g. FundReceipt or Admin">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Action Type</label>
+                <select name="action" class="form-select">
+                    <option value="" {% if not action_filter %}selected{% endif %}>All Action Types</option>
+                    <option value="CREATE" {% if action_filter == 'CREATE' %}selected{% endif %}>CREATE</option>
+                    <option value="UPDATE" {% if action_filter == 'UPDATE' %}selected{% endif %}>UPDATE</option>
+                    <option value="DELETE" {% if action_filter == 'DELETE' %}selected{% endif %}>DELETE</option>
+                    <option value="BULK_DELETE" {% if action_filter == 'BULK_DELETE' %}selected{% endif %}>BULK_DELETE</option>
+                </select>
+            </div>
+            <div class="col-md-3 d-flex align-items-end gap-2">
+                <button type="submit" class="btn btn-primary w-100"><i class="bi bi-funnel"></i> Filter</button>
+                <a href="/audit/" class="btn btn-outline-secondary"><i class="bi bi-arrow-counterclockwise"></i></a>
             </div>
         </div>
-        <div class="col-md-3">
-            <label class="form-label">Module</label>
-            <select class="form-select">
-                <option selected>All Modules</option>
-                <option>Funds Received</option>
-                <option>Expenses</option>
-                <option>Committee Members</option>
-                <option>User Accounts</option>
-            </select>
-        </div>
-        <div class="col-md-2">
-            <label class="form-label">From Date</label>
-            <input type="date" class="form-control">
-        </div>
-        <div class="col-md-2">
-            <label class="form-label">To Date</label>
-            <input type="date" class="form-control">
-        </div>
-        <div class="col-md-2 d-flex align-items-end gap-2">
-            <button class="btn btn-primary w-100"><i class="bi bi-funnel"></i> Filter</button>
-            <button class="btn btn-outline-secondary"><i class="bi bi-arrow-counterclockwise"></i></button>
-        </div>
-    </div>
+    </form>
 </div>
 
 <!-- Audit Table Card -->
 <div class="card">
     <div class="card-header-clean">
-        <h6 class="mb-0 fw-bold"><i class="bi bi-shield-check text-danger me-2"></i>Audit Trail History</h6>
+        <h6 class="mb-0 fw-bold"><i class="bi bi-shield-check text-danger me-2"></i>Audit Trail History (Total Logs: {{ audit_logs.count }})</h6>
     </div>
     <div class="table-responsive">
         <table class="table table-hover">
@@ -59,51 +53,31 @@
                     <th>Timestamp</th>
                     <th>User Account</th>
                     <th>Action Executed</th>
-                    <th>Target Module</th>
-                    <th>Record ID</th>
-                    <th>IP Address</th>
+                    <th>Target Model</th>
+                    <th>Object ID</th>
+                    <th>Details</th>
                 </tr>
             </thead>
             <tbody>
+                {% for log in audit_logs %}
                 <tr>
-                    <td class="text-muted"><i class="bi bi-clock me-1"></i>13 Aug 2026 10:32 AM</td>
+                    <td class="text-muted"><i class="bi bi-clock me-1"></i>{{ log.timestamp|date:"d M Y h:i A" }}</td>
                     <td>
                         <div class="d-flex align-items-center gap-2">
-                            <div class="avatar-badge" style="width:28px; height:28px; font-size:10px;">CA</div>
-                            <span class="fw-semibold">Committee Admin</span>
+                            <div class="avatar-badge" style="width:28px; height:28px; font-size:10px;">{{ log.user.username|slice:":2"|upper|default:"SYS" }}</div>
+                            <span class="fw-semibold">{{ log.user.get_full_name|default:log.user.username|default:"System" }}</span>
                         </div>
                     </td>
-                    <td><span class="badge badge-soft-success"><i class="bi bi-plus-circle me-1"></i>Created Record</span></td>
-                    <td><span class="badge badge-soft-primary">Funds Received</span></td>
-                    <td class="fw-semibold">RCPT-2026-001</td>
-                    <td class="text-muted"><code>192.168.1.20</code></td>
+                    <td><span class="badge badge-soft-{% if log.action == 'CREATE' %}success{% elif log.action == 'UPDATE' %}warning{% else %}danger{% endif %}">{{ log.action }}</span></td>
+                    <td><span class="badge badge-soft-primary">{{ log.model_name }}</span></td>
+                    <td class="fw-semibold">{{ log.object_id }}</td>
+                    <td class="text-muted small">{{ log.details|default:"N/A" }}</td>
                 </tr>
+                {% empty %}
                 <tr>
-                    <td class="text-muted"><i class="bi bi-clock me-1"></i>13 Aug 2026 09:15 AM</td>
-                    <td>
-                        <div class="d-flex align-items-center gap-2">
-                            <div class="avatar-badge" style="width:28px; height:28px; font-size:10px; background: linear-gradient(135deg, #2b2d42 0%, #8b1e24 100%);">TR</div>
-                            <span class="fw-semibold">Treasurer User</span>
-                        </div>
-                    </td>
-                    <td><span class="badge badge-soft-warning"><i class="bi bi-pencil-square me-1"></i>Updated Record</span></td>
-                    <td><span class="badge badge-soft-danger">Expenses</span></td>
-                    <td class="fw-semibold">EXP-2026-002</td>
-                    <td class="text-muted"><code>192.168.1.22</code></td>
+                    <td colspan="6" class="text-center text-muted py-4">No audit logs recorded yet.</td>
                 </tr>
-                <tr>
-                    <td class="text-muted"><i class="bi bi-clock me-1"></i>12 Aug 2026 04:45 PM</td>
-                    <td>
-                        <div class="d-flex align-items-center gap-2">
-                            <div class="avatar-badge" style="width:28px; height:28px; font-size:10px;">CA</div>
-                            <span class="fw-semibold">Committee Admin</span>
-                        </div>
-                    </td>
-                    <td><span class="badge badge-soft-info"><i class="bi bi-person-check me-1"></i>Approved Member</span></td>
-                    <td><span class="badge badge-soft-primary">Committee Members</span></td>
-                    <td class="fw-semibold">MBR-2026-003</td>
-                    <td class="text-muted"><code>192.168.1.20</code></td>
-                </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>

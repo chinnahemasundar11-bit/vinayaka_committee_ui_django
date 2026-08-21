@@ -254,7 +254,6 @@ h1, h2, h3, h4, h5, h6, .brand-title, .page-heading, .stat-value {
     min-height: 100vh;
     transition: margin-left 0.28s cubic-bezier(0.16, 1, 0.3, 1);
     position: relative;
-    z-index: 1;
 }
 
 /* --- Topbar --- */
@@ -343,6 +342,54 @@ h1, h2, h3, h4, h5, h6, .brand-title, .page-heading, .stat-value {
     border-color: #cbd5e1;
 }
 
+/* Stacking context fix: Elevate cards & dropdown wrappers when dropdown is open */
+.card:has(.dropdown-menu.show),
+.card:has(.show),
+.card:focus-within,
+.dropdown.show {
+    z-index: 20 !important;
+}
+
+/* --- Popups, Modals & Overlay Global Z-Index Hierarchy Fix --- */
+.modal-backdrop {
+    z-index: 1050 !important;
+}
+
+.modal {
+    z-index: 1060 !important;
+}
+
+.modal-dialog {
+    z-index: 1065 !important;
+}
+
+.modal-content {
+    background-color: #ffffff !important;
+    position: relative;
+    z-index: 1070 !important;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Center modal dialogs cleanly inside main workspace on desktop (accounting for 260px fixed sidebar) */
+@media (min-width: 992px) {
+    .modal {
+        padding-left: 260px !important;
+    }
+}
+
+/* Lower fixed sidebar, topbar, and floating toolbars when any modal popup is open */
+body.modal-open .sidebar {
+    z-index: 1030 !important;
+}
+
+body.modal-open .topbar {
+    z-index: 1020 !important;
+}
+
+body.modal-open .bulk-actions-toolbar {
+    z-index: 1020 !important;
+}
+
 .top-user {
     position: relative;
     z-index: 1040;
@@ -382,7 +429,6 @@ h1, h2, h3, h4, h5, h6, .brand-title, .page-heading, .stat-value {
     padding: 28px 32px;
     flex: 1;
     position: relative;
-    z-index: 1;
 }
 
 /* --- Cards & Form Layouts --- */
@@ -398,11 +444,13 @@ h1, h2, h3, h4, h5, h6, .brand-title, .page-heading, .stat-value {
 }
 
 .card-header-clean {
-    padding: 20px 24px;
+    padding: 16px 20px;
     border-bottom: 1px solid var(--border-color);
     display: flex;
     align-items: center;
     justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
     background: var(--surface);
     border-top-left-radius: var(--radius-lg);
     border-top-right-radius: var(--radius-lg);
@@ -816,13 +864,34 @@ h1, h2, h3, h4, h5, h6, .brand-title, .page-heading, .stat-value {
         padding: 0 16px;
     }
     .content-area {
-        padding: 20px 16px;
+        padding: 16px;
+    }
+    .modal {
+        padding-left: 0 !important;
     }
     .landing-hero-master {
         padding: 50px 0 80px 0;
     }
     .glass-login-card {
         padding: 28px 20px;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .card-header-clean {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 14px 16px;
+    }
+    .card-header-clean > div,
+    .card-header-clean .d-flex {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+    .card-header-clean .btn {
+        flex: 1 1 auto;
+        justify-content: center;
+        white-space: nowrap;
     }
 }
 
@@ -835,10 +904,164 @@ h1, h2, h3, h4, h5, h6, .brand-title, .page-heading, .stat-value {
         padding: 0 12px;
     }
     .stat-value {
-        font-size: 1.65rem;
+        font-size: 1.5rem;
+    }
+    .stat-card {
+        padding: 16px 18px;
     }
     .btn {
-        padding: 0.48rem 0.95rem;
-        font-size: 0.835rem;
+        padding: 0.45rem 0.85rem;
+        font-size: 0.825rem;
+    }
+    .bulk-actions-toolbar {
+        width: calc(100% - 24px);
+        padding: 10px 14px;
+        gap: 8px;
+        justify-content: center;
+        font-size: 0.78rem;
+    }
+}
+
+/* --- Floating Bulk Actions Bar --- */
+.bulk-actions-toolbar {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: #0f172a;
+    color: #ffffff;
+    padding: 12px 24px;
+    border-radius: 50px;
+    box-shadow: 0 16px 40px rgba(15, 23, 42, 0.4), 0 0 20px rgba(245, 158, 11, 0.25);
+    border: 1px solid rgba(245, 158, 11, 0.4);
+    z-index: 1050;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.bulk-actions-toolbar.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.bulk-count-badge {
+    background: var(--accent-gold);
+    color: #0f172a;
+    font-weight: 800;
+    font-size: 0.8rem;
+    padding: 4px 10px;
+    border-radius: 20px;
+}
+
+/* --- Printable Voucher & Receipt Cards --- */
+.printable-voucher {
+    background: #ffffff;
+    border: 2px dashed #cbd5e1;
+    border-radius: var(--radius-md);
+    padding: 24px;
+    color: #0f172a;
+    font-family: 'Inter', sans-serif;
+}
+
+.printable-voucher-header {
+    border-bottom: 2px solid #8b1e24;
+    padding-bottom: 14px;
+    margin-bottom: 18px;
+}
+
+/* --- High-Contrast MNC Custom Tabs & Site Settings Controls --- */
+.card-header-tabs {
+    flex-wrap: nowrap !important;
+    white-space: nowrap !important;
+    overflow-x: auto !important;
+    scrollbar-width: none;
+}
+
+.card-header-tabs::-webkit-scrollbar {
+    display: none;
+}
+
+.card-header-tabs .nav-link {
+    border: none !important;
+    border-bottom: 3px solid transparent !important;
+    padding: 12px 18px !important;
+    font-weight: 700 !important;
+    font-size: 0.885rem !important;
+    color: #475569 !important;
+    background: transparent !important;
+    transition: all 0.2s ease !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+}
+
+.card-header-tabs .nav-link:hover {
+    color: var(--primary) !important;
+    background: rgba(139, 30, 36, 0.04) !important;
+}
+
+.card-header-tabs .nav-link.active {
+    color: var(--primary) !important;
+    border-bottom: 3px solid var(--primary) !important;
+    background: transparent !important;
+}
+
+.app-footer {
+    position: relative;
+    z-index: 1030 !important;
+    background: #ffffff;
+    clear: both;
+}
+
+.form-control-color {
+    max-width: 46px !important;
+    height: 38px !important;
+    padding: 3px !important;
+    cursor: pointer;
+}
+
+.preset-btn {
+    transition: all 0.2s ease;
+    font-weight: 700;
+}
+
+.preset-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.printable-watermark {
+    font-size: 3rem;
+    font-weight: 900;
+    color: rgba(139, 30, 36, 0.04);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-25deg);
+    pointer-events: none;
+    text-transform: uppercase;
+}
+
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    .modal-dialog, .modal-dialog * {
+        visibility: visible;
+    }
+    .modal-dialog {
+        position: absolute;
+        left: 0;
+        top: 0;
+        margin: 0;
+        width: 100%;
+        max-width: 100%;
+    }
+    .modal-footer, .btn-close {
+        display: none !important;
     }
 }

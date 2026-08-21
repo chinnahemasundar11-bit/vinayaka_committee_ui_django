@@ -110,7 +110,7 @@
             </div>
 
             <div class="card-body p-4">
-                <form id="siteSettingsForm" method="POST" action="/administration/site-settings/">
+                <form id="siteSettingsForm" method="POST" action="/administration/site-settings/" enctype="multipart/form-data">
                     {% csrf_token %}
                     <input type="hidden" name="action" value="save">
                     <input type="hidden" id="themePresetInput" name="THEME_PRESET" value="{{ site_settings.THEME_PRESET }}">
@@ -143,9 +143,9 @@
 
                             <hr class="my-4 text-muted">
                             <h6 class="fw-bold mb-3 text-primary"><i class="bi bi-image me-1"></i> Logo Branding & Currency Settings</h6>
-                            <div class="row g-3">
+                            <div class="row g-3 mb-4">
                                 <div class="col-md-4">
-                                    <label class="form-label fw-semibold">Logo Bootstrap Icon</label>
+                                    <label class="form-label fw-semibold">Logo Bootstrap Icon (Fallback)</label>
                                     <select id="logoIconInput" name="SITE_LOGO_ICON" class="form-select">
                                         <option value="bi-flower1" {% if site_settings.SITE_LOGO_ICON == "bi-flower1" %}selected{% endif %}>bi-flower1 (Flower/Lotus)</option>
                                         <option value="bi-building" {% if site_settings.SITE_LOGO_ICON == "bi-building" %}selected{% endif %}>bi-building (Corporate)</option>
@@ -157,14 +157,41 @@
                                     </select>
                                 </div>
                                 <div class="col-md-5">
-                                    <label class="form-label fw-semibold">Custom Logo Image URL</label>
-                                    <input type="url" id="logoUrlInput" name="SITE_LOGO_URL" class="form-control" placeholder="https://example.com/logo.png" value="{{ site_settings.SITE_LOGO_URL }}">
+                                    <label class="form-label fw-semibold"><i class="bi bi-upload text-danger me-1"></i> Upload Company/Committee Logo Image</label>
+                                    <input type="file" name="SITE_LOGO_FILE" class="form-control" accept="image/*">
+                                    <span class="text-muted small">Upload PNG, JPG, WEBP, or SVG image file (max 5 MB).</span>
                                 </div>
                                 <div class="col-md-3">
                                     <label class="form-label fw-semibold">Currency Symbol</label>
                                     <input type="text" id="currencySymbolInput" name="CURRENCY_SYMBOL" class="form-control" value="{{ site_settings.CURRENCY_SYMBOL }}">
                                 </div>
                             </div>
+
+                            {% if site_settings.SITE_LOGO_URL %}
+                            <!-- Uploaded File Metadata & Preview Box -->
+                            <div class="card border border-primary bg-primary-subtle rounded-3 p-3 mb-4">
+                                <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="bg-white p-2 rounded-3 border shadow-sm d-flex align-items-center justify-content-center" style="width: 64px; height: 64px;">
+                                            <img src="{{ site_settings.SITE_LOGO_URL }}" alt="Site Logo" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                                        </div>
+                                        <div>
+                                            <h6 class="mb-1 fw-bold text-dark"><i class="bi bi-file-earmark-image text-primary me-1"></i> {{ site_settings.SITE_LOGO_FILE_NAME|default:"Uploaded Company Logo" }}</h6>
+                                            <div class="d-flex align-items-center gap-3 text-secondary small flex-wrap">
+                                                <span><strong>Size:</strong> {{ site_settings.SITE_LOGO_FILE_SIZE|default:"N/A" }}</span>
+                                                <span><strong>Type:</strong> {{ site_settings.SITE_LOGO_TYPE|default:"image" }}</span>
+                                                <span><strong>Uploaded:</strong> {{ site_settings.SITE_LOGO_UPLOADED_AT|default:"Recently" }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <button type="submit" name="action" value="clear_logo" class="btn btn-outline-danger btn-sm fw-bold">
+                                            <i class="bi bi-trash me-1"></i> Remove Image & Use Icon
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
                         </div>
 
                         <!-- TAB 2: TYPOGRAPHY & GOOGLE FONTS -->
@@ -666,9 +693,14 @@
                     <!-- Preview Top Header -->
                     <div id="previewHeader" class="p-3 border-bottom d-flex align-items-center justify-content-between">
                         <div class="d-flex align-items-center gap-2">
-                            <div id="previewBrandIcon" class="p-2 rounded text-white d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
-                                <i id="previewLogoIconElem" class="bi bi-flower1 fs-5"></i>
-                                <img id="previewLogoImgElem" src="" alt="Logo" class="d-none" style="max-height: 28px; max-width: 28px; object-fit: contain;">
+                            <div id="previewBrandIcon" class="p-1 rounded text-white d-flex align-items-center justify-content-center" style="width: 47px; height: 60px;">
+                                {% if site_settings.SITE_LOGO_URL %}
+                                    <i id="previewLogoIconElem" class="bi {{ site_settings.SITE_LOGO_ICON|default:'bi-flower1' }} fs-5 d-none"></i>
+                                    <img id="previewLogoImgElem" src="{{ site_settings.SITE_LOGO_URL }}" alt="Logo" style="max-height: 60px; max-width: 47px; object-fit: contain;">
+                                {% else %}
+                                    <i id="previewLogoIconElem" class="bi {{ site_settings.SITE_LOGO_ICON|default:'bi-flower1' }} fs-5"></i>
+                                    <img id="previewLogoImgElem" src="" alt="Logo" class="d-none" style="max-height: 60px; max-width: 47px; object-fit: contain;">
+                                {% endif %}
                             </div>
                             <div>
                                 <div id="previewSiteName" class="fw-bold leading-tight" style="font-size: 16px;">Vinayaka</div>
@@ -920,19 +952,43 @@ document.addEventListener("DOMContentLoaded", function() {
     bindSync(footerBgPicker, footerBgInput);
     bindSync(footerTextColorPicker, footerTextColorInput);
 
+    const logoFileInput = document.querySelector('input[name="SITE_LOGO_FILE"]');
+    if (logoFileInput) {
+        logoFileInput.addEventListener('change', function(e) {
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    if (previewLogoImgElem) {
+                        previewLogoImgElem.src = evt.target.result;
+                        previewLogoImgElem.classList.remove('d-none');
+                    }
+                    if (previewLogoIconElem) {
+                        previewLogoIconElem.classList.add('d-none');
+                    }
+                };
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+    }
+
     function updatePreview() {
         if (previewSiteName) previewSiteName.textContent = siteNameInput.value || "Vinayaka";
         if (previewSiteSlogan) previewSiteSlogan.textContent = siteSloganInput.value || "Youth Committee";
         if (previewHeaderTitleElem) previewHeaderTitleElem.textContent = headerTitleInput.value || "Dashboard";
 
-        if (logoUrlInput.value.trim() !== "") {
+        if (previewLogoImgElem && previewLogoImgElem.src && previewLogoImgElem.src !== "" && !previewLogoImgElem.src.endsWith('/')) {
+            previewLogoImgElem.classList.remove("d-none");
+            if (previewLogoIconElem) previewLogoIconElem.classList.add("d-none");
+        } else if (logoUrlInput && logoUrlInput.value.trim() !== "") {
             previewLogoImgElem.src = logoUrlInput.value.trim();
             previewLogoImgElem.classList.remove("d-none");
-            previewLogoIconElem.classList.add("d-none");
+            if (previewLogoIconElem) previewLogoIconElem.classList.add("d-none");
         } else {
-            previewLogoImgElem.classList.add("d-none");
-            previewLogoIconElem.classList.remove("d-none");
-            previewLogoIconElem.className = "bi " + logoIconInput.value + " fs-5";
+            if (previewLogoImgElem) previewLogoImgElem.classList.add("d-none");
+            if (previewLogoIconElem) {
+                previewLogoIconElem.classList.remove("d-none");
+                previewLogoIconElem.className = "bi " + logoIconInput.value + " fs-5";
+            }
         }
 
         // Fonts

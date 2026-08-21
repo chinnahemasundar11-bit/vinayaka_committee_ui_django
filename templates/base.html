@@ -173,9 +173,9 @@
     <!-- Clean Sidebar Navigation (No Scrollbar Noise, Collapsible Accordion Dropdowns) -->
     <aside class="sidebar" id="sidebar">
         <div class="brand">
-            <div class="brand-icon">
+            <div class="brand-icon" style="width:47px; height:60px; display:flex; align-items:center; justify-content:center;">
                 {% if site_settings.SITE_LOGO_URL %}
-                    <img src="{{ site_settings.SITE_LOGO_URL }}" alt="Logo" style="max-height: 26px; max-width: 26px; object-fit: contain;">
+                    <img src="{{ site_settings.SITE_LOGO_URL }}" alt="Logo" style="max-height: 70px; max-width: 62px; object-fit: contain;">
                 {% else %}
                     <i class="bi {{ site_settings.SITE_LOGO_ICON|default:'bi-flower1' }}"></i>
                 {% endif %}

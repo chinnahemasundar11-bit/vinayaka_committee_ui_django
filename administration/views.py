@@ -149,11 +149,23 @@ def financial_years(request):
     return render(request, "administration/financial_years.html", {"fy_list": fy_qs})
 
 
+import os
+from django.conf import settings
+from django.core.files.storage import FileSystemStorage
+from django.utils import timezone
 from django.utils.translation import gettext as _
 
 def site_settings(request):
-    """Global Site Settings & Customization management view."""
+    """Global Site Settings & Customization management view with Image File Upload support."""
     if request.method == "POST":
+        action = request.POST.get("action")
+        
+        if action == "clear_logo":
+            for k in ["SITE_LOGO_URL", "SITE_LOGO_FILE_NAME", "SITE_LOGO_FILE_SIZE", "SITE_LOGO_TYPE", "SITE_LOGO_UPLOADED_AT"]:
+                SiteSetting.objects.filter(key=k).delete()
+            messages.success(request, _("Custom logo image removed. Reverted to default icon."))
+            return redirect("/administration/site-settings/")
+
         updated_count = 0
         for key, value in request.POST.items():
             if key not in ["csrfmiddlewaretoken", "action"]:
@@ -163,7 +175,32 @@ def site_settings(request):
                 updated_count += 1
                 if key == "DEFAULT_LANGUAGE" and value in ["en", "te", "hi"]:
                     request.session["_language"] = value
-        
+
+        # Process uploaded logo image file
+        if request.FILES.get("SITE_LOGO_FILE"):
+            logo_file = request.FILES["SITE_LOGO_FILE"]
+            upload_dir = os.path.join(settings.MEDIA_ROOT, "site_logos")
+            os.makedirs(upload_dir, exist_ok=True)
+            
+            fs = FileSystemStorage(location=upload_dir, base_url="/media/site_logos/")
+            filename = fs.save(logo_file.name, logo_file)
+            file_url = fs.url(filename)
+
+            # Format file size (KB / MB)
+            bytes_size = logo_file.size
+            if bytes_size >= 1048576:
+                size_str = f"{bytes_size / 1048576:.2f} MB"
+            else:
+                size_str = f"{bytes_size / 1024:.1f} KB"
+
+            # Save logo image URL & metadata fields in SiteSetting
+            SiteSetting.objects.update_or_create(key="SITE_LOGO_URL", defaults={"value": file_url, "category": "BRANDING"})
+            SiteSetting.objects.update_or_create(key="SITE_LOGO_FILE_NAME", defaults={"value": logo_file.name, "category": "BRANDING"})
+            SiteSetting.objects.update_or_create(key="SITE_LOGO_FILE_SIZE", defaults={"value": size_str, "category": "BRANDING"})
+            SiteSetting.objects.update_or_create(key="SITE_LOGO_TYPE", defaults={"value": logo_file.content_type, "category": "BRANDING"})
+            SiteSetting.objects.update_or_create(key="SITE_LOGO_UPLOADED_AT", defaults={"value": timezone.now().strftime("%Y-%m-%d %H:%M:%S"), "category": "BRANDING"})
+            updated_count += 1
+
         AuditLog.objects.create(
             user=request.user if request.user.is_authenticated else None,
             action="UPDATE",

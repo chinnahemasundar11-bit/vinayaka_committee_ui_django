@@ -1,15 +1,16 @@
 {% extends "base.html" %}
-{% block title %}Audit Logs | Vinayaka Youth Committee{% endblock %}
-{% block page_heading %}Security & Activity Audit Logs{% endblock %}
+{% load i18n i18n_extras %}
+{% block title %}{% trans "Audit Logs" %} | {{ SITE_NAME }}{% endblock %}
+{% block page_heading %}{% trans "Security & Activity Audit Logs" %}{% endblock %}
 
 {% block content %}
 <!-- Page Header -->
 <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
     <div>
-        <h4 class="mb-1 fw-bold">System Audit & Activity Trail</h4>
-        <p class="text-muted small mb-0">Track all create, update, approval, delete, and administrative operations</p>
+        <h4 class="mb-1 fw-bold">{% trans "System Audit & Activity Trail" %}</h4>
+        <p class="text-muted small mb-0">{% trans "Track all create, update, approval, delete, and administrative operations" %}</p>
     </div>
-    <button class="btn btn-outline-secondary btn-sm"><i class="bi bi-download"></i> Export Audit Log</button>
+    <button class="btn btn-outline-secondary btn-sm"><i class="bi bi-download"></i> {% trans "Export Audit Log" %}</button>
 </div>
 
 <!-- Filter Box -->
@@ -17,16 +18,16 @@
     <form method="GET" action="/audit/">
         <div class="row g-3">
             <div class="col-md-5">
-                <label class="form-label">Search Action / Model / User</label>
+                <label class="form-label">{% trans "Search Action / Model / User" %}</label>
                 <div class="input-group">
                     <span class="input-group-text"><i class="bi bi-search"></i></span>
                     <input type="text" name="q" class="form-control" value="{{ search_query }}" placeholder="e.g. FundReceipt or Admin">
                 </div>
             </div>
             <div class="col-md-4">
-                <label class="form-label">Action Type</label>
+                <label class="form-label">{% trans "Action Type" %}</label>
                 <select name="action" class="form-select">
-                    <option value="" {% if not action_filter %}selected{% endif %}>All Action Types</option>
+                    <option value="" {% if not action_filter %}selected{% endif %}>{% trans "All Action Types" %}</option>
                     <option value="CREATE" {% if action_filter == 'CREATE' %}selected{% endif %}>CREATE</option>
                     <option value="UPDATE" {% if action_filter == 'UPDATE' %}selected{% endif %}>UPDATE</option>
                     <option value="DELETE" {% if action_filter == 'DELETE' %}selected{% endif %}>DELETE</option>
@@ -34,7 +35,7 @@
                 </select>
             </div>
             <div class="col-md-3 d-flex align-items-end gap-2">
-                <button type="submit" class="btn btn-primary w-100"><i class="bi bi-funnel"></i> Filter</button>
+                <button type="submit" class="btn btn-primary w-100"><i class="bi bi-funnel"></i> {% trans "Filter" %}</button>
                 <a href="/audit/" class="btn btn-outline-secondary"><i class="bi bi-arrow-counterclockwise"></i></a>
             </div>
         </div>
@@ -44,18 +45,18 @@
 <!-- Audit Table Card -->
 <div class="card">
     <div class="card-header-clean">
-        <h6 class="mb-0 fw-bold"><i class="bi bi-shield-check text-danger me-2"></i>Audit Trail History (Total Logs: {{ audit_logs.count }})</h6>
+        <h6 class="mb-0 fw-bold"><i class="bi bi-shield-check text-danger me-2"></i>{% trans "Audit Trail History" %} ({% trans "Total Logs" %}: {{ audit_logs.count }})</h6>
     </div>
     <div class="table-responsive">
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th>Timestamp</th>
-                    <th>User Account</th>
-                    <th>Action Executed</th>
-                    <th>Target Model</th>
-                    <th>Object ID</th>
-                    <th>Details</th>
+                    <th>{% trans "Timestamp" %}</th>
+                    <th>{% trans "User Account" %}</th>
+                    <th>{% trans "Action Executed" %}</th>
+                    <th>{% trans "Target Model" %}</th>
+                    <th>{% trans "Object ID" %}</th>
+                    <th>{% trans "Details" %}</th>
                 </tr>
             </thead>
             <tbody>
@@ -68,14 +69,14 @@
                             <span class="fw-semibold">{{ log.user.get_full_name|default:log.user.username|default:"System" }}</span>
                         </div>
                     </td>
-                    <td><span class="badge badge-soft-{% if log.action == 'CREATE' %}success{% elif log.action == 'UPDATE' %}warning{% else %}danger{% endif %}">{{ log.action }}</span></td>
-                    <td><span class="badge badge-soft-primary">{{ log.model_name }}</span></td>
+                    <td><span class="badge badge-soft-{% if log.action == 'CREATE' %}success{% elif log.action == 'UPDATE' %}warning{% else %}danger{% endif %}">{{ log.action|t }}</span></td>
+                    <td><span class="badge badge-soft-primary">{{ log.model_name|t }}</span></td>
                     <td class="fw-semibold">{{ log.object_id }}</td>
                     <td class="text-muted small">{{ log.details|default:"N/A" }}</td>
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="6" class="text-center text-muted py-4">No audit logs recorded yet.</td>
+                    <td colspan="6" class="text-center text-muted py-4">{% trans "No audit logs recorded yet." %}</td>
                 </tr>
                 {% endfor %}
             </tbody>

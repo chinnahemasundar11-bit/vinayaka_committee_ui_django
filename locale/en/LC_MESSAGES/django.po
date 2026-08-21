@@ -1,0 +1,492 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Vinayaka Committee 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-08-21 18:45+0530\n"
+"PO-Revision-Date: 2026-08-21 18:45+0530\n"
+"Last-Translator: Admin <admin@vinayakacommittee.org>\n"
+"Language-Team: English\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Dashboard"
+msgstr "Dashboard"
+
+msgid "Finance Management"
+msgstr "Finance Management"
+
+msgid "Funds Received"
+msgstr "Funds Received"
+
+msgid "Expenses"
+msgstr "Expenses"
+
+msgid "Reports & Analytics"
+msgstr "Reports & Analytics"
+
+msgid "Committee & Events"
+msgstr "Committee & Events"
+
+msgid "Committee Members"
+msgstr "Committee Members"
+
+msgid "Festival Events"
+msgstr "Festival Events"
+
+msgid "Administration"
+msgstr "Administration"
+
+msgid "Master Overview"
+msgstr "Master Overview"
+
+msgid "Users & Access"
+msgstr "Users & Access"
+
+msgid "Roles & Permissions"
+msgstr "Roles & Permissions"
+
+msgid "Payment Methods"
+msgstr "Payment Methods"
+
+msgid "Fund Sources"
+msgstr "Fund Sources"
+
+msgid "Expense Categories"
+msgstr "Expense Categories"
+
+msgid "Financial Years"
+msgstr "Financial Years"
+
+msgid "Site Settings UI"
+msgstr "Site Settings UI"
+
+msgid "Audit Logs"
+msgstr "Audit Logs"
+
+msgid "User Profile"
+msgstr "User Profile"
+
+msgid "Sign Out"
+msgstr "Sign Out"
+
+msgid "Portal Sign In"
+msgstr "Portal Sign In"
+
+msgid "About Portal"
+msgstr "About Portal"
+
+msgid "Capabilities"
+msgstr "Capabilities"
+
+msgid "Impact Stats"
+msgstr "Impact Stats"
+
+msgid "Schedule"
+msgstr "Schedule"
+
+msgid "Committee Helpline"
+msgstr "Committee Helpline"
+
+msgid "Site settings updated successfully!"
+msgstr "Site settings updated successfully!"
+
+msgid "You have been logged out."
+msgstr "You have been logged out."
+
+msgid "Welcome back"
+msgstr "Welcome back"
+
+msgid "English"
+msgstr "English"
+
+msgid "Telugu"
+msgstr "Telugu"
+
+msgid "Hindi"
+msgstr "Hindi"
+
+msgid "Site Settings & Enterprise Theme Customization"
+msgstr "Site Settings & Enterprise Theme Customization"
+
+msgid "Site Settings & Theme Engine"
+msgstr "Site Settings & Theme Engine"
+
+msgid "Enterprise Site Settings & Theme Engine"
+msgstr "Enterprise Site Settings & Theme Engine"
+
+msgid "Configure global themes, landing titles, fonts, sidebar nav, header, structural cards, tables, buttons, and footer styling with real-time live preview."
+msgstr "Configure global themes, landing titles, fonts, sidebar nav, header, structural cards, tables, buttons, and footer styling with real-time live preview."
+
+msgid "Reset Defaults"
+msgstr "Reset Defaults"
+
+msgid "Save All Settings"
+msgstr "Save All Settings"
+
+msgid "1-Click Industry Theme Presets"
+msgstr "1-Click Industry Theme Presets"
+
+msgid "Royal Maroon & Gold"
+msgstr "Royal Maroon & Gold"
+
+msgid "Modern Navy Corporate"
+msgstr "Modern Navy Corporate"
+
+msgid "Cyber Emerald Green"
+msgstr "Cyber Emerald Green"
+
+msgid "Midnight Dark Deluxe"
+msgstr "Midnight Dark Deluxe"
+
+msgid "Sunset Amber & Purple"
+msgstr "Sunset Amber & Purple"
+
+msgid "Minimal Slate Light"
+msgstr "Minimal Slate Light"
+
+msgid "Branding"
+msgstr "Branding"
+
+msgid "Typography"
+msgstr "Typography"
+
+msgid "Sidebar"
+msgstr "Sidebar"
+
+msgid "Header"
+msgstr "Header"
+
+msgid "Cards & Layout"
+msgstr "Cards & Layout"
+
+msgid "Tables"
+msgstr "Tables"
+
+msgid "Buttons"
+msgstr "Buttons"
+
+msgid "Footer & Contact"
+msgstr "Footer & Contact"
+
+msgid "Language & Localization"
+msgstr "Language & Localization"
+
+msgid "Financial Dashboard"
+msgstr "Financial Dashboard"
+
+msgid "Festival Accounting Overview"
+msgstr "Festival Accounting Overview"
+
+msgid "Live financial ledger & real-time tracking for Vinayaka Chavithi 2026"
+msgstr "Live financial ledger & real-time tracking for Vinayaka Chavithi 2026"
+
+msgid "Search transactions..."
+msgstr "Search transactions..."
+
+msgid "Accounting Period"
+msgstr "Accounting Period"
+
+msgid "Current"
+msgstr "Current"
+
+msgid "TOTAL FUNDS RECEIVED"
+msgstr "TOTAL FUNDS RECEIVED"
+
+msgid "Total Receipts Collected"
+msgstr "Total Receipts Collected"
+
+msgid "TOTAL EXPENSES INCURRED"
+msgstr "TOTAL EXPENSES INCURRED"
+
+msgid "Total Outflow Expenses"
+msgstr "Total Outflow Expenses"
+
+msgid "NET AVAILABLE BALANCE"
+msgstr "NET AVAILABLE BALANCE"
+
+msgid "Healthy Net Position"
+msgstr "Healthy Net Position"
+
+msgid "Fund Sources Distribution"
+msgstr "Fund Sources Distribution"
+
+msgid "Expenses by Category"
+msgstr "Expenses by Category"
+
+msgid "Current Period"
+msgstr "Current Period"
+
+msgid "Recent Receipts & Expenses"
+msgstr "Recent Receipts & Expenses"
+
+msgid "Latest contribution receipts recorded in database"
+msgstr "Latest contribution receipts recorded in database"
+
+msgid "View Full Ledger"
+msgstr "View Full Ledger"
+
+msgid "Ref No."
+msgstr "Ref No."
+
+msgid "Type"
+msgstr "Type"
+
+msgid "Contributor / Vendor Name"
+msgstr "Contributor / Vendor Name"
+
+msgid "Category / Source"
+msgstr "Category / Source"
+
+msgid "Payment Channel"
+msgstr "Payment Channel"
+
+msgid "Date"
+msgstr "Date"
+
+msgid "Amount"
+msgstr "Amount"
+
+msgid "Fund"
+msgstr "Fund"
+
+msgid "Expense"
+msgstr "Expense"
+
+msgid "No fund receipts recorded yet."
+msgstr "No fund receipts recorded yet."
+
+msgid "Funds Received Ledger"
+msgstr "Funds Received Ledger"
+
+msgid "Contributions & Income Receipts"
+msgstr "Contributions & Income Receipts"
+
+msgid "Track all incoming contributions, donations, and festival collections"
+msgstr "Track all incoming contributions, donations, and festival collections"
+
+msgid "Record New Contribution"
+msgstr "Record New Contribution"
+
+msgid "Search Receipt / Donor Name"
+msgstr "Search Receipt / Donor Name"
+
+msgid "Fund Source Category"
+msgstr "Fund Source Category"
+
+msgid "All Fund Sources"
+msgstr "All Fund Sources"
+
+msgid "Filter"
+msgstr "Filter"
+
+msgid "Fund Receipts List"
+msgstr "Fund Receipts List"
+
+msgid "Total"
+msgstr "Total"
+
+msgid "Print Receipts"
+msgstr "Print Receipts"
+
+msgid "Export PDF"
+msgstr "Export PDF"
+
+msgid "Export Excel"
+msgstr "Export Excel"
+
+msgid "Receipt No."
+msgstr "Receipt No."
+
+msgid "Donor / Contributor Name"
+msgstr "Donor / Contributor Name"
+
+msgid "Fund Source"
+msgstr "Fund Source"
+
+msgid "Date Received"
+msgstr "Date Received"
+
+msgid "Payment Mode"
+msgstr "Payment Mode"
+
+msgid "Amount Paid"
+msgstr "Amount Paid"
+
+msgid "Actions"
+msgstr "Actions"
+
+msgid "Expense Voucher Ledger"
+msgstr "Expense Voucher Ledger"
+
+msgid "Festival Expenditure & Vouchers"
+msgstr "Festival Expenditure & Vouchers"
+
+msgid "Track all committee purchases, vendor bills, and operational expenses"
+msgstr "Track all committee purchases, vendor bills, and operational expenses"
+
+msgid "Record New Expense"
+msgstr "Record New Expense"
+
+msgid "Search Expense / Paid To"
+msgstr "Search Expense / Paid To"
+
+msgid "Expense Category"
+msgstr "Expense Category"
+
+msgid "All Categories"
+msgstr "All Categories"
+
+msgid "Expense Vouchers List"
+msgstr "Expense Vouchers List"
+
+msgid "Total Outflow"
+msgstr "Total Outflow"
+
+msgid "Print Vouchers"
+msgstr "Print Vouchers"
+
+msgid "Voucher No."
+msgstr "Voucher No."
+
+msgid "Category"
+msgstr "Category"
+
+msgid "Description"
+msgstr "Description"
+
+msgid "Paid To / Vendor"
+msgstr "Paid To / Vendor"
+
+msgid "Amount Spent"
+msgstr "Amount Spent"
+
+msgid "Committee Members Directory"
+msgstr "Committee Members Directory"
+
+msgid "Youth Committee Members & Leadership"
+msgstr "Youth Committee Members & Leadership"
+
+msgid "Manage roles, contact info, positions, and active festival committee members"
+msgstr "Manage roles, contact info, positions, and active festival committee members"
+
+msgid "Add New Member"
+msgstr "Add New Member"
+
+msgid "Search Member Name / ID / Phone / Position"
+msgstr "Search Member Name / ID / Phone / Position"
+
+msgid "Search"
+msgstr "Search"
+
+msgid "Active Members Directory"
+msgstr "Active Members Directory"
+
+msgid "Print ID Cards"
+msgstr "Print ID Cards"
+
+msgid "Member Name"
+msgstr "Member Name"
+
+msgid "Mobile Contact"
+msgstr "Mobile Contact"
+
+msgid "System Access Role"
+msgstr "System Access Role"
+
+msgid "Committee Position"
+msgstr "Committee Position"
+
+msgid "Joining Date"
+msgstr "Joining Date"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Festival Events & Programs"
+msgstr "Festival Events & Programs"
+
+msgid "Festival Schedule & Event Budgets"
+msgstr "Festival Schedule & Event Budgets"
+
+msgid "Plan, track budgets, and manage key cultural & religious festival events"
+msgstr "Plan, track budgets, and manage key cultural & religious festival events"
+
+msgid "Print Schedule"
+msgstr "Print Schedule"
+
+msgid "Add New Event"
+msgstr "Add New Event"
+
+msgid "Event Budget vs Spend"
+msgstr "Event Budget vs Spend"
+
+msgid "Edit"
+msgstr "Edit"
+
+msgid "Print"
+msgstr "Print"
+
+msgid "Financial Reports & Audit Statements"
+msgstr "Financial Reports & Audit Statements"
+
+msgid "Generate and print committee financial balance sheets and category breakdowns"
+msgstr "Generate and print committee financial balance sheets and category breakdowns"
+
+msgid "Print Balance Sheet"
+msgstr "Print Balance Sheet"
+
+msgid "TOTAL FUNDS COLLECTED"
+msgstr "TOTAL FUNDS COLLECTED"
+
+msgid "NET CASH SURPLUS"
+msgstr "NET CASH SURPLUS"
+
+msgid "Funds Collection by Source"
+msgstr "Funds Collection by Source"
+
+msgid "Security & Activity Audit Logs"
+msgstr "Security & Activity Audit Logs"
+
+msgid "System Audit & Activity Trail"
+msgstr "System Audit & Activity Trail"
+
+msgid "Track all create, update, approval, delete, and administrative operations"
+msgstr "Track all create, update, approval, delete, and administrative operations"
+
+msgid "Export Audit Log"
+msgstr "Export Audit Log"
+
+msgid "Search Action / Model / User"
+msgstr "Search Action / Model / User"
+
+msgid "Action Type"
+msgstr "Action Type"
+
+msgid "All Action Types"
+msgstr "All Action Types"
+
+msgid "Audit Trail History"
+msgstr "Audit Trail History"
+
+msgid "Total Logs"
+msgstr "Total Logs"
+
+msgid "Timestamp"
+msgstr "Timestamp"
+
+msgid "User Account"
+msgstr "User Account"
+
+msgid "Action Executed"
+msgstr "Action Executed"
+
+msgid "Target Model"
+msgstr "Target Model"
+
+msgid "Object ID"
+msgstr "Object ID"
+
+msgid "Details"
+msgstr "Details"

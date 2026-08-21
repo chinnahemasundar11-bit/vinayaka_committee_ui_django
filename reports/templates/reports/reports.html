@@ -1,15 +1,16 @@
 {% extends "base.html" %}
-{% block title %}Reports | Vinayaka Committee{% endblock %}
-{% block page_heading %}Reports & Balance Sheet{% endblock %}
+{% load i18n i18n_extras %}
+{% block title %}{% trans "Reports & Analytics" %} | {{ SITE_NAME }}{% endblock %}
+{% block page_heading %}{% trans "Reports & Balance Sheet" %}{% endblock %}
 
 {% block content %}
 <!-- Page Header -->
 <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
     <div>
-        <h4 class="mb-1 fw-bold">Financial Reports & Audit Statements</h4>
-        <p class="text-muted small mb-0">Generate and print committee financial balance sheets and category breakdowns</p>
+        <h4 class="mb-1 fw-bold">{% trans "Financial Reports & Audit Statements" %}</h4>
+        <p class="text-muted small mb-0">{% trans "Generate and print committee financial balance sheets and category breakdowns" %}</p>
     </div>
-    <button class="btn btn-outline-secondary" onclick="triggerPrint()"><i class="bi bi-printer me-1"></i> Print Balance Sheet</button>
+    <button class="btn btn-outline-secondary" onclick="triggerPrint()"><i class="bi bi-printer me-1"></i> {% trans "Print Balance Sheet" %}</button>
 </div>
 
 <!-- Summary Metric Cards -->
@@ -17,7 +18,7 @@
     <div class="col-md-4">
         <div class="stat-card border-0 shadow-sm p-4 rounded-3 bg-white">
             <div class="d-flex justify-content-between align-items-center mb-2">
-                <span class="text-muted small fw-bold">TOTAL FUNDS COLLECTED</span>
+                <span class="text-muted small fw-bold">{% trans "TOTAL FUNDS COLLECTED" %}</span>
                 <i class="bi bi-wallet2 text-success fs-4"></i>
             </div>
             <h3 class="fw-extrabold text-success mb-0">{{ CURRENCY_SYMBOL }} {{ total_funds|floatformat:2 }}</h3>
@@ -26,7 +27,7 @@
     <div class="col-md-4">
         <div class="stat-card border-0 shadow-sm p-4 rounded-3 bg-white">
             <div class="d-flex justify-content-between align-items-center mb-2">
-                <span class="text-muted small fw-bold">TOTAL EXPENSES INCURRED</span>
+                <span class="text-muted small fw-bold">{% trans "TOTAL EXPENSES INCURRED" %}</span>
                 <i class="bi bi-receipt text-danger fs-4"></i>
             </div>
             <h3 class="fw-extrabold text-danger mb-0">{{ CURRENCY_SYMBOL }} {{ total_expenses|floatformat:2 }}</h3>
@@ -35,7 +36,7 @@
     <div class="col-md-4">
         <div class="stat-card border-0 shadow-sm p-4 rounded-3 bg-white">
             <div class="d-flex justify-content-between align-items-center mb-2">
-                <span class="text-muted small fw-bold">NET CASH SURPLUS</span>
+                <span class="text-muted small fw-bold">{% trans "NET CASH SURPLUS" %}</span>
                 <i class="bi bi-piggy-bank text-warning fs-4"></i>
             </div>
             <h3 class="fw-extrabold text-primary mb-0">{{ CURRENCY_SYMBOL }} {{ net_surplus|floatformat:2 }}</h3>
@@ -48,13 +49,13 @@
     <div class="col-md-6">
         <div class="card border-0 shadow-sm h-100">
             <div class="card-header bg-white border-bottom py-3">
-                <h6 class="mb-0 fw-bold"><i class="bi bi-pie-chart-fill text-success me-2"></i>Funds Collection by Source</h6>
+                <h6 class="mb-0 fw-bold"><i class="bi bi-pie-chart-fill text-success me-2"></i>{% trans "Funds Collection by Source" %}</h6>
             </div>
             <div class="card-body p-0">
                 <ul class="list-group list-group-flush">
                     {% for item in receipts_by_source %}
                     <li class="list-group-item d-flex justify-content-between align-items-center py-3">
-                        <span class="fw-semibold">{{ item.fund_source__name|default:"General Contribution" }}</span>
+                        <span class="fw-semibold">{{ item.fund_source__name|t|default:"General Contribution" }}</span>
                         <span class="fw-bold text-success">{{ CURRENCY_SYMBOL }} {{ item.total|floatformat:2 }}</span>
                     </li>
                     {% empty %}

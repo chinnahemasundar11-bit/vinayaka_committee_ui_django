@@ -1,6 +1,6 @@
-{% load static %}
+{% load static i18n %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ LANGUAGE_CODE|default:'en' }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -191,7 +191,7 @@
             <a href="/dashboard/" class="nav-link">
                 <span class="nav-link-content">
                     <i class="bi bi-grid-1x2-fill menu-icon"></i>
-                    <span>Dashboard</span>
+                    <span>{% trans "Dashboard" %}</span>
                 </span>
             </a>
 
@@ -199,15 +199,15 @@
             <a class="nav-link" data-bs-toggle="collapse" href="#financeSubmenu" role="button" aria-expanded="false" aria-controls="financeSubmenu">
                 <span class="nav-link-content">
                     <i class="bi bi-wallet2 menu-icon"></i>
-                    <span>Finance Management</span>
+                    <span>{% trans "Finance Management" %}</span>
                 </span>
                 <i class="bi bi-chevron-right chevron-icon"></i>
             </a>
             <div class="collapse" id="financeSubmenu">
                 <div class="sidebar-submenu">
-                    <a href="/funds/" class="submenu-link"><i class="bi bi-circle-fill" style="font-size: 5px;"></i> Funds Received</a>
-                    <a href="/expenses/" class="submenu-link"><i class="bi bi-circle-fill" style="font-size: 5px;"></i> Expenses</a>
-                    <a href="/reports/" class="submenu-link"><i class="bi bi-circle-fill" style="font-size: 5px;"></i> Reports & Analytics</a>
+                    <a href="/funds/" class="submenu-link"><i class="bi bi-circle-fill" style="font-size: 5px;"></i> {% trans "Funds Received" %}</a>
+                    <a href="/expenses/" class="submenu-link"><i class="bi bi-circle-fill" style="font-size: 5px;"></i> {% trans "Expenses" %}</a>
+                    <a href="/reports/" class="submenu-link"><i class="bi bi-circle-fill" style="font-size: 5px;"></i> {% trans "Reports & Analytics" %}</a>
                 </div>
             </div>
 
@@ -215,14 +215,14 @@
             <a class="nav-link" data-bs-toggle="collapse" href="#committeeSubmenu" role="button" aria-expanded="false" aria-controls="committeeSubmenu">
                 <span class="nav-link-content">
                     <i class="bi bi-people-fill menu-icon"></i>
-                    <span>Committee & Events</span>
+                    <span>{% trans "Committee & Events" %}</span>
                 </span>
                 <i class="bi bi-chevron-right chevron-icon"></i>
             </a>
             <div class="collapse" id="committeeSubmenu">
                 <div class="sidebar-submenu">
-                    <a href="/members/" class="submenu-link"><i class="bi bi-circle-fill" style="font-size: 5px;"></i> Committee Members</a>
-                    <a href="/events/" class="submenu-link"><i class="bi bi-circle-fill" style="font-size: 5px;"></i> Festival Events</a>
+                    <a href="/members/" class="submenu-link"><i class="bi bi-circle-fill" style="font-size: 5px;"></i> {% trans "Committee Members" %}</a>
+                    <a href="/events/" class="submenu-link"><i class="bi bi-circle-fill" style="font-size: 5px;"></i> {% trans "Festival Events" %}</a>
                 </div>
             </div>
 
@@ -230,20 +230,20 @@
             <a class="nav-link" data-bs-toggle="collapse" href="#adminSubmenu" role="button" aria-expanded="false" aria-controls="adminSubmenu">
                 <span class="nav-link-content">
                     <i class="bi bi-gear-fill menu-icon"></i>
-                    <span>Administration</span>
+                    <span>{% trans "Administration" %}</span>
                 </span>
                 <i class="bi bi-chevron-right chevron-icon"></i>
             </a>
             <div class="collapse" id="adminSubmenu">
                 <div class="sidebar-submenu">
-                    <a href="/administration/" class="submenu-link"><i class="bi bi-circle-fill" style="font-size: 5px;"></i> Master Overview</a>
-                    <a href="/administration/users/" class="submenu-link"><i class="bi bi-circle-fill" style="font-size: 5px;"></i> Users & Access</a>
-                    <a href="/administration/roles/" class="submenu-link"><i class="bi bi-circle-fill" style="font-size: 5px;"></i> Roles & Permissions</a>
-                    <a href="/administration/payment-methods/" class="submenu-link"><i class="bi bi-circle-fill" style="font-size: 5px;"></i> Payment Methods</a>
-                    <a href="/administration/fund-sources/" class="submenu-link"><i class="bi bi-circle-fill" style="font-size: 5px;"></i> Fund Sources</a>
-                    <a href="/administration/expense-categories/" class="submenu-link"><i class="bi bi-circle-fill" style="font-size: 5px;"></i> Expense Categories</a>
-                    <a href="/administration/financial-years/" class="submenu-link"><i class="bi bi-circle-fill" style="font-size: 5px;"></i> Financial Years</a>
-                    <a href="/administration/site-settings/" class="submenu-link"><i class="bi bi-circle-fill" style="font-size: 5px;"></i> Site Settings UI</a>
+                    <a href="/administration/" class="submenu-link"><i class="bi bi-circle-fill" style="font-size: 5px;"></i> {% trans "Master Overview" %}</a>
+                    <a href="/administration/users/" class="submenu-link"><i class="bi bi-circle-fill" style="font-size: 5px;"></i> {% trans "Users & Access" %}</a>
+                    <a href="/administration/roles/" class="submenu-link"><i class="bi bi-circle-fill" style="font-size: 5px;"></i> {% trans "Roles & Permissions" %}</a>
+                    <a href="/administration/payment-methods/" class="submenu-link"><i class="bi bi-circle-fill" style="font-size: 5px;"></i> {% trans "Payment Methods" %}</a>
+                    <a href="/administration/fund-sources/" class="submenu-link"><i class="bi bi-circle-fill" style="font-size: 5px;"></i> {% trans "Fund Sources" %}</a>
+                    <a href="/administration/expense-categories/" class="submenu-link"><i class="bi bi-circle-fill" style="font-size: 5px;"></i> {% trans "Expense Categories" %}</a>
+                    <a href="/administration/financial-years/" class="submenu-link"><i class="bi bi-circle-fill" style="font-size: 5px;"></i> {% trans "Financial Years" %}</a>
+                    <a href="/administration/site-settings/" class="submenu-link"><i class="bi bi-circle-fill" style="font-size: 5px;"></i> {% trans "Site Settings UI" %}</a>
                 </div>
             </div>
 
@@ -251,7 +251,7 @@
             <a href="/audit/" class="nav-link">
                 <span class="nav-link-content">
                     <i class="bi bi-clock-history menu-icon"></i>
-                    <span>Audit Logs</span>
+                    <span>{% trans "Audit Logs" %}</span>
                 </span>
             </a>
         </nav>
@@ -263,10 +263,38 @@
         <header class="topbar">
             <div class="topbar-left">
                 <button class="btn btn-light d-lg-none py-1 px-2 me-1" id="menuBtn" type="button"><i class="bi bi-list fs-5"></i></button>
-                <h2 class="page-heading">{% block page_heading %}Dashboard{% endblock %}</h2>
+                <h2 class="page-heading">{% block page_heading %}{% trans "Dashboard" %}{% endblock %}</h2>
             </div>
             
             <div class="topbar-right">
+                {% if site_settings.ENABLE_MULTILANG != "false" and site_settings.SHOW_LANG_HEADER != "false" %}
+                <!-- Multi-Language Selector Dropdown -->
+                <div class="dropdown me-2">
+                    <button class="btn btn-sm btn-light border d-flex align-items-center gap-1 dropdown-toggle px-2 py-1.5 fw-bold text-dark shadow-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 0.85rem;">
+                        <i class="bi bi-globe2 text-primary fs-6"></i>
+                        {% get_current_language as CURRENT_LANG %}
+                        {% get_available_languages as AVAILABLE_LANGS %}
+                        {% get_language_info for CURRENT_LANG as current_lang_info %}
+                        <span>{{ current_lang_info.name_local|title }}</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0" style="min-width: 160px;">
+                        {% for lang_code, lang_name in AVAILABLE_LANGS %}
+                        <li>
+                            <form action="{% url 'set_language' %}" method="post" class="d-inline w-100">
+                                {% csrf_token %}
+                                <input name="next" type="hidden" value="{{ request.path }}">
+                                <input name="language" type="hidden" value="{{ lang_code }}">
+                                <button type="submit" class="dropdown-item py-2 d-flex align-items-center justify-content-between {% if lang_code == CURRENT_LANG %}active fw-bold{% endif %}" style="font-size: 0.875rem;">
+                                    <span>{{ lang_name }}</span>
+                                    {% if lang_code == CURRENT_LANG %}<i class="bi bi-check2 text-success ms-2"></i>{% endif %}
+                                </button>
+                            </form>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+
                 <!-- User Profile Menu (High Z-Index Floating Dropdown) -->
                 <div class="top-user dropdown">
                     <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle gap-2" data-bs-toggle="dropdown" aria-expanded="false">
@@ -277,10 +305,10 @@
                         </div>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0">
-                        <li><a class="dropdown-item py-2" href="/administration/users/"><i class="bi bi-person me-2 text-primary"></i> User Profile</a></li>
-                        <li><a class="dropdown-item py-2" href="/administration/site-settings/"><i class="bi bi-sliders me-2 text-primary"></i> Site Settings UI</a></li>
+                        <li><a class="dropdown-item py-2" href="/administration/users/"><i class="bi bi-person me-2 text-primary"></i> {% trans "User Profile" %}</a></li>
+                        <li><a class="dropdown-item py-2" href="/administration/site-settings/"><i class="bi bi-sliders me-2 text-primary"></i> {% trans "Site Settings UI" %}</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item py-2 text-danger fw-semibold" href="{% url 'logout' %}"><i class="bi bi-box-arrow-right me-2"></i> Sign Out</a></li>
+                        <li><a class="dropdown-item py-2 text-danger fw-semibold" href="{% url 'logout' %}"><i class="bi bi-box-arrow-right me-2"></i> {% trans "Sign Out" %}</a></li>
                     </ul>
                 </div>
             </div>

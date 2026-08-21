@@ -1,16 +1,17 @@
 {% extends "base.html" %}
-{% block title %}Expenses | Vinayaka Youth Committee{% endblock %}
-{% block page_heading %}Expense Voucher Ledger{% endblock %}
+{% load i18n i18n_extras %}
+{% block title %}{% trans "Expenses" %} | {{ SITE_NAME }}{% endblock %}
+{% block page_heading %}{% trans "Expense Voucher Ledger" %}{% endblock %}
 
 {% block content %}
 <!-- Page Header -->
 <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
     <div>
-        <h4 class="mb-1 fw-bold">Festival Expenditure & Vouchers</h4>
-        <p class="text-muted small mb-0">Track all committee purchases, vendor bills, and operational expenses</p>
+        <h4 class="mb-1 fw-bold">{% trans "Festival Expenditure & Vouchers" %}</h4>
+        <p class="text-muted small mb-0">{% trans "Track all committee purchases, vendor bills, and operational expenses" %}</p>
     </div>
     <a href="/expenses/add/" class="btn btn-primary">
-        <i class="bi bi-plus-lg"></i> Record New Expense
+        <i class="bi bi-plus-lg"></i> {% trans "Record New Expense" %}
     </a>
 </div>
 
@@ -19,23 +20,23 @@
     <form method="GET" action="/expenses/">
         <div class="row g-3">
             <div class="col-md-4">
-                <label class="form-label">Search Expense / Paid To</label>
+                <label class="form-label">{% trans "Search Expense / Paid To" %}</label>
                 <div class="input-group">
                     <span class="input-group-text"><i class="bi bi-search"></i></span>
                     <input type="text" name="q" class="form-control" value="{{ search_query }}">
                 </div>
             </div>
             <div class="col-md-4">
-                <label class="form-label">Expense Category</label>
+                <label class="form-label">{% trans "Expense Category" %}</label>
                 <select name="category" class="form-select">
-                    <option value="">All Categories</option>
+                    <option value="">{% trans "All Categories" %}</option>
                     {% for cat in categories %}
-                    <option value="{{ cat.id }}">{{ cat.name }}</option>
+                    <option value="{{ cat.id }}">{{ cat.name|t }}</option>
                     {% endfor %}
                 </select>
             </div>
             <div class="col-md-4 d-flex align-items-end gap-2">
-                <button type="submit" class="btn btn-primary w-100"><i class="bi bi-funnel"></i> Filter</button>
+                <button type="submit" class="btn btn-primary w-100"><i class="bi bi-funnel"></i> {% trans "Filter" %}</button>
                 <a href="/expenses/" class="btn btn-outline-secondary"><i class="bi bi-arrow-counterclockwise"></i></a>
             </div>
         </div>
@@ -56,11 +57,11 @@
 <!-- Expense Table Card -->
 <div class="card">
     <div class="card-header-clean">
-        <h6 class="mb-0 fw-bold"><i class="bi bi-receipt-cutoff text-danger me-2"></i>Expense Vouchers List (Total Outflow: {{ CURRENCY_SYMBOL }} {{ total_spent|floatformat:2 }})</h6>
+        <h6 class="mb-0 fw-bold"><i class="bi bi-receipt-cutoff text-danger me-2"></i>{% trans "Expense Vouchers List" %} ({% trans "Total Outflow" %}: {{ CURRENCY_SYMBOL }} {{ total_spent|floatformat:2 }})</h6>
         <div class="d-flex flex-wrap gap-2">
-            <button class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#bulkPrintExpenseModal"><i class="bi bi-printer text-primary me-1"></i> Print Vouchers</button>
-            <button class="btn btn-outline-secondary btn-sm"><i class="bi bi-file-earmark-pdf text-danger"></i> Export PDF</button>
-            <button class="btn btn-outline-secondary btn-sm"><i class="bi bi-file-earmark-excel text-success"></i> Export Excel</button>
+            <button class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#bulkPrintExpenseModal"><i class="bi bi-printer text-primary me-1"></i> {% trans "Print Vouchers" %}</button>
+            <button class="btn btn-outline-secondary btn-sm"><i class="bi bi-file-earmark-pdf text-danger"></i> {% trans "Export PDF" %}</button>
+            <button class="btn btn-outline-secondary btn-sm"><i class="bi bi-file-earmark-excel text-success"></i> {% trans "Export Excel" %}</button>
         </div>
     </div>
     <div class="table-responsive">
@@ -68,13 +69,13 @@
             <thead>
                 <tr>
                     <th style="width: 40px;"><input type="checkbox" id="selectAll" class="form-check-input"></th>
-                    <th>Voucher No.</th>
-                    <th>Category</th>
-                    <th>Description</th>
-                    <th>Date</th>
-                    <th>Paid To / Vendor</th>
-                    <th class="text-end">Amount Spent</th>
-                    <th class="text-end">Actions</th>
+                    <th>{% trans "Voucher No." %}</th>
+                    <th>{% trans "Category" %}</th>
+                    <th>{% trans "Description" %}</th>
+                    <th>{% trans "Date" %}</th>
+                    <th>{% trans "Paid To / Vendor" %}</th>
+                    <th class="text-end">{% trans "Amount Spent" %}</th>
+                    <th class="text-end">{% trans "Actions" %}</th>
                 </tr>
             </thead>
             <tbody>
@@ -82,7 +83,7 @@
                 <tr>
                     <td><input type="checkbox" class="form-check-input row-checkbox" value="{{ voucher.id }}"></td>
                     <td class="fw-semibold">{{ voucher.voucher_number }}</td>
-                    <td><span class="badge badge-soft-danger">{{ voucher.category.name }}</span></td>
+                    <td><span class="badge badge-soft-danger">{{ voucher.category.name|t }}</span></td>
                     <td>{{ voucher.description }}</td>
                     <td class="text-muted">{{ voucher.expense_date|date:"d M Y" }}</td>
                     <td class="fw-semibold">{{ voucher.vendor_name }}</td>

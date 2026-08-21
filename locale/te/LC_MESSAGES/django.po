@@ -1,0 +1,825 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Vinayaka Committee 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-08-21 18:45+0530\n"
+"PO-Revision-Date: 2026-08-21 18:45+0530\n"
+"Last-Translator: Admin <admin@vinayakacommittee.org>\n"
+"Language-Team: Telugu\n"
+"Language: te\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Dashboard"
+msgstr "డ్యాష్‌బోర్డ్"
+
+msgid "Finance Management"
+msgstr "ఆర్థిక నిర్వహణ"
+
+msgid "Funds Received"
+msgstr "స్వీకరించిన నిధులు"
+
+msgid "Expenses"
+msgstr "ఖర్చులు"
+
+msgid "Reports & Analytics"
+msgstr "నివేదికలు & విశ్లేషణలు"
+
+msgid "Committee & Events"
+msgstr "కమిటీ & కార్యక్రమాలు"
+
+msgid "Committee Members"
+msgstr "కమిటీ సభ్యులు"
+
+msgid "Festival Events"
+msgstr "ఉత్సవ కార్యక్రమాలు"
+
+msgid "Administration"
+msgstr "పరిపాలన"
+
+msgid "Master Overview"
+msgstr "మాస్టర్ అవలోకనం"
+
+msgid "Users & Access"
+msgstr "యూజర్లు & ప్రాప్యత"
+
+msgid "Roles & Permissions"
+msgstr "పాత్రలు & అనుమతులు"
+
+msgid "Payment Methods"
+msgstr "చెల్లింపు పద్ధతులు"
+
+msgid "Fund Sources"
+msgstr "నిధుల వనరులు"
+
+msgid "Expense Categories"
+msgstr "ఖర్చు వర్గాలు"
+
+msgid "Financial Years"
+msgstr "ఆర్థిక సంవత్సరాలు"
+
+msgid "Site Settings UI"
+msgstr "సైట్ సెట్టింగ్‌ల UI"
+
+msgid "Audit Logs"
+msgstr "ఆడిట్ లాగ్‌లు"
+
+msgid "User Profile"
+msgstr "యూజర్ ప్రొఫైల్"
+
+msgid "Sign Out"
+msgstr "సైన్ అవుట్"
+
+msgid "Portal Sign In"
+msgstr "పోర్టల్ సైన్ ఇన్"
+
+msgid "About Portal"
+msgstr "పోర్టల్ గురించి"
+
+msgid "Capabilities"
+msgstr "సామర్థ్యాలు"
+
+msgid "Impact Stats"
+msgstr "ప్రభావ గణాంకాలు"
+
+msgid "Schedule"
+msgstr "షెడ్యూల్"
+
+msgid "Committee Helpline"
+msgstr "కమిటీ హెల్ప్‌లైన్"
+
+msgid "Site settings updated successfully!"
+msgstr "సైట్ సెట్టింగ్‌లు విజయవంతంగా అప్‌డేట్ చేయబడ్డాయి!"
+
+msgid "You have been logged out."
+msgstr "మీరు లాగ్ అవుట్ అయ్యారు."
+
+msgid "Welcome back"
+msgstr "తిరిగి స్వాగతం"
+
+msgid "Welcome back, %(name)s!"
+msgstr "తిరిగి స్వాగతం, %(name)s!"
+
+msgid "Invalid mobile number/username or password. Please try again."
+msgstr "చెల్లని మొబైల్ నంబర్/యూజర్‌నేమ్ లేదా పాస్‌వర్డ్. దయచేసి మళ్లీ ప్రయత్నించండి."
+
+msgid "* Please enter both Mobile Number / Username and Password."
+msgstr "* దయచేసి మొబైల్ నంబర్ / యూజర్‌నేమ్ మరియు పాస్‌వర్డ్ రెండింటినీ ఎంటర్ చేయండి."
+
+msgid "* All fields marked with an asterisk are required."
+msgstr "* నక్షత్ర గుర్తు ఉన్న అన్ని ఫీల్డ్‌లు తప్పనిసరి."
+
+msgid "An account with this mobile number already exists."
+msgstr "ఈ మొబైల్ నంబర్‌తో ఒక ఖాతా ఇప్పటికే ఉంది."
+
+msgid "Account created successfully! Please sign in with your credentials."
+msgstr "ఖాతా విజయవంతంగా సృష్టించబడింది! దయచేసి మీ వివరాలతో సైన్ ఇన్ చేయండి."
+
+msgid "Password reset instructions sent to registered mobile number %(mobile)s."
+msgstr "నమోదిత మొబైల్ నంబర్ %(mobile)s కు పాస్‌వర్డ్ రీసెట్ సూచనలు పంపబడ్డాయి."
+
+msgid "English"
+msgstr "ఇంగ్లీష్"
+
+msgid "Telugu"
+msgstr "తెలుగు"
+
+msgid "Hindi"
+msgstr "హిందీ"
+
+msgid "Official Portal & Login"
+msgstr "అధికారిక పోర్టల్ & లాగిన్"
+
+msgid "Celebrations"
+msgstr "ఉత్సవ వేడుకలు"
+
+msgid "Sacred Tradition."
+msgstr "పవిత్ర సంప్రదాయం."
+
+msgid "Uncompromising Financial Transparency."
+msgstr "పారదర్శక ఆర్థిక నిర్వహణ."
+
+msgid "Welcome to the official digital accounting portal of the Vinayaka Chavithi Youth Committee. Experience 100% transparent financial management, digital donor receipts, itemized vendor expense tracking, and live audit reports."
+msgstr "వినాయక చవితి యూత్ కమిటీ అధికారిక డిజిటల్ ఖాతాల పోర్టల్‌కు స్వాగతం. 100% పారదర్శక ఆర్థిక నిర్వహణ, డిజిటల్ దాత రశీదులు, ఖర్చుల ట్రాకింగ్ మరియు లైవ్ ఆడిట్ నివేదికలను అనుభవించండి."
+
+msgid "100% Audited Accounts"
+msgstr "100% ఆడిట్ చేయబడిన ఖాతాలు"
+
+msgid "Digital UPI & Cash Receipts"
+msgstr "డిజిటల్ UPI & నగదు రశీదులు"
+
+msgid "Vendor Bill Proofs"
+msgstr "వ్యాపారి బిల్లు రశీదులు"
+
+msgid "Committee Sign In"
+msgstr "కమిటీ సైన్ ఇన్"
+
+msgid "Enter mobile credentials to access dashboard"
+msgstr "డ్యాష్‌బోర్డ్‌ను యాక్సెస్ చేయడానికి మొబైల్ వివరాలను ఎంటర్ చేయండి"
+
+msgid "Forgot?"
+msgstr "మర్చిపోయారా?"
+
+msgid "New Committee Member?"
+msgstr "కొత్త కమిటీ సభ్యుడా?"
+
+msgid "Register Account"
+msgstr "ఖాతా నమోదు చేయండి"
+
+msgid "100% Digitally Receipted"
+msgstr "100% డిజిటల్ రశీదులు"
+
+msgid "Devotees Served Meal"
+msgstr "భోజనం చేసిన భక్తులు"
+
+msgid "Annasantharpana Feast"
+msgstr "అన్నసంతర్పణ వేడుక"
+
+msgid "Public Audit Accuracy"
+msgstr "ప్రజా ఆడిట్ ఖచ్చితత్వం"
+
+msgid "Zero Discrepancy"
+msgstr "సున్నా వ్యత్యాసం"
+
+msgid "Active Youth Volunteers"
+msgstr "ఉత్సాహవంతమైన యువ స్వచ్ఛంద సేవకులు"
+
+msgid "Village Committee"
+msgstr "గ్రామ కమిటీ"
+
+msgid "Comprehensive Financial Management"
+msgstr "సమగ్ర ఆర్థిక నిర్వహణ"
+
+msgid "Purpose-built for village festival committees to manage every rupee with complete accountability."
+msgstr "గ్రామ ఉత్సవ కమిటీలు ప్రతి రూపాయిని పూర్తి జవాబుదారీతనంతో నిర్వహించడానికి ప్రత్యేకంగా రూపొందించబడింది."
+
+msgid "Fund Receipts"
+msgstr "నిధుల రశీదులు"
+
+msgid "Record youth contributions, village household funds, and outside donations with instant digital receipts."
+msgstr "యువత కాంట్రిబ్యూషన్‌లు, గ్రామ ఇళ్ల నిధులు మరియు బయటి విరాళాలను తక్షణ డిజిటల్ రశీదులతో నమోదు చేయండి."
+
+msgid "Expense Vouchers"
+msgstr "ఖర్చుల వోచర్లు"
+
+msgid "Log Mandapam decorations, Annasantharpana groceries, sound/lighting bills with attached bill photos."
+msgstr "మండపం అలంకరణలు, అన్నసంతర్పణ సరుకులు, సౌండ్/లైటింగ్ బిల్లులను రశీదులతో నమోదు చేయండి."
+
+msgid "Live Analytics"
+msgstr "ప్రత్యక్ష విశ్లేషణలు"
+
+msgid "Real-time interactive dashboard charts showing budget vs actual spend and net balance position."
+msgstr "బడ్జెట్ వర్సెస్ అసలు ఖర్చు మరియు నికర నిల్వను చూపే రియల్-టైమ్ చార్ట్‌లు."
+
+msgid "Audit Reports"
+msgstr "ఆడిట్ నివేదికలు"
+
+msgid "Export complete financial statements, daily ledger logs, and audit trail records in PDF or Excel format."
+msgstr "పూర్తి ఆర్థిక ప్రకటనలు, రోజువారీ ఖాతా లాగ్‌లను PDF లేదా Excel ఆకృతిలో ఎగుమతి చేయండి."
+
+msgid "Upcoming Festival Programs"
+msgstr "రాబోయే ఉత్సవ కార్యక్రమాలు"
+
+msgid "Key religious ceremonies, cultural programs, and community feasts planned for 2026."
+msgstr "2026 కోసం ప్రణాళిక చేయబడిన ప్రధాన ఆధ్యాత్మిక పూజలు, సాంస్కృతిక కార్యక్రమాలు మరియు అన్నదాన వేడుకలు."
+
+msgid "Ganesh Idol Sthapana & Pooja"
+msgstr "గణేష్ విగ్రహ ప్రతిష్ఠాపన & పూజ"
+
+msgid "Grand installation of Lord Ganesha idol with Veda chanting and morning pooja ceremony."
+msgstr "వేద మంత్రోచ్ఛారణలు మరియు ఉదయం పూజతో వినాయకుడి విగ్రహ ప్రతిష్ఠాపన."
+
+msgid "Grand Annasantharpana Feast"
+msgstr "మహా అన్నసంతర్పణ మహోత్సవం"
+
+msgid "Community meal distribution planned for over 5,000 village residents and visiting devotees."
+msgstr "5,000 మందికి పైగా గ్రామస్తులు మరియు భక్తులకు అన్నదాన వితరణ ప్రణాళిక."
+
+msgid "Laddu Auction & Shobhayatra"
+msgstr "లడ్డూ వేలం & శోభాయాత్ర"
+
+msgid "Sacred Laddu auction followed by traditional music procession and lake Nimajjanam."
+msgstr "పవిత్ర లడ్డూ వేలంపాట, మంగళవాద్యాల ఊరేగింపు మరియు చెరువు నిమజ్జనం."
+
+msgid "Committee Leadership"
+msgstr "కమిటీ నాయకత్వం"
+
+msgid "Have questions regarding festival donations, receipts, or upcoming events? Get in touch with our committee representatives."
+msgstr "ఉత్సవ విరాళాలు, రశీదులు లేదా రాబోయే కార్యక్రమాల గురించి ప్రశ్నలు ఉన్నాయా? కమిటీ ప్రతినిధులను సంప్రదించండి."
+
+msgid "Festival Mandapam Location"
+msgstr "ఉత్సవ మండపం ప్రాంగణం"
+
+msgid "Festival Period"
+msgstr "ఉత్సవ కాలపరిమితి"
+
+msgid "Daily Pooja Timings"
+msgstr "రోజువారీ పూజ సమయాలు"
+
+msgid "Sign In to Festival Portal"
+msgstr "ఉత్సవ పోర్టల్‌కు సైన్ ఇన్ చేయండి"
+
+msgid "Site Settings & Enterprise Theme Customization"
+msgstr "సైట్ సెట్టింగ్‌లు & సంస్థ థీమ్ అనుకూలీకరణ"
+
+msgid "Site Settings & Theme Engine"
+msgstr "సైట్ సెట్టింగ్‌లు & థీమ్ ఇంజిన్"
+
+msgid "Enterprise Site Settings & Theme Engine"
+msgstr "సంస్థ సైట్ సెట్టింగ్‌లు & థీమ్ ఇంజిన్"
+
+msgid "Configure global themes, landing titles, fonts, sidebar nav, header, structural cards, tables, buttons, and footer styling with real-time live preview."
+msgstr "రియల్-టైమ్ లైవ్ ప్రివ్యూతో గ్లోబల్ థీమ్‌లు, ల్యాండింగ్ టైటిల్స్, ఫాంట్‌లు, సైడ్‌బార్, హెడర్, కార్డ్‌లు, టేబుల్‌లు, బటన్‌లు మరియు ఫుటర్ స్టైలింగ్‌ను కాన్ఫిగర్ చేయండి."
+
+msgid "Reset Defaults"
+msgstr "డిఫాల్ట్‌లను రీసెట్ చేయండి"
+
+msgid "Save All Settings"
+msgstr "అన్ని సెట్టింగ్‌లను సేవ్ చేయండి"
+
+msgid "1-Click Industry Theme Presets"
+msgstr "1-క్లిక్ పరిశ్రమ థీమ్ ప్రీసెట్లు"
+
+msgid "Royal Maroon & Gold"
+msgstr "రాయల్ మెరూన్ & గోల్డ్"
+
+msgid "Modern Navy Corporate"
+msgstr "మోడరన్ నేవీ కార్పొరేట్"
+
+msgid "Cyber Emerald Green"
+msgstr "సైబర్ ఎమరాల్డ్ గ్రీన్"
+
+msgid "Midnight Dark Deluxe"
+msgstr "మిడ్‌నైట్ డార్క్ డీలక్స్"
+
+msgid "Sunset Amber & Purple"
+msgstr "సన్‌సెట్ అంబర్ & పర్పల్"
+
+msgid "Minimal Slate Light"
+msgstr "మినిమల్ స్లేట్ లైట్"
+
+msgid "Branding"
+msgstr "బ్రాండింగ్"
+
+msgid "Typography"
+msgstr "టైపోగ్రఫీ"
+
+msgid "Sidebar"
+msgstr "సైడ్‌బార్"
+
+msgid "Header"
+msgstr "హెడర్"
+
+msgid "Cards & Layout"
+msgstr "కార్డులు & లేఅవుట్"
+
+msgid "Tables"
+msgstr "పట్టికలు"
+
+msgid "Buttons"
+msgstr "బటన్లు"
+
+msgid "Footer & Contact"
+msgstr "ఫుటర్ & పరిచయం"
+
+msgid "Language & Localization"
+msgstr "భాష & ప్రాంతీయకరణ"
+
+msgid "Financial Dashboard"
+msgstr "ఆర్థిక డ్యాష్‌బోర్డ్"
+
+msgid "Festival Accounting Overview"
+msgstr "ఉత్సవ ఖాతాల అవలోకనం"
+
+msgid "Live financial ledger & real-time tracking for Vinayaka Chavithi 2026"
+msgstr "వినాయక చవితి 2026 కోసం ప్రత్యక్ష ఆర్థిక ఖాతా పుస్తకం"
+
+msgid "Search transactions..."
+msgstr "లావాదేవీలను శోధించండి..."
+
+msgid "Accounting Period"
+msgstr "ఖాతాల కాలపరిమితి"
+
+msgid "Current"
+msgstr "ప్రస్తుత"
+
+msgid "TOTAL FUNDS RECEIVED"
+msgstr "మొత్తం స్వీకరించిన నిధులు"
+
+msgid "Total Receipts Collected"
+msgstr "మొత్తం సేకరించిన రశీదులు"
+
+msgid "TOTAL EXPENSES INCURRED"
+msgstr "మొత్తం అయిన ఖర్చులు"
+
+msgid "Total Outflow Expenses"
+msgstr "మొత్తం వెచ్చించిన ఖర్చులు"
+
+msgid "NET AVAILABLE BALANCE"
+msgstr "నికర అందుబాటులో ఉన్న నిల్వ"
+
+msgid "Healthy Net Position"
+msgstr "ఆరోగ్యకరమైన ఆర్థిక స్థితి"
+
+msgid "Fund Sources Distribution"
+msgstr "నిధుల వనరుల పంపిణీ"
+
+msgid "Expenses by Category"
+msgstr "వర్గం వారీగా ఖర్చులు"
+
+msgid "Current Period"
+msgstr "ప్రస్తుత కాలం"
+
+msgid "Recent Receipts & Expenses"
+msgstr "ఇటీవలి రశీదులు & ఖర్చులు"
+
+msgid "Latest contribution receipts recorded in database"
+msgstr "డేటాబేస్‌లో నమోదు చేయబడిన తాజా విరాళ రశీదులు"
+
+msgid "View Full Ledger"
+msgstr "పూర్తి లేడ్జర్‌ను చూడండి"
+
+msgid "Ref No."
+msgstr "రెఫరెన్స్ సంఖ్య"
+
+msgid "Type"
+msgstr "రకం"
+
+msgid "Contributor / Vendor Name"
+msgstr "విరాళందారు / వ్యాపారి పేరు"
+
+msgid "Category / Source"
+msgstr "వర్గం / వనరు"
+
+msgid "Payment Channel"
+msgstr "చెల్లింపు మార్గం"
+
+msgid "Date"
+msgstr "తేదీ"
+
+msgid "Amount"
+msgstr "మొత్తం"
+
+msgid "Fund"
+msgstr "నిధి"
+
+msgid "Expense"
+msgstr "ఖర్చు"
+
+msgid "No fund receipts recorded yet."
+msgstr "ఇంకా ఎటువంటి నిధుల రశీదులు నమోదు కాలేదు."
+
+msgid "Funds Received Ledger"
+msgstr "స్వీకరించిన నిధుల పుస్తకం"
+
+msgid "Contributions & Income Receipts"
+msgstr "విరాళాలు & ఆదాయ రశీదులు"
+
+msgid "Track all incoming contributions, donations, and festival collections"
+msgstr "వచ్చిన విరాళాలు మరియు ఉత్సవ సేకరణలను ట్రాక్ చేయండి"
+
+msgid "Record New Contribution"
+msgstr "కొత్త విరాళాన్ని నమోదు చేయండి"
+
+msgid "Search Receipt / Donor Name"
+msgstr "రశీదు / విరాళందారు పేరు శోధించండి"
+
+msgid "Fund Source Category"
+msgstr "నిధుల వనరుల వర్గం"
+
+msgid "All Fund Sources"
+msgstr "అన్ని నిధుల వనరులు"
+
+msgid "Filter"
+msgstr "ఫిల్టర్"
+
+msgid "Fund Receipts List"
+msgstr "నిధుల రశీదుల జాబితా"
+
+msgid "Total"
+msgstr "మొత్తం"
+
+msgid "Print Receipts"
+msgstr "రశీదులను ప్రింట్ చేయండి"
+
+msgid "Export PDF"
+msgstr "PDF ఎగుమతి చేయండి"
+
+msgid "Export Excel"
+msgstr "Excel ఎగుమతి చేయండి"
+
+msgid "Receipt No."
+msgstr "రశీదు సంఖ్య"
+
+msgid "Donor / Contributor Name"
+msgstr "విరాళందారు పేరు"
+
+msgid "Fund Source"
+msgstr "నిధుల వనరు"
+
+msgid "Date Received"
+msgstr "స్వీకరించిన తేదీ"
+
+msgid "Payment Mode"
+msgstr "చెల్లింపు పద్ధతి"
+
+msgid "Amount Paid"
+msgstr "చెల్లించిన మొత్తం"
+
+msgid "Actions"
+msgstr "చర్యలు"
+
+msgid "Expense Voucher Ledger"
+msgstr "ఖర్చుల వోచర్ల పుస్తకం"
+
+msgid "Festival Expenditure & Vouchers"
+msgstr "ఉత్సవ ఖర్చులు & వోచర్లు"
+
+msgid "Track all committee purchases, vendor bills, and operational expenses"
+msgstr "కమిటీ కొనుగోళ్లు, వ్యాపారి బిల్లులు మరియు ఖర్చులను ట్రాక్ చేయండి"
+
+msgid "Record New Expense"
+msgstr "కొత్త ఖర్చును నమోదు చేయండి"
+
+msgid "Search Expense / Paid To"
+msgstr "ఖర్చు / చెల్లించిన వ్యక్తిని శోధించండి"
+
+msgid "Expense Category"
+msgstr "ఖర్చు వర్గం"
+
+msgid "All Categories"
+msgstr "అన్ని వర్గాలు"
+
+msgid "Expense Vouchers List"
+msgstr "ఖర్చు వోచర్ల జాబితా"
+
+msgid "Total Outflow"
+msgstr "మొత్తం వెచ్చించిన సొమ్ము"
+
+msgid "Print Vouchers"
+msgstr "వోచర్లను ప్రింట్ చేయండి"
+
+msgid "Voucher No."
+msgstr "వోచర్ సంఖ్య"
+
+msgid "Category"
+msgstr "వర్గం"
+
+msgid "Description"
+msgstr "వివరాలు"
+
+msgid "Paid To / Vendor"
+msgstr "చెల్లించిన వ్యక్తి / వ్యాపారి"
+
+msgid "Amount Spent"
+msgstr "వెచ్చించిన మొత్తం"
+
+msgid "Committee Members Directory"
+msgstr "కమిటీ సభ్యుల డైరెక్టరీ"
+
+msgid "Youth Committee Members & Leadership"
+msgstr "యూత్ కమిటీ సభ్యులు & నాయకత్వం"
+
+msgid "Manage roles, contact info, positions, and active festival committee members"
+msgstr "పాత్రలు, సంప్రదింపు సమాచారం మరియు కమిటీ సభ్యులను నిర్వహించండి"
+
+msgid "Add New Member"
+msgstr "కొత్త సభ్యుడిని చేర్చండి"
+
+msgid "Search Member Name / ID / Phone / Position"
+msgstr "సభ్యుడి పేరు / ID / ఫోన్ శోధించండి"
+
+msgid "Search"
+msgstr "శోధించండి"
+
+msgid "Active Members Directory"
+msgstr "యాక్టివ్ సభ్యుల డైరెక్టరీ"
+
+msgid "Print ID Cards"
+msgstr "ID కార్డులను ప్రింట్ చేయండి"
+
+msgid "Member Name"
+msgstr "సభ్యుడి పేరు"
+
+msgid "Mobile Contact"
+msgstr "మొబైల్ నంబరు"
+
+msgid "System Access Role"
+msgstr "సిస్టమ్ అనుమతి పాత్ర"
+
+msgid "Committee Position"
+msgstr "కమిటీ పదవి"
+
+msgid "Joining Date"
+msgstr "చేరిన తేదీ"
+
+msgid "Status"
+msgstr "స్థితి"
+
+msgid "Festival Events & Programs"
+msgstr "ఉత్సవ కార్యక్రమాలు & ప్రోగ్రామ్‌లు"
+
+msgid "Festival Schedule & Event Budgets"
+msgstr "ఉత్సవ షెడ్యూల్ & ప్రోగ్రామ్ బడ్జెట్‌లు"
+
+msgid "Plan, track budgets, and manage key cultural & religious festival events"
+msgstr "ఉత్సవ సాంస్కృతిక & ఆధ్యాత్మిక కార్యక్రమాలను ప్లాన్ చేయండి"
+
+msgid "Print Schedule"
+msgstr "షెడ్యూల్‌ను ప్రింట్ చేయండి"
+
+msgid "Add New Event"
+msgstr "కొత్త కార్యక్రమాన్ని చేర్చండి"
+
+msgid "Event Budget vs Spend"
+msgstr "కార్యక్రమ బడ్జెట్ వర్సెస్ ఖర్చు"
+
+msgid "Edit"
+msgstr "ఎడిట్"
+
+msgid "Print"
+msgstr "ప్రింట్"
+
+msgid "Financial Reports & Audit Statements"
+msgstr "ఆర్థిక నివేదికలు & ఆడిట్ స్టేట్‌మెంట్‌లు"
+
+msgid "Generate and print committee financial balance sheets and category breakdowns"
+msgstr "ఆర్థిక బ్యాలెన్స్ షీట్‌లు మరియు వర్గ వర్గీకరణలను రూపొందించండి"
+
+msgid "Print Balance Sheet"
+msgstr "బ్యాలెన్స్ షీట్ ప్రింట్ చేయండి"
+
+msgid "TOTAL FUNDS COLLECTED"
+msgstr "మొత్తం సేకరించిన నిధులు"
+
+msgid "NET CASH SURPLUS"
+msgstr "నికర నగదు మిగులు"
+
+msgid "Funds Collection by Source"
+msgstr "వనరుల వారీగా నిధుల సేకరణ"
+
+msgid "Security & Activity Audit Logs"
+msgstr "సెక్యూరిటీ & కార్యకలాపాల ఆడిట్ లాగ్‌లు"
+
+msgid "System Audit & Activity Trail"
+msgstr "సిస్టమ్ ఆడిట్ & కార్యకలాపాల చరిత్ర"
+
+msgid "Track all create, update, approval, delete, and administrative operations"
+msgstr "అన్ని సృష్టి, అప్‌డేట్, తొలగింపు మరియు పరిపాలనా చర్యలను ట్రాక్ చేయండి"
+
+msgid "Export Audit Log"
+msgstr "ఆడిట్ లాగ్‌ను ఎగుమతి చేయండి"
+
+msgid "Search Action / Model / User"
+msgstr "చర్య / మోడల్ / యూజర్‌ను శోధించండి"
+
+msgid "Action Type"
+msgstr "చర్య రకం"
+
+msgid "All Action Types"
+msgstr "అన్ని చర్య రకాలు"
+
+msgid "Audit Trail History"
+msgstr "ఆడిట్ ట్రయల్ చరిత్ర"
+
+msgid "Total Logs"
+msgstr "మొత్తం లాగ్‌లు"
+
+msgid "Timestamp"
+msgstr "సమయము"
+
+msgid "User Account"
+msgstr "యూజర్ ఖాతా"
+
+msgid "Action Executed"
+msgstr "చేసిన చర్య"
+
+msgid "Target Model"
+msgstr "లక్ష్య మోడల్"
+
+msgid "Object ID"
+msgstr "ఆబ్జెక్ట్ ID"
+
+msgid "Details"
+msgstr "వివరాలు"
+
+msgid "No audit logs recorded yet."
+msgstr "ఇంకా ఎటువంటి ఆడిట్ లాగ్‌లు నమోదు కాలేదు."
+
+msgid "Youth Contribution"
+msgstr "యూత్ కాంట్రిబ్యూషన్"
+
+msgid "Village Household Contribution"
+msgstr "గ్రామ ఇళ్ల విరాళం"
+
+msgid "Outside Donors & Well Wishers"
+msgstr "బయటి దాతలు & శ్రేయోభిలాషులు"
+
+msgid "Laddu Auction & Prasadam"
+msgstr "లడ్డూ వేలం & ప్రసాదం"
+
+msgid "Village Contribution"
+msgstr "గ్రామ విరాళం"
+
+msgid "Outside Donors"
+msgstr "బయటి దాతలు"
+
+msgid "General Contribution"
+msgstr "సాధారణ విరాళం"
+
+msgid "Laddu Auction"
+msgstr "లడ్డూ వేలం"
+
+msgid "Temple Collection"
+msgstr "ఆలయ సేకరణ"
+
+msgid "Decorations & Mandapam Set"
+msgstr "అలంకరణలు & మండపం సెట్"
+
+msgid "Lighting & Sound Systems"
+msgstr "లైటింగ్ & సౌండ్ సిస్టమ్స్"
+
+msgid "Annasantharpana / Prasadam Food"
+msgstr "అన్నసంతర్పణ / ప్రసాదం భోజనం"
+
+msgid "Idol & Sthapana Pooja"
+msgstr "విగ్రహం & స్థాపన పూజ"
+
+msgid "Nimajjanam Procession & Band"
+msgstr "నిమజ్జనం ఊరేగింపు & బ్యాండ్"
+
+msgid "Mandapam Decoration"
+msgstr "మండపం అలంకరణ"
+
+msgid "Annasantharpana Groceries"
+msgstr "అన్నసంతర్పణ దినుసులు"
+
+msgid "Sound & Lighting"
+msgstr "సౌండ్ & లైటింగ్"
+
+msgid "Pooja Items"
+msgstr "పూజా సామాగ్రి"
+
+msgid "Priest Dakshina"
+msgstr "పూజారి దక్షిణ"
+
+msgid "Nimajjanam Procession"
+msgstr "నిమజ్జనం ఊరేగింపు"
+
+msgid "Electrician & Generator"
+msgstr "ఎలక్ట్రీషియన్ & జనరేటర్"
+
+msgid "General Expense"
+msgstr "సాధారణ ఖర్చు"
+
+msgid "Cash Payment"
+msgstr "నగదు చెల్లింపు"
+
+msgid "UPI / PhonePe / GooglePay"
+msgstr "UPI / PhonePe / GooglePay"
+
+msgid "Bank Transfer (NEFT/IMPS)"
+msgstr "బ్యాంక్ బదిలీ (NEFT/IMPS)"
+
+msgid "Cash"
+msgstr "నగదు"
+
+msgid "UPI / QR Code"
+msgstr "UPI / QR కోడ్"
+
+msgid "Bank Transfer"
+msgstr "బ్యాంక్ బదిలీ"
+
+msgid "Cheque"
+msgstr "చెక్కు"
+
+msgid "President"
+msgstr "అధ్యక్షుడు"
+
+msgid "Vice President"
+msgstr "ఉపాధ్యక్షుడు"
+
+msgid "Treasurer"
+msgstr "కోశాధికారి"
+
+msgid "Chief Treasurer"
+msgstr "ముఖ్య కోశాధికారి"
+
+msgid "Secretary"
+msgstr "కార్యదర్శి"
+
+msgid "Youth Secretary"
+msgstr "యూత్ సెక్రటరీ"
+
+msgid "Executive Member"
+msgstr "కార్యవర్గ సభ్యుడు"
+
+msgid "Volunteer"
+msgstr "స్వచ్ఛంద సేవకుడు"
+
+msgid "Super Admin"
+msgstr "సూపర్ అడ్మిన్"
+
+msgid "Treasurer / Super Admin"
+msgstr "కోశాధికారి / సూపర్ అడ్మిన్"
+
+msgid "Committee Member"
+msgstr "కమిటీ సభ్యుడు"
+
+msgid "Member"
+msgstr "సభ్యుడు"
+
+msgid "Planned"
+msgstr "ప్రణాళిక చేయబడింది"
+
+msgid "Upcoming"
+msgstr "రాబోయే"
+
+msgid "Ongoing"
+msgstr "జరుగుతున్న"
+
+msgid "Completed"
+msgstr "పూర్తయింది"
+
+msgid "Active"
+msgstr "యాక్టివ్"
+
+msgid "Inactive"
+msgstr "ఇన్యాక్టివ్"
+
+msgid "Pending"
+msgstr "పెండింగ్"
+
+msgid "Approved"
+msgstr "ఆమోదించబడింది"
+
+msgid "Rejected"
+msgstr "తిరస్కరించబడింది"
+
+msgid "CREATE"
+msgstr "సృష్టి"
+
+msgid "UPDATE"
+msgstr "అప్‌డేట్"
+
+msgid "DELETE"
+msgstr "తొలగింపు"
+
+msgid "BULK_DELETE"
+msgstr "బల్క్ తొలగింపు"
+
+msgid "FundReceipt"
+msgstr "నిధి రశీదు"
+
+msgid "ExpenseVoucher"
+msgstr "ఖర్చు వోచర్"
+
+msgid "MemberRecord"
+msgstr "సభ్యుడి రికార్డు"
+
+msgid "FestivalEvent"
+msgstr "ఉత్సవ కార్యక్రమం"
+
+msgid "SiteSetting"
+msgstr "సైట్ సెట్టింగ్"

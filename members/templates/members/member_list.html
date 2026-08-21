@@ -1,16 +1,17 @@
 {% extends "base.html" %}
-{% block title %}Committee Members | Vinayaka Youth Committee{% endblock %}
-{% block page_heading %}Committee Members Directory{% endblock %}
+{% load i18n i18n_extras %}
+{% block title %}{% trans "Committee Members" %} | {{ SITE_NAME }}{% endblock %}
+{% block page_heading %}{% trans "Committee Members Directory" %}{% endblock %}
 
 {% block content %}
 <!-- Page Header -->
 <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
     <div>
-        <h4 class="mb-1 fw-bold">Youth Committee Members & Leadership</h4>
-        <p class="text-muted small mb-0">Manage roles, contact info, positions, and active festival committee members</p>
+        <h4 class="mb-1 fw-bold">{% trans "Youth Committee Members & Leadership" %}</h4>
+        <p class="text-muted small mb-0">{% trans "Manage roles, contact info, positions, and active festival committee members" %}</p>
     </div>
     <a href="/members/add/" class="btn btn-primary">
-        <i class="bi bi-person-plus-fill"></i> Add New Member
+        <i class="bi bi-person-plus-fill"></i> {% trans "Add New Member" %}
     </a>
 </div>
 
@@ -19,14 +20,14 @@
     <form method="GET" action="/members/">
         <div class="row g-3">
             <div class="col-md-8">
-                <label class="form-label">Search Member Name / ID / Phone / Position</label>
+                <label class="form-label">{% trans "Search Member Name / ID / Phone / Position" %}</label>
                 <div class="input-group">
                     <span class="input-group-text"><i class="bi bi-search"></i></span>
                     <input type="text" name="q" class="form-control" value="{{ search_query }}">
                 </div>
             </div>
             <div class="col-md-4 d-flex align-items-end gap-2">
-                <button type="submit" class="btn btn-primary w-100"><i class="bi bi-funnel"></i> Search</button>
+                <button type="submit" class="btn btn-primary w-100"><i class="bi bi-funnel"></i> {% trans "Search" %}</button>
                 <a href="/members/" class="btn btn-outline-secondary"><i class="bi bi-arrow-counterclockwise"></i></a>
             </div>
         </div>
@@ -47,10 +48,10 @@
 <!-- Member List Table Card -->
 <div class="card">
     <div class="card-header-clean">
-        <h6 class="mb-0 fw-bold"><i class="bi bi-people-fill text-danger me-2"></i>Active Members Directory (Total: {{ members.count }})</h6>
+        <h6 class="mb-0 fw-bold"><i class="bi bi-people-fill text-danger me-2"></i>{% trans "Active Members Directory" %} ({% trans "Total" %}: {{ members.count }})</h6>
         <div class="d-flex flex-wrap align-items-center gap-2">
-            <button class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#bulkPrintMemberModal"><i class="bi bi-printer text-primary me-1"></i> Print ID Cards</button>
-            <button class="btn btn-outline-secondary btn-sm"><i class="bi bi-file-earmark-excel text-success"></i> Export Excel</button>
+            <button class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#bulkPrintMemberModal"><i class="bi bi-printer text-primary me-1"></i> {% trans "Print ID Cards" %}</button>
+            <button class="btn btn-outline-secondary btn-sm"><i class="bi bi-file-earmark-excel text-success"></i> {% trans "Export Excel" %}</button>
         </div>
     </div>
     <div class="table-responsive">
@@ -58,13 +59,13 @@
             <thead>
                 <tr>
                     <th style="width: 40px;"><input type="checkbox" id="selectAll" class="form-check-input"></th>
-                    <th>Member Name</th>
-                    <th>Mobile Contact</th>
-                    <th>System Access Role</th>
-                    <th>Committee Position</th>
-                    <th>Joining Date</th>
-                    <th>Status</th>
-                    <th class="text-end">Actions</th>
+                    <th>{% trans "Member Name" %}</th>
+                    <th>{% trans "Mobile Contact" %}</th>
+                    <th>{% trans "System Access Role" %}</th>
+                    <th>{% trans "Committee Position" %}</th>
+                    <th>{% trans "Joining Date" %}</th>
+                    <th>{% trans "Status" %}</th>
+                    <th class="text-end">{% trans "Actions" %}</th>
                 </tr>
             </thead>
             <tbody>
@@ -81,10 +82,10 @@
                         </div>
                     </td>
                     <td class="fw-semibold"><i class="bi bi-telephone text-muted me-1"></i>{{ member.mobile_number }}</td>
-                    <td><span class="badge badge-soft-danger"><i class="bi bi-shield-lock me-1"></i>{{ member.system_role }}</span></td>
-                    <td><span class="badge badge-soft-warning">{{ member.committee_position }}</span></td>
+                    <td><span class="badge badge-soft-danger"><i class="bi bi-shield-lock me-1"></i>{{ member.system_role|t }}</span></td>
+                    <td><span class="badge badge-soft-warning">{{ member.committee_position|t }}</span></td>
                     <td class="text-muted">{{ member.joining_date|date:"d M Y" }}</td>
-                    <td><span class="badge badge-soft-{% if member.status == 'Active' %}success{% else %}secondary{% endif %}"><i class="bi bi-check-circle-fill me-1"></i>{{ member.status }}</span></td>
+                    <td><span class="badge badge-soft-{% if member.status == 'Active' %}success{% else %}secondary{% endif %}"><i class="bi bi-check-circle-fill me-1"></i>{{ member.status|t }}</span></td>
                     <td class="text-end">
                         <div class="d-flex gap-1 justify-content-end">
                             <button class="btn btn-sm btn-light" data-bs-toggle="modal" data-bs-target="#editMemberModal{{ member.id }}" title="Edit Member"><i class="bi bi-pencil"></i></button>

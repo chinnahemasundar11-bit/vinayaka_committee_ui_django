@@ -18,6 +18,12 @@ def site_settings(request):
         "SITE_LOGO_ICON": "bi-flower1",
         "SITE_LOGO_URL": "",
 
+        # Multi-Language Defaults
+        "ENABLE_MULTILANG": "true",
+        "DEFAULT_LANGUAGE": "en",
+        "SHOW_LANG_HEADER": "true",
+        "SHOW_LANG_LOGIN": "true",
+
         # Global Typography & Google Fonts
         "BODY_FONT_FAMILY": "'Inter', sans-serif",
         "HEADING_FONT_FAMILY": "'Outfit', sans-serif",

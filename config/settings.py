@@ -25,9 +25,12 @@ INSTALLED_APPS = [
     "audit",
 ]
 
+from django.utils.translation import gettext_lazy as _
+
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -48,8 +51,12 @@ TEMPLATES = [{
             "django.template.context_processors.request",
             "django.contrib.auth.context_processors.auth",
             "django.contrib.messages.context_processors.messages",
+            "django.template.context_processors.i18n",
             "administration.context_processors.site_settings",
-        ]
+        ],
+        "libraries": {
+            "i18n_extras": "administration.templatetags.i18n_extras",
+        }
     },
 }]
 
@@ -67,10 +74,21 @@ DATABASES = {
     }
 }
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "en"
 TIME_ZONE = "Asia/Kolkata"
 USE_I18N = True
+USE_L10N = True
 USE_TZ = True
+
+LANGUAGES = [
+    ("en", _("English")),
+    ("te", _("Telugu (తెలుగు)")),
+    ("hi", _("Hindi (हिन्दी)")),
+]
+
+LOCALE_PATHS = [
+    BASE_DIR / "locale",
+]
 
 STATIC_URL = "static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]

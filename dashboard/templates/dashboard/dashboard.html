@@ -1,6 +1,7 @@
 {% extends "base.html" %}
-{% block title %}Dashboard | Vinayaka Youth Committee{% endblock %}
-{% block page_heading %}Financial Dashboard{% endblock %}
+{% load i18n i18n_extras %}
+{% block title %}{% trans "Dashboard" %} | {{ SITE_NAME }}{% endblock %}
+{% block page_heading %}{% trans "Financial Dashboard" %}{% endblock %}
 
 {% block content %}
 <!-- Pixel-Perfect Neat & Responsive Dashboard Header Card -->
@@ -13,8 +14,8 @@
                     <i class="bi bi-grid-1x2-fill"></i>
                 </div>
                 <div>
-                    <h4 class="mb-0 fw-extrabold text-dark" style="font-family:'Outfit'; font-size: 1.3rem;">Festival Accounting Overview</h4>
-                    <span class="text-secondary small fw-semibold">Live financial ledger & real-time tracking for Vinayaka Chavithi 2026</span>
+                    <h4 class="mb-0 fw-extrabold text-dark" style="font-family:'Outfit'; font-size: 1.3rem;">{% trans "Festival Accounting Overview" %}</h4>
+                    <span class="text-secondary small fw-semibold">{% trans "Live financial ledger & real-time tracking for Vinayaka Chavithi 2026" %}</span>
                 </div>
             </div>
         </div>
@@ -25,7 +26,7 @@
                 <!-- Search Input Field -->
                 <div class="search-input-group flex-grow-1 flex-sm-grow-0" style="max-width: 320px; width: 100%;">
                     <i class="bi bi-search"></i>
-                    <input type="text" class="form-control fw-semibold" style="height: 42px;">
+                    <input type="text" class="form-control fw-semibold" style="height: 42px;" placeholder="{% trans 'Search transactions...' %}">
                 </div>
 
                 <!-- Financial Year Selector Dropdown -->
@@ -35,8 +36,8 @@
                         <span>FY 2026-2027</span>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end shadow-md border-0">
-                        <li><h6 class="dropdown-header">Accounting Period</h6></li>
-                        <li><a class="dropdown-item active" href="#">2026 - 2027 (Current)</a></li>
+                        <li><h6 class="dropdown-header">{% trans "Accounting Period" %}</h6></li>
+                        <li><a class="dropdown-item active" href="#">2026 - 2027 ({% trans "Current" %})</a></li>
                         <li><a class="dropdown-item" href="#">2025 - 2026</a></li>
                         <li><a class="dropdown-item" href="#">2024 - 2025</a></li>
                     </ul>
@@ -52,10 +53,10 @@
         <div class="card stat-card stat-gold h-100 border-0 shadow-sm">
             <div class="d-flex justify-content-between align-items-start">
                 <div>
-                    <div class="stat-label">TOTAL FUNDS RECEIVED</div>
+                    <div class="stat-label">{% trans "TOTAL FUNDS RECEIVED" %}</div>
                     <div class="stat-value">{{ CURRENCY_SYMBOL }} {{ total_funds|floatformat:2 }}</div>
                     <span class="badge badge-soft-success fw-bold">
-                        <i class="bi bi-shield-check"></i> Total Receipts Collected
+                        <i class="bi bi-shield-check"></i> {% trans "Total Receipts Collected" %}
                     </span>
                 </div>
                 <div class="stat-icon-wrapper icon-gold">
@@ -68,10 +69,10 @@
         <div class="card stat-card h-100 border-0 shadow-sm">
             <div class="d-flex justify-content-between align-items-start">
                 <div>
-                    <div class="stat-label">TOTAL EXPENSES INCURRED</div>
+                    <div class="stat-label">{% trans "TOTAL EXPENSES INCURRED" %}</div>
                     <div class="stat-value">{{ CURRENCY_SYMBOL }} {{ total_expenses|floatformat:2 }}</div>
                     <span class="badge badge-soft-danger fw-bold">
-                        <i class="bi bi-receipt"></i> Total Outflow Expenses
+                        <i class="bi bi-receipt"></i> {% trans "Total Outflow Expenses" %}
                     </span>
                 </div>
                 <div class="stat-icon-wrapper">
@@ -84,10 +85,10 @@
         <div class="card stat-card stat-success h-100 border-0 shadow-sm">
             <div class="d-flex justify-content-between align-items-start">
                 <div>
-                    <div class="stat-label">NET AVAILABLE BALANCE</div>
+                    <div class="stat-label">{% trans "NET AVAILABLE BALANCE" %}</div>
                     <div class="stat-value text-success">{{ CURRENCY_SYMBOL }} {{ net_balance|floatformat:2 }}</div>
                     <span class="badge badge-soft-success fw-bold">
-                        <i class="bi bi-bank"></i> Healthy Net Position
+                        <i class="bi bi-bank"></i> {% trans "Healthy Net Position" %}
                     </span>
                 </div>
                 <div class="stat-icon-wrapper icon-success">
@@ -103,7 +104,7 @@
     <div class="col-lg-5">
         <div class="card h-100 border-0 shadow-sm">
             <div class="card-header-clean bg-white border-bottom">
-                <h6 class="mb-0 fw-bold"><i class="bi bi-pie-chart-fill text-danger me-2"></i>Fund Sources Distribution</h6>
+                <h6 class="mb-0 fw-bold"><i class="bi bi-pie-chart-fill text-danger me-2"></i>{% trans "Fund Sources Distribution" %}</h6>
                 <span class="badge badge-soft-primary">FY 2026-27</span>
             </div>
             <div class="card-body-clean d-flex align-items-center justify-content-center" style="min-height: 280px;">
@@ -114,8 +115,8 @@
     <div class="col-lg-7">
         <div class="card h-100 border-0 shadow-sm">
             <div class="card-header-clean bg-white border-bottom">
-                <h6 class="mb-0 fw-bold"><i class="bi bi-bar-chart-fill text-danger me-2"></i>Expenses by Category</h6>
-                <span class="badge badge-soft-info">Current Period</span>
+                <h6 class="mb-0 fw-bold"><i class="bi bi-bar-chart-fill text-danger me-2"></i>{% trans "Expenses by Category" %}</h6>
+                <span class="badge badge-soft-info">{% trans "Current Period" %}</span>
             </div>
             <div class="card-body-clean" style="min-height: 280px;">
                 <canvas id="expenseCategoriesChart"></canvas>
@@ -128,47 +129,47 @@
 <div class="card border-0 shadow-sm">
     <div class="card-header-clean bg-white border-bottom">
         <div>
-            <h6 class="mb-0 fw-bold"><i class="bi bi-arrow-left-right text-danger me-2"></i>Recent Receipts & Expenses</h6>
-            <small class="text-secondary fw-semibold">Latest contribution receipts recorded in database</small>
+            <h6 class="mb-0 fw-bold"><i class="bi bi-arrow-left-right text-danger me-2"></i>{% trans "Recent Receipts & Expenses" %}</h6>
+            <small class="text-secondary fw-semibold">{% trans "Latest contribution receipts recorded in database" %}</small>
         </div>
-        <a href="/reports/" class="btn btn-light btn-sm fw-bold">View Full Ledger <i class="bi bi-arrow-right ms-1"></i></a>
+        <a href="/reports/" class="btn btn-light btn-sm fw-bold">{% trans "View Full Ledger" %} <i class="bi bi-arrow-right ms-1"></i></a>
     </div>
     <div class="table-responsive">
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th>Ref No.</th>
-                    <th>Type</th>
-                    <th>Contributor / Vendor Name</th>
-                    <th>Category / Source</th>
-                    <th>Payment Channel</th>
-                    <th>Date</th>
-                    <th class="text-end">Amount</th>
+                    <th>{% trans "Ref No." %}</th>
+                    <th>{% trans "Type" %}</th>
+                    <th>{% trans "Contributor / Vendor Name" %}</th>
+                    <th>{% trans "Category / Source" %}</th>
+                    <th>{% trans "Payment Channel" %}</th>
+                    <th>{% trans "Date" %}</th>
+                    <th class="text-end">{% trans "Amount" %}</th>
                 </tr>
             </thead>
             <tbody>
                 {% for receipt in recent_receipts %}
                 <tr>
                     <td class="fw-semibold">{{ receipt.receipt_number }}</td>
-                    <td><span class="badge badge-soft-success"><i class="bi bi-arrow-down-left me-1"></i>Fund</span></td>
+                    <td><span class="badge badge-soft-success"><i class="bi bi-arrow-down-left me-1"></i>{% trans "Fund" %}</span></td>
                     <td class="fw-bold">{{ receipt.donor_name }}</td>
-                    <td><span class="badge badge-soft-primary">{{ receipt.fund_source.name }}</span></td>
-                    <td><span class="badge badge-soft-info">{{ receipt.payment_method.name }}</span></td>
+                    <td><span class="badge badge-soft-primary">{{ receipt.fund_source.name|t }}</span></td>
+                    <td><span class="badge badge-soft-info">{{ receipt.payment_method.name|t }}</span></td>
                     <td class="text-muted">{{ receipt.date_received|date:"d M Y" }}</td>
                     <td class="text-end fw-bold text-success">+ {{ CURRENCY_SYMBOL }} {{ receipt.amount|floatformat:2 }}</td>
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="7" class="text-center text-muted py-3">No fund receipts recorded yet.</td>
+                    <td colspan="7" class="text-center text-muted py-3">{% trans "No fund receipts recorded yet." %}</td>
                 </tr>
                 {% endfor %}
                 {% for expense in recent_expenses %}
                 <tr>
                     <td class="fw-semibold">{{ expense.voucher_number }}</td>
-                    <td><span class="badge badge-soft-danger"><i class="bi bi-arrow-up-right me-1"></i>Expense</span></td>
+                    <td><span class="badge badge-soft-danger"><i class="bi bi-arrow-up-right me-1"></i>{% trans "Expense" %}</span></td>
                     <td class="fw-bold">{{ expense.vendor_name }}</td>
-                    <td><span class="badge badge-soft-danger">{{ expense.category.name }}</span></td>
-                    <td><span class="badge badge-soft-warning">{{ expense.payment_method.name }}</span></td>
+                    <td><span class="badge badge-soft-danger">{{ expense.category.name|t }}</span></td>
+                    <td><span class="badge badge-soft-warning">{{ expense.payment_method.name|t }}</span></td>
                     <td class="text-muted">{{ expense.expense_date|date:"d M Y" }}</td>
                     <td class="text-end fw-bold text-danger">- {{ CURRENCY_SYMBOL }} {{ expense.amount_spent|floatformat:2 }}</td>
                 </tr>

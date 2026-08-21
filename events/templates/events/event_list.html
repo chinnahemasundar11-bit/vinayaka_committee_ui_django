@@ -1,18 +1,19 @@
 {% extends "base.html" %}
-{% block title %}Events | Vinayaka Youth Committee{% endblock %}
-{% block page_heading %}Festival Events & Programs{% endblock %}
+{% load i18n i18n_extras %}
+{% block title %}{% trans "Events" %} | {{ SITE_NAME }}{% endblock %}
+{% block page_heading %}{% trans "Festival Events & Programs" %}{% endblock %}
 
 {% block content %}
 <!-- Page Header -->
 <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
     <div>
-        <h4 class="mb-1 fw-bold">Festival Schedule & Event Budgets</h4>
-        <p class="text-muted small mb-0">Plan, track budgets, and manage key cultural & religious festival events</p>
+        <h4 class="mb-1 fw-bold">{% trans "Festival Schedule & Event Budgets" %}</h4>
+        <p class="text-muted small mb-0">{% trans "Plan, track budgets, and manage key cultural & religious festival events" %}</p>
     </div>
     <div class="d-flex gap-2">
-        <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#bulkPrintEventModal"><i class="bi bi-printer text-primary me-1"></i> Print Schedule</button>
+        <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#bulkPrintEventModal"><i class="bi bi-printer text-primary me-1"></i> {% trans "Print Schedule" %}</button>
         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createEventModal">
-            <i class="bi bi-calendar-plus-fill me-1"></i> Add New Event
+            <i class="bi bi-calendar-plus-fill me-1"></i> {% trans "Add New Event" %}
         </button>
     </div>
 </div>
@@ -44,7 +45,7 @@
                         <small class="text-muted"><i class="bi bi-geo-alt me-1 text-danger"></i>{{ event.venue_location }}</small>
                     </div>
                 </div>
-                <span class="badge badge-soft-{% if event.status == 'Completed' %}secondary{% elif event.status == 'Ongoing' %}warning{% else %}success{% endif %}"><i class="bi bi-check-circle-fill me-1"></i>{{ event.status }}</span>
+                <span class="badge badge-soft-{% if event.status == 'Completed' %}secondary{% elif event.status == 'Ongoing' %}warning{% else %}success{% endif %}"><i class="bi bi-check-circle-fill me-1"></i>{{ event.status|t }}</span>
             </div>
             <div class="card-body-clean">
                 <p class="text-muted small mb-3">{{ event.description|default:"Festival ceremony program." }}</p>
@@ -54,7 +55,7 @@
                 </div>
                 <div class="p-3 bg-light rounded-3">
                     <div class="d-flex justify-content-between small mb-1">
-                        <span>Event Budget vs Spend</span>
+                        <span>{% trans "Event Budget vs Spend" %}</span>
                         <strong class="text-dark">{{ CURRENCY_SYMBOL }} {{ event.actual_spend|floatformat:2 }} / {{ CURRENCY_SYMBOL }} {{ event.allocated_budget|floatformat:2 }}</strong>
                     </div>
                     <div class="progress" style="height: 8px;">
@@ -64,8 +65,8 @@
             </div>
             <div class="card-footer bg-transparent border-top-0 p-3 pt-0 text-end">
                 <div class="d-flex gap-1 justify-content-end">
-                    <button class="btn btn-sm btn-light" data-bs-toggle="modal" data-bs-target="#editEventModal{{ event.id }}" title="Edit Event"><i class="bi bi-pencil me-1"></i> Edit</button>
-                    <button class="btn btn-sm btn-light" data-bs-toggle="modal" data-bs-target="#singlePrintEventModal{{ event.id }}" title="Print Event"><i class="bi bi-printer text-primary me-1"></i> Print</button>
+                    <button class="btn btn-sm btn-light" data-bs-toggle="modal" data-bs-target="#editEventModal{{ event.id }}" title="Edit Event"><i class="bi bi-pencil me-1"></i> {% trans "Edit" %}</button>
+                    <button class="btn btn-sm btn-light" data-bs-toggle="modal" data-bs-target="#singlePrintEventModal{{ event.id }}" title="Print Event"><i class="bi bi-printer text-primary me-1"></i> {% trans "Print" %}</button>
                     <button class="btn btn-sm btn-light text-danger" data-bs-toggle="modal" data-bs-target="#singleDeleteModal{{ event.id }}" title="Delete Event"><i class="bi bi-trash"></i></button>
                 </div>
 

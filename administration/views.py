@@ -149,16 +149,20 @@ def financial_years(request):
     return render(request, "administration/financial_years.html", {"fy_list": fy_qs})
 
 
+from django.utils.translation import gettext as _
+
 def site_settings(request):
     """Global Site Settings & Customization management view."""
     if request.method == "POST":
         updated_count = 0
         for key, value in request.POST.items():
             if key not in ["csrfmiddlewaretoken", "action"]:
-                setting, _ = SiteSetting.objects.get_or_create(key=key)
+                setting, _obj = SiteSetting.objects.get_or_create(key=key)
                 setting.value = str(value).strip()
                 setting.save()
                 updated_count += 1
+                if key == "DEFAULT_LANGUAGE" and value in ["en", "te", "hi"]:
+                    request.session["_language"] = value
         
         AuditLog.objects.create(
             user=request.user if request.user.is_authenticated else None,
@@ -167,7 +171,7 @@ def site_settings(request):
             object_id="GLOBAL",
             details=f"Updated {updated_count} site configuration setting(s)"
         )
-        messages.success(request, "Site settings updated successfully!")
+        messages.success(request, _("Site settings updated successfully!"))
         return redirect("/administration/site-settings/")
 
     return render(request, "administration/site_settings.html")

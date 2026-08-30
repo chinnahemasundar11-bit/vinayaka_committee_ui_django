@@ -99,6 +99,26 @@
                         </div>
                     </div>
 
+                    <!-- Dynamic Live UPI QR Code Payment Card -->
+                    <div id="upiQrPreviewCard" class="card border border-success-subtle bg-success-subtle rounded-3 p-3.5 mb-5 d-none">
+                        <div class="d-flex flex-column flex-sm-row align-items-center gap-4">
+                            <div class="bg-white p-2 rounded-3 border shadow-sm text-center">
+                                <img id="upiQrCodeImg" src="" alt="Scan & Pay UPI QR" style="width: 140px; height: 140px;" class="rounded">
+                            </div>
+                            <div>
+                                <span class="badge bg-success text-white rounded-pill px-3 py-1 fw-bold mb-2">
+                                    <i class="bi bi-qr-code-scan me-1"></i> Scan & Pay Dynamic UPI QR Code
+                                </span>
+                                <h5 class="fw-bold text-dark mb-1">Pay <span id="upiAmountDisp" class="text-success fw-extrabold">{{ CURRENCY_SYMBOL|default:"₹" }} 0.00</span> via Any UPI App</h5>
+                                <p class="text-secondary small mb-2">Scan with Google Pay, PhonePe, Paytm, or BHIM to contribute directly to committee account.</p>
+                                <div class="d-flex flex-wrap gap-3 small text-dark fw-bold">
+                                    <span><strong>UPI VPA:</strong> <span id="upiIdVal">{{ site_settings.UPI_ID|default:'vinayaka.committee@upi' }}</span></span>
+                                    <span><strong>Payee Name:</strong> {{ site_settings.UPI_PAYEE_NAME|default:'Vinayaka Youth Committee' }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Section 3: Notes & Digital Receipt Attachment -->
                     <div class="mb-4">
                         <div class="d-flex align-items-center gap-2 mb-3 pb-2 border-bottom">
@@ -135,4 +155,41 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const paymentMethodSelect = document.querySelector('select[name="payment_method"]');
+    const amountInput = document.querySelector('input[name="amount"]');
+    const upiCard = document.getElementById('upiQrPreviewCard');
+    const upiImg = document.getElementById('upiQrCodeImg');
+    const upiAmountDisp = document.getElementById('upiAmountDisp');
+    const upiId = "{{ site_settings.UPI_ID|default:'vinayaka.committee@upi' }}";
+    const payeeName = "{{ site_settings.UPI_PAYEE_NAME|default:'Vinayaka Youth Committee' }}";
+    const currencySymbol = "{{ CURRENCY_SYMBOL|default:'₹' }}";
+
+    function updateUpiQr() {
+        if (!paymentMethodSelect) return;
+        const selectedText = paymentMethodSelect.options[paymentMethodSelect.selectedIndex]?.text || '';
+        const isUpi = selectedText.toLowerCase().includes('upi');
+
+        if (isUpi) {
+            const amountVal = parseFloat(amountInput.value) || 0;
+            upiAmountDisp.textContent = `${currencySymbol} ${amountVal.toFixed(2)}`;
+            
+            const upiUrl = `upi://pay?pa=${encodeURIComponent(upiId)}&pn=${encodeURIComponent(payeeName)}&am=${amountVal}&tn=${encodeURIComponent('Festival Fund Contribution')}&cu=INR`;
+            const qrSrc = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiUrl)}`;
+            
+            upiImg.src = qrSrc;
+            upiCard.classList.remove('d-none');
+        } else {
+            upiCard.classList.add('d-none');
+        }
+    }
+
+    if (paymentMethodSelect) paymentMethodSelect.addEventListener('change', updateUpiQr);
+    if (amountInput) amountInput.addEventListener('input', updateUpiQr);
+});
+</script>
 {% endblock %}

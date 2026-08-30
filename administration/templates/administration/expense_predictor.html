@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}AI Festival Expense Predictor & Budget Analytics | {{ SITE_NAME }}{% endblock %}
+{% block page_heading %}AI Festival Expense Predictor & Budget Analytics{% endblock %}
+
+{% block content %}
+<!-- Page Header Banner -->
+<div class="card border-0 shadow-sm mb-4 bg-primary text-white p-4 rounded-3 style-gradient">
+    <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
+        <div class="d-flex align-items-center gap-3">
+            <div class="stat-icon-wrapper bg-white text-danger rounded-circle p-3 fs-2 shadow-sm">
+                <i class="bi bi-cpu-fill"></i>
+            </div>
+            <div>
+                <h4 class="fw-extrabold mb-1 text-white"><i class="bi bi-magic me-2 text-warning"></i>AI Festival Budget & Expense Velocity Predictor</h4>
+                <p class="mb-0 text-white-50 small">Algorithmic forecast of collection velocity vs projected event expenditures & vendor commitments</p>
+            </div>
+        </div>
+        <a href="/administration/site-settings/" class="btn btn-light btn-sm fw-bold px-3 py-2 text-dark"><i class="bi bi-sliders me-1"></i> Adjust Parameters</a>
+    </div>
+</div>
+
+<!-- AI Health Recommendation Banner -->
+<div class="alert alert-{% if ai_health_status == 'HEALTHY_SURPLUS' %}success border-success bg-success-subtle{% else %}danger border-danger bg-danger-subtle{% endif %} p-4 rounded-3 mb-4 shadow-sm">
+    <div class="d-flex align-items-start gap-3">
+        <i class="bi bi-{% if ai_health_status == 'HEALTHY_SURPLUS' %}check-circle-fill text-success{% else %}exclamation-triangle-fill text-danger{% endif %} fs-2"></i>
+        <div>
+            <h5 class="fw-bold mb-1 text-{% if ai_health_status == 'HEALTHY_SURPLUS' %}success{% else %}danger{% endif %}">
+                AI Budget Insight: {% if ai_health_status == 'HEALTHY_SURPLUS' %}Healthy Financial Trajectory (Projected Surplus){% else %}Deficit Warning Detected{% endif %}
+            </h5>
+            <p class="mb-0 fs-6 fw-medium text-dark">{{ ai_recommendation }}</p>
+        </div>
+    </div>
+</div>
+
+<!-- Key Predictive Metrics Grid -->
+<div class="row g-4 mb-4">
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm p-4 h-100">
+            <span class="text-muted small fw-bold text-uppercase d-block mb-1">Current Collections</span>
+            <h3 class="fw-extrabold text-success mb-2">{{ currency }} {{ total_income|floatformat:2 }}</h3>
+            <small class="text-secondary"><i class="bi bi-receipt me-1"></i> From {{ total_receipts_count }} recorded vouchers</small>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm p-4 h-100">
+            <span class="text-muted small fw-bold text-uppercase d-block mb-1">Daily Collection Velocity</span>
+            <h3 class="fw-extrabold text-primary mb-2">{{ currency }} {{ avg_daily_collection|floatformat:2 }} / day</h3>
+            <small class="text-secondary"><i class="bi bi-speedometer2 me-1"></i> Based on {{ active_days_count }} active collection days</small>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm p-4 h-100">
+            <span class="text-muted small fw-bold text-uppercase d-block mb-1">Projected Total Revenue</span>
+            <h3 class="fw-extrabold text-info mb-2">{{ currency }} {{ projected_final_income|floatformat:2 }}</h3>
+            <small class="text-secondary"><i class="bi bi-graph-up-arrow me-1"></i> AI peak forecast</small>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm p-4 h-100">
+            <span class="text-muted small fw-bold text-uppercase d-block mb-1">Projected Net Surplus</span>
+            <h3 class="fw-extrabold text-{% if projected_net_surplus >= 0 %}success{% else %}danger{% endif %} mb-2">
+                {{ currency }} {{ projected_net_surplus|floatformat:2 }}
+            </h3>
+            <small class="text-secondary"><i class="bi bi-shield-check me-1"></i> Net closing estimate</small>
+        </div>
+    </div>
+</div>
+
+<!-- Analytical Breakdown Section -->
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-header-clean bg-white border-bottom py-3 px-4">
+        <h6 class="mb-0 fw-bold text-dark"><i class="bi bi-bar-chart-line-fill text-danger me-2"></i>Outflow & Event Contingency Analysis</h6>
+    </div>
+    <div class="card-body p-4">
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="p-3 bg-light rounded-3">
+                    <h6 class="fw-bold text-dark mb-3">Approved & Pending Expenses Breakdown</h6>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-secondary">Approved Vouchers:</span>
+                        <strong class="text-dark">{{ currency }} {{ total_expenses|floatformat:2 }}</strong>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-secondary">Pending Approval Vouchers:</span>
+                        <strong class="text-warning">{{ currency }} {{ pending_expenses|floatformat:2 }}</strong>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-secondary">Scheduled Event Budgets:</span>
+                        <strong class="text-primary">{{ currency }} {{ total_event_budget|floatformat:2 }}</strong>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between">
+                        <strong class="text-dark">Total Forecasted Outflow:</strong>
+                        <strong class="text-danger fs-5">{{ currency }} {{ projected_total_outflow|floatformat:2 }}</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="p-3 bg-light rounded-3 h-100">
+                    <h6 class="fw-bold text-dark mb-3"><i class="bi bi-lightbulb-fill text-warning me-1"></i> AI Optimization Action Plan</h6>
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2.5 d-flex gap-2">
+                            <i class="bi bi-check-circle-fill text-success"></i>
+                            <span class="small text-dark"><strong>Contingency Buffer:</strong> 20% safety margin added for unexpected pooja & prasad items.</span>
+                        </li>
+                        <li class="mb-2.5 d-flex gap-2">
+                            <i class="bi bi-check-circle-fill text-success"></i>
+                            <span class="small text-dark"><strong>Approval Trigger:</strong> Any pending voucher exceeding {{ currency }} 5,000 auto-routes to Committee President.</span>
+                        </li>
+                        <li class="d-flex gap-2">
+                            <i class="bi bi-check-circle-fill text-success"></i>
+                            <span class="small text-dark"><strong>Donor Velocity:</strong> Daily average collection is steady at {{ currency }} {{ avg_daily_collection|floatformat:2 }}.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

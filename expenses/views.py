@@ -7,10 +7,28 @@ from audit.models import AuditLog
 import datetime
 
 
+from accounts.permissions import login_required_custom, get_user_role, has_module_action_right, treasurer_required
+
+
+@login_required_custom
 def expense_list(request):
     """List, search, create, update, and delete expense vouchers."""
     if request.method == "POST":
         action = request.POST.get("action")
+
+        if action == "create" and not has_module_action_right(request.user, "EXPENSES", "add"):
+            messages.error(request, "Access Denied: You do not have permission to add expense vouchers.")
+            return redirect("/expenses/")
+        elif action in ["update", "edit"] and not has_module_action_right(request.user, "EXPENSES", "edit"):
+            messages.error(request, "Access Denied: You do not have permission to edit expense vouchers.")
+            return redirect("/expenses/")
+        elif action == "delete" and not has_module_action_right(request.user, "EXPENSES", "delete_single"):
+            messages.error(request, "Access Denied: You do not have permission to delete expense vouchers.")
+            return redirect("/expenses/")
+        elif action == "bulk_delete" and not has_module_action_right(request.user, "EXPENSES", "delete_bulk"):
+            messages.error(request, "Access Denied: You do not have permission to bulk delete expense vouchers.")
+            return redirect("/expenses/")
+
 
         if action == "create":
             voucher_no = request.POST.get("voucher_number", "").strip() or f"EXP-2026-{ExpenseVoucher.objects.count() + 1:03d}"
@@ -33,11 +51,24 @@ def expense_list(request):
                     expense_date=expense_date,
                     payment_method=method,
                     description=description,
-                    status="Approved"
+                    status="Pending Approval" if category.requires_approval else "Approved"
                 )
                 user = request.user if request.user.is_authenticated else None
                 AuditLog.objects.create(user=user, action="CREATE", model_name="ExpenseVoucher", object_id=str(voucher.id), details=f"Created expense voucher {voucher_no} to {vendor_name} (₹{amount_spent})")
-                messages.success(request, f"Expense voucher {voucher_no} recorded successfully!")
+
+                # Initiate Enterprise Workflow
+                from workflows.services import start_workflow_for_object
+                try:
+                    start_workflow_for_object(
+                        module_code="EXPENSE",
+                        object_id=voucher_no,
+                        submitter=user,
+                        amount=float(amount_spent)
+                    )
+                except Exception:
+                    pass
+
+                messages.success(request, f"Expense voucher {voucher_no} recorded and initiated into approval workflow!")
             else:
                 messages.error(request, "* Please fill all mandatory fields.")
 
@@ -93,8 +124,21 @@ def expense_list(request):
     payment_methods = PaymentMethod.objects.filter(is_active=True)
     total_spent = vouchers_qs.aggregate(Sum("amount_spent"))["amount_spent__sum"] or 0
 
+    try:
+        per_page = int(request.GET.get("per_page", 10))
+        if per_page not in [10, 50, 100, 500]: per_page = 10
+    except (ValueError, TypeError):
+        per_page = 10
+
+    from django.core.paginator import Paginator
+    paginator = Paginator(vouchers_qs, per_page)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
     context = {
-        "vouchers": vouchers_qs,
+        "vouchers": page_obj,
+        "page_obj": page_obj,
+        "per_page": per_page,
         "categories": expense_categories,
         "payment_methods": payment_methods,
         "total_spent": total_spent,
@@ -103,6 +147,7 @@ def expense_list(request):
     return render(request, "expenses/expense_list.html", context)
 
 
+@treasurer_required
 def expense_add(request):
     """Dedicated Add Expense Voucher View."""
     if request.method == "POST":
@@ -120,3 +165,41 @@ def expense_add(request):
         "today_date": today_date,
     }
     return render(request, "expenses/expense_form.html", context)
+
+
+import csv
+from django.http import HttpResponse
+
+@login_required_custom
+def export_expenses_csv(request):
+    """Export filtered or full expense register as downloadable CSV file."""
+    search_query = request.GET.get("q", "").strip()
+    vouchers_qs = ExpenseVoucher.objects.select_related("category", "payment_method")
+    if search_query:
+        vouchers_qs = vouchers_qs.filter(
+            Q(voucher_number__icontains=search_query) |
+            Q(vendor_name__icontains=search_query) |
+            Q(description__icontains=search_query)
+        )
+
+    response = HttpResponse(content_type="text/csv; charset=utf-8")
+    response["Content-Disposition"] = 'attachment; filename="expense_register.csv"'
+    response.write('\ufeff'.encode('utf8'))
+
+    writer = csv.writer(response)
+    writer.writerow(["Voucher Number", "Category", "Vendor Name", "Description", "Amount Spent (INR)", "Expense Date", "Payment Channel", "Status"])
+
+    for v in vouchers_qs:
+        writer.writerow([
+            v.voucher_number,
+            v.category.name if v.category else "",
+            v.vendor_name,
+            v.description,
+            f"{v.amount_spent:.2f}",
+            v.expense_date.strftime("%Y-%m-%d") if v.expense_date else "",
+            v.payment_method.name if v.payment_method else "",
+            v.status
+        ])
+
+    return response
+

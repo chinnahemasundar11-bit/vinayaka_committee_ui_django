@@ -1,0 +1,237 @@
+{% extends "base.html" %}
+{% load i18n i18n_extras %}
+{% block title %}{% trans "Status-Wise Email Configs" %} | {{ SITE_NAME }}{% endblock %}
+{% block page_heading %}{% trans "Status-Wise Email Configuration Module" %}{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
+    <div>
+        <h4 class="mb-1 fw-bold">{% trans "Status-Wise Dynamic Email Configuration" %}</h4>
+        <p class="text-muted small mb-0">{% trans "Customize email subject & body templates dynamically per task status trigger" %}</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a href="/workflows/" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-1"></i> {% trans "Back to Workflows" %}
+        </a>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createEmailConfigModal">
+            <i class="bi bi-plus-lg me-1"></i> {% trans "Add Email Template Config" %}
+        </button>
+    </div>
+</div>
+
+{% if messages %}
+<div class="mb-3">
+    {% for message in messages %}
+    <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<!-- Available Dynamic Placeholders Cheat Sheet -->
+<div class="alert alert-info border-0 shadow-sm rounded-3 mb-4">
+    <div class="d-flex align-items-center gap-2 mb-2">
+        <i class="bi bi-code-slash fs-5 text-primary"></i>
+        <h6 class="mb-0 fw-bold">Enterprise Dynamic Template Placeholders</h6>
+    </div>
+    <p class="small text-muted mb-2">Use these exact tag tokens in your Email Subject and Body templates to dynamically inject runtime task details:</p>
+    <div class="d-flex flex-wrap gap-2">
+        <code class="bg-white border px-2 py-1 rounded text-dark">{item_number}</code>
+        <code class="bg-white border px-2 py-1 rounded text-dark">{workflow_name}</code>
+        <code class="bg-white border px-2 py-1 rounded text-dark">{module_code}</code>
+        <code class="bg-white border px-2 py-1 rounded text-dark">{amount}</code>
+        <code class="bg-white border px-2 py-1 rounded text-dark">{submitted_by}</code>
+        <code class="bg-white border px-2 py-1 rounded text-dark">{step_name}</code>
+        <code class="bg-white border px-2 py-1 rounded text-dark">{assigned_role}</code>
+        <code class="bg-white border px-2 py-1 rounded text-dark">{performed_by}</code>
+        <code class="bg-white border px-2 py-1 rounded text-dark">{action_taken}</code>
+        <code class="bg-white border px-2 py-1 rounded text-dark">{comments}</code>
+        <code class="bg-white border px-2 py-1 rounded text-dark">{status}</code>
+    </div>
+</div>
+
+<!-- Email Configurations Table Card -->
+<div class="card border-0 shadow-sm">
+    <div class="card-header bg-white py-3">
+        <h6 class="mb-0 fw-bold"><i class="bi bi-envelope-check text-success me-2"></i>{% trans "Configured Status-Wise Email Templates" %}</h6>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Status Event Trigger</th>
+                        <th>Workflow Scope</th>
+                        <th>Recipient Users</th>
+                        <th>Email Subject Template</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cfg in email_configs %}
+                    <tr>
+                        <td>
+                            {% if cfg.trigger_event == "ON_SUBMIT" %}
+                                <span class="badge bg-primary px-3 py-1.5"><i class="bi bi-send me-1"></i>On Submission</span>
+                            {% elif cfg.trigger_event == "ON_ASSIGNMENT" %}
+                                <span class="badge bg-warning text-dark px-3 py-1.5"><i class="bi bi-person-up me-1"></i>On Task Assignment</span>
+                            {% elif cfg.trigger_event == "ON_APPROVE" %}
+                                <span class="badge bg-success px-3 py-1.5"><i class="bi bi-check-circle me-1"></i>On Approval</span>
+                            {% elif cfg.trigger_event == "ON_REJECT" %}
+                                <span class="badge bg-danger px-3 py-1.5"><i class="bi bi-x-circle me-1"></i>On Rejection</span>
+                            {% endif %}
+                        </td>
+                        <td><span class="badge bg-light text-dark border">{{ cfg.workflow.name|default:"Global Default" }}</span></td>
+                        <td><span class="fw-semibold text-dark">{{ cfg.get_recipient_type_display }}</span></td>
+                        <td class="font-monospace text-truncate" style="max-width: 300px;">{{ cfg.email_subject_template }}</td>
+                        <td class="text-end">
+                            <div class="d-flex gap-1 justify-content-end">
+                                <button class="btn btn-sm btn-light" data-bs-toggle="modal" data-bs-target="#editEmailConfigModal{{ cfg.id }}"><i class="bi bi-pencil"></i> Edit</button>
+                                <form method="POST" action="/workflows/email-configs/" onsubmit="return confirm('Delete email template config?');" class="d-inline">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="delete_config">
+                                    <input type="hidden" name="config_id" value="{{ cfg.id }}">
+                                    <button type="submit" class="btn btn-sm btn-light text-danger"><i class="bi bi-trash"></i></button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Edit Email Config Modal -->
+                    <div class="modal fade" id="editEmailConfigModal{{ cfg.id }}" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-lg modal-dialog-centered">
+                            <div class="modal-content border-0 shadow-lg">
+                                <div class="modal-header bg-white border-bottom">
+                                    <h5 class="modal-title fw-bold text-dark"><i class="bi bi-pencil-square text-primary me-2"></i>Edit Status-Wise Email Configuration</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <form method="POST" action="/workflows/email-configs/">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="save_email_config">
+                                    <input type="hidden" name="config_id" value="{{ cfg.id }}">
+                                    <div class="modal-body p-4">
+                                        <div class="row g-3">
+                                            <div class="col-md-6">
+                                                <label class="form-label fw-bold">Status Trigger Event <span class="text-danger">*</span></label>
+                                                <select name="trigger_event" class="form-select" required>
+                                                    <option value="ON_SUBMIT" {% if cfg.trigger_event == "ON_SUBMIT" %}selected{% endif %}>On Item Submission</option>
+                                                    <option value="ON_ASSIGNMENT" {% if cfg.trigger_event == "ON_ASSIGNMENT" %}selected{% endif %}>On Task Assignment to Role</option>
+                                                    <option value="ON_APPROVE" {% if cfg.trigger_event == "ON_APPROVE" %}selected{% endif %}>On Task Approval</option>
+                                                    <option value="ON_REJECT" {% if cfg.trigger_event == "ON_REJECT" %}selected{% endif %}>On Task Rejection</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label fw-bold">Recipient Users <span class="text-danger">*</span></label>
+                                                <select name="recipient_type" class="form-select" required>
+                                                    <option value="ASSIGNED_ROLE" {% if cfg.recipient_type == "ASSIGNED_ROLE" %}selected{% endif %}>Users with Assigned Step Role</option>
+                                                    <option value="SUBMITTER" {% if cfg.recipient_type == "SUBMITTER" %}selected{% endif %}>Item Submitter</option>
+                                                    <option value="SUPER_ADMIN" {% if cfg.recipient_type == "SUPER_ADMIN" %}selected{% endif %}>System Super Admins</option>
+                                                    <option value="ALL_LEADERS" {% if cfg.recipient_type == "ALL_LEADERS" %}selected{% endif %}>All Committee Leaders</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-12">
+                                                <label class="form-label fw-bold">Dynamic Email Subject Template <span class="text-danger">*</span></label>
+                                                <input type="text" name="email_subject_template" class="form-control" value="{{ cfg.email_subject_template }}" required>
+                                            </div>
+                                            <div class="col-12">
+                                                <label class="form-label fw-bold">Dynamic Email Body Template (HTML / Text) <span class="text-danger">*</span></label>
+                                                <textarea name="email_body_template" class="form-control font-monospace" rows="6" required>{{ cfg.email_body_template }}</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer bg-light border-top">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        <button type="submit" class="btn btn-primary px-4 fw-bold">Save Configuration</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center py-5 text-muted">
+                            <i class="bi bi-envelope-x display-4 d-block mb-2"></i>
+                            No status-wise email templates configured yet. Click 'Add Email Template Config' above.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% include "components/pagination.html" %}
+    </div>
+</div>
+
+<!-- Create Email Config Modal -->
+<div class="modal fade" id="createEmailConfigModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg">
+            <div class="modal-header bg-white border-bottom">
+                <h5 class="modal-title fw-bold text-dark"><i class="bi bi-envelope-plus-fill text-success me-2"></i>New Status-Wise Email Configuration</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="POST" action="/workflows/email-configs/">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="save_email_config">
+                <div class="modal-body p-4">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Status Trigger Event <span class="text-danger">*</span></label>
+                            <select name="trigger_event" class="form-select" required>
+                                <option value="ON_SUBMIT">On Item Submission</option>
+                                <option value="ON_ASSIGNMENT" selected>On Task Assignment to Role</option>
+                                <option value="ON_APPROVE">On Task Approval</option>
+                                <option value="ON_REJECT">On Task Rejection</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Recipient Users <span class="text-danger">*</span></label>
+                            <select name="recipient_type" class="form-select" required>
+                                <option value="ASSIGNED_ROLE">Users with Assigned Step Role</option>
+                                <option value="SUBMITTER">Item Submitter</option>
+                                <option value="SUPER_ADMIN">System Super Admins</option>
+                                <option value="ALL_LEADERS">All Committee Leaders</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-bold">Workflow Scope</label>
+                            <select name="workflow_id" class="form-select">
+                                <option value="">Global Default (Applies to All Workflows)</option>
+                                {% for wf in workflows %}
+                                <option value="{{ wf.id }}">{{ wf.name }} [{{ wf.module_code }}]</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-bold">Dynamic Email Subject Template <span class="text-danger">*</span></label>
+                            <input type="text" name="email_subject_template" class="form-control" value="Action Required: {workflow_name} - Item #{item_number}" required>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-bold">Dynamic Email Body Template <span class="text-danger">*</span></label>
+                            <textarea name="email_body_template" class="form-control font-monospace" rows="6" required>Hello {user_name},
+
+A new task step '{step_name}' has been assigned to your role ({assigned_role}) for item #{item_number}.
+
+Workflow: {workflow_name}
+Module: {module_code}
+Submitted By: {submitted_by}
+
+Please sign in to the Vinayaka Finance Portal and open your Task Inbox to perform your review.
+
+Thank you,
+Vinayaka Youth Committee</textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer bg-light border-top">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-success px-4 fw-bold">Save Template</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

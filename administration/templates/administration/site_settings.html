@@ -106,6 +106,16 @@
                             <i class="bi bi-globe2 me-1 text-primary"></i> {% trans "Language & Localization" %}
                         </button>
                     </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link fw-bold small text-nowrap" id="tab-security-tab" data-bs-toggle="tab" data-bs-target="#tab-security" type="button" role="tab">
+                            <i class="bi bi-shield-lock-fill me-1 text-primary"></i> {% trans "Security & MFA" %}
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link fw-bold small text-nowrap" id="tab-upi-qr-tab" data-bs-toggle="tab" data-bs-target="#tab-upi-qr" type="button" role="tab">
+                            <i class="bi bi-qr-code-scan me-1 text-success"></i> {% trans "UPI & QR Details" %}
+                        </button>
+                    </li>
                 </ul>
             </div>
 
@@ -164,6 +174,27 @@
                                 <div class="col-md-3">
                                     <label class="form-label fw-semibold">Currency Symbol</label>
                                     <input type="text" id="currencySymbolInput" name="CURRENCY_SYMBOL" class="form-control" value="{{ site_settings.CURRENCY_SYMBOL }}">
+                                </div>
+                            </div>
+
+                            <hr class="my-4 text-muted">
+                            <h6 class="fw-bold mb-3 text-primary"><i class="bi bi-qr-code-scan me-1"></i> Committee UPI Payment & QR Code Settings</h6>
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Committee UPI VPA / ID</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="bi bi-qr-code"></i></span>
+                                        <input type="text" id="upiIdInput" name="UPI_ID" class="form-control" value="{{ site_settings.UPI_ID|default:'vinayaka.committee@upi' }}" placeholder="e.g. 9876543210@ybl or committee@upi">
+                                    </div>
+                                    <span class="text-muted small">Registered UPI ID for scanning & receiving direct donor payments.</span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">UPI Payee Display Name</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="bi bi-person-badge"></i></span>
+                                        <input type="text" id="upiPayeeNameInput" name="UPI_PAYEE_NAME" class="form-control" value="{{ site_settings.UPI_PAYEE_NAME|default:'Vinayaka Youth Committee' }}" placeholder="e.g. Vinayaka Youth Committee">
+                                    </div>
+                                    <span class="text-muted small">Name displayed in Google Pay / PhonePe / Paytm upon scanning QR.</span>
                                 </div>
                             </div>
 
@@ -662,6 +693,122 @@
                                         <option value="false" {% if site_settings.SHOW_LANG_LOGIN == "false" %}selected{% endif %}>No - Hide Landing Switcher</option>
                                     </select>
                                 </div>
+                            </div>
+                        </div>
+
+                        <!-- TAB 10: SECURITY & MULTI-FACTOR AUTHENTICATION -->
+                        <div class="tab-pane fade" id="tab-security" role="tabpanel">
+                            <h6 class="fw-bold mb-3 text-primary"><i class="bi bi-shield-check me-1"></i> Multi-Factor Authentication (MFA / 2FA) Settings</h6>
+                            <div class="card border border-primary-subtle bg-light rounded-3 p-3 mb-4">
+                                <label class="form-label fw-bold text-dark mb-2">Require Multi-Factor Authentication (MFA OTP) on User Login</label>
+                                <p class="text-muted small mb-3">When enabled, users will receive a 6-digit OTP verification code upon login before accessing the application.</p>
+
+                                <div class="d-flex flex-column flex-sm-row gap-3">
+                                    <div class="form-check card p-3 border bg-white flex-fill">
+                                        <input class="form-check-input ms-0 me-2" type="radio" name="MFA_ENABLED" id="mfaOn" value="true" {% if site_settings.MFA_ENABLED == "true" %}checked{% endif %}>
+                                        <label class="form-check-label fw-bold text-success cursor-pointer ms-2" for="mfaOn">
+                                            <i class="bi bi-shield-lock-fill me-1 text-success"></i> ON (Enabled - 2-Step OTP Authentication Required)
+                                        </label>
+                                        <div class="text-muted small ms-4 mt-1">Users will enter credentials + 6-digit OTP code sent via email/console.</div>
+                                    </div>
+
+                                    <div class="form-check card p-3 border bg-white flex-fill">
+                                        <input class="form-check-input ms-0 me-2" type="radio" name="MFA_ENABLED" id="mfaOff" value="false" {% if site_settings.MFA_ENABLED != "true" %}checked{% endif %}>
+                                        <label class="form-check-label fw-bold text-secondary cursor-pointer ms-2" for="mfaOff">
+                                            <i class="bi bi-shield-slash me-1 text-secondary"></i> OFF (Disabled - Direct Password Login)
+                                        </label>
+                                        <div class="text-muted small ms-4 mt-1">Users authenticate directly with valid username/mobile and password.</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TAB 11: UPI PAYMENT & QR DETAILS -->
+                        <div class="tab-pane fade" id="tab-upi-qr" role="tabpanel">
+                            <h6 class="fw-bold mb-3 text-success"><i class="bi bi-qr-code-scan me-1"></i> Committee UPI Payment Gateway & QR Code Details</h6>
+                            <p class="text-muted small mb-4">Configure your committee's registered Virtual Payment Address (VPA/UPI ID), merchant payee name, custom QR poster image, and print integration settings for festival contributions.</p>
+
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Committee UPI VPA / ID <span class="text-danger">*</span></label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light text-success fw-bold"><i class="bi bi-qr-code"></i></span>
+                                        <input type="text" id="upiIdInput" name="UPI_ID" class="form-control fw-bold text-dark" value="{{ site_settings.UPI_ID|default:'vinayaka.committee@upi' }}" placeholder="e.g. 9876543210@ybl or committee@upi">
+                                    </div>
+                                    <span class="text-muted small">Registered UPI ID for receiving direct donor payments via GPay, PhonePe, Paytm, BHIM.</span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">UPI Payee Display Name <span class="text-danger">*</span></label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light text-primary"><i class="bi bi-person-badge"></i></span>
+                                        <input type="text" id="upiPayeeNameInput" name="UPI_PAYEE_NAME" class="form-control fw-bold text-dark" value="{{ site_settings.UPI_PAYEE_NAME|default:'Vinayaka Youth Committee' }}" placeholder="e.g. Vinayaka Youth Committee">
+                                    </div>
+                                    <span class="text-muted small">Official merchant/payee name shown on donor app screen upon scanning QR.</span>
+                                </div>
+                            </div>
+
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold"><i class="bi bi-upload text-danger me-1"></i> Upload Custom Static UPI QR Image (Optional)</label>
+                                    <input type="file" name="UPI_QR_IMAGE_FILE" class="form-control" accept="image/*">
+                                    <span class="text-muted small">Upload printed GPay/PhonePe merchant poster image (PNG, JPG, WEBP, max 5 MB).</span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Auto-Print QR Code on Receipt Copies</label>
+                                    <div class="d-flex align-items-center gap-4 mt-1">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="UPI_QR_PRINT_ENABLE" id="qrPrintOn" value="true" {% if site_settings.UPI_QR_PRINT_ENABLE != "false" %}checked{% endif %}>
+                                            <label class="form-check-label fw-bold text-success cursor-pointer" for="qrPrintOn"><i class="bi bi-printer me-1"></i> Enabled (Print QR)</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="UPI_QR_PRINT_ENABLE" id="qrPrintOff" value="false" {% if site_settings.UPI_QR_PRINT_ENABLE == "false" %}checked{% endif %}>
+                                            <label class="form-check-label text-muted cursor-pointer" for="qrPrintOff">Disabled</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label fw-semibold">Scan & Pay Instruction Note</label>
+                                <textarea name="UPI_QR_NOTE" class="form-control" rows="2" placeholder="e.g. Scan using Google Pay, PhonePe, Paytm, or BHIM to pay festival contribution">{{ site_settings.UPI_QR_NOTE|default:"Scan using Google Pay, PhonePe, Paytm, BHIM, or any UPI App to contribute directly." }}</textarea>
+                            </div>
+
+                            {% if site_settings.UPI_QR_IMAGE_URL %}
+                            <div class="card border border-success bg-success-subtle rounded-3 p-3 mb-4">
+                                <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="bg-white p-1 rounded-3 border shadow-sm d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                                            <img src="{{ site_settings.UPI_QR_IMAGE_URL }}" alt="Uploaded QR Code" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                                        </div>
+                                        <div>
+                                            <h6 class="mb-1 fw-bold text-dark"><i class="bi bi-qr-code text-success me-1"></i> {{ site_settings.UPI_QR_FILE_NAME|default:"Uploaded Merchant QR Poster" }}</h6>
+                                            <div class="d-flex align-items-center gap-3 text-secondary small flex-wrap">
+                                                <span><strong>Size:</strong> {{ site_settings.UPI_QR_FILE_SIZE|default:"N/A" }}</span>
+                                                <span><strong>Uploaded:</strong> {{ site_settings.UPI_QR_UPLOADED_AT|default:"Recently" }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <button type="submit" name="action" value="clear_qr_image" class="btn btn-outline-danger btn-sm fw-bold">
+                                            <i class="bi bi-trash me-1"></i> Remove Uploaded Image
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+
+                            <!-- Live QR Preview Card -->
+                            <div class="card border-0 bg-light p-3 rounded-3 text-center">
+                                <h6 class="fw-bold text-dark mb-2"><i class="bi bi-phone-vibrate text-primary me-1"></i> Live Interactive UPI QR Preview</h6>
+                                <div class="d-flex justify-content-center my-2">
+                                    {% if site_settings.UPI_QR_IMAGE_URL %}
+                                        <img src="{{ site_settings.UPI_QR_IMAGE_URL }}" alt="UPI QR Code" class="img-thumbnail shadow-sm p-2 bg-white" style="width: 140px; height: 140px; object-fit: contain;">
+                                    {% else %}
+                                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=upi%3A%2F%2Fpay%3Fpa%3D{{ site_settings.UPI_ID|default:'vinayaka.committee@upi'|urlencode }}%26pn%3D{{ site_settings.UPI_PAYEE_NAME|default:'Vinayaka Youth Committee'|urlencode }}%26cu%3DINR" alt="Generated UPI QR Code" class="img-thumbnail shadow-sm p-2 bg-white" style="width: 140px; height: 140px;">
+                                    {% endif %}
+                                </div>
+                                <div class="fw-bold text-success mb-1" style="font-size: 0.9rem;">{{ site_settings.UPI_PAYEE_NAME|default:"Vinayaka Youth Committee" }}</div>
+                                <code class="px-2 py-1 bg-white border rounded text-dark small fw-bold">{{ site_settings.UPI_ID|default:"vinayaka.committee@upi" }}</code>
                             </div>
                         </div>
 

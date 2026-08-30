@@ -7,10 +7,28 @@ from audit.models import AuditLog
 import datetime
 
 
+from accounts.permissions import login_required_custom, get_user_role, has_module_action_right, leader_required
+
+
+@login_required_custom
 def member_list(request):
     """List, search, create, update, and delete committee members."""
     if request.method == "POST":
         action = request.POST.get("action")
+
+        if action == "create" and not has_module_action_right(request.user, "MEMBERS", "add"):
+            messages.error(request, "Access Denied: You do not have permission to add committee members.")
+            return redirect("/members/")
+        elif action in ["update", "edit"] and not has_module_action_right(request.user, "MEMBERS", "edit"):
+            messages.error(request, "Access Denied: You do not have permission to edit committee members.")
+            return redirect("/members/")
+        elif action == "delete" and not has_module_action_right(request.user, "MEMBERS", "delete_single"):
+            messages.error(request, "Access Denied: You do not have permission to delete committee members.")
+            return redirect("/members/")
+        elif action == "bulk_delete" and not has_module_action_right(request.user, "MEMBERS", "delete_bulk"):
+            messages.error(request, "Access Denied: You do not have permission to bulk delete committee members.")
+            return redirect("/members/")
+
 
         if action == "create":
             m_id = request.POST.get("member_id", "").strip() or f"MBR-2026-{Member.objects.count() + 1:03d}"
@@ -94,8 +112,21 @@ def member_list(request):
     role_type = LookupType.objects.filter(code="SYSTEM_ROLE").first()
     roles = LookupValue.objects.filter(lookup_type=role_type, is_active=True) if role_type else []
 
+    try:
+        per_page = int(request.GET.get("per_page", 10))
+        if per_page not in [10, 50, 100, 500]: per_page = 10
+    except (ValueError, TypeError):
+        per_page = 10
+
+    from django.core.paginator import Paginator
+    paginator = Paginator(members_qs, per_page)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
     context = {
-        "members": members_qs,
+        "members": page_obj,
+        "page_obj": page_obj,
+        "per_page": per_page,
         "positions": positions,
         "roles": roles,
         "search_query": search_query,
@@ -103,6 +134,7 @@ def member_list(request):
     return render(request, "members/member_list.html", context)
 
 
+@leader_required
 def member_add(request):
     """Dedicated Add Committee Member View."""
     if request.method == "POST":
@@ -124,3 +156,42 @@ def member_add(request):
         "today_date": today_date,
     }
     return render(request, "members/member_form.html", context)
+
+
+import csv
+from django.http import HttpResponse
+
+@login_required_custom
+def export_members_csv(request):
+    """Export committee members directory as downloadable CSV file."""
+    search_query = request.GET.get("q", "").strip()
+    members_qs = Member.objects.all()
+    if search_query:
+        members_qs = members_qs.filter(
+            Q(member_id__icontains=search_query) |
+            Q(full_name__icontains=search_query) |
+            Q(mobile_number__icontains=search_query) |
+            Q(committee_position__icontains=search_query)
+        )
+
+    response = HttpResponse(content_type="text/csv; charset=utf-8")
+    response["Content-Disposition"] = 'attachment; filename="committee_members_directory.csv"'
+    response.write('\ufeff'.encode('utf8'))
+
+    writer = csv.writer(response)
+    writer.writerow(["Member ID", "Full Name", "Mobile Number", "Committee Position", "System Role", "Joining Date", "Status", "Address"])
+
+    for m in members_qs:
+        writer.writerow([
+            m.member_id,
+            m.full_name,
+            m.mobile_number,
+            m.committee_position,
+            m.system_role,
+            m.joining_date.strftime("%Y-%m-%d") if m.joining_date else "",
+            m.status,
+            m.address
+        ])
+
+    return response
+

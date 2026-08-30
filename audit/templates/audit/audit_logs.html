@@ -42,6 +42,17 @@
     </form>
 </div>
 
+{% if messages %}
+<div class="mb-3">
+    {% for message in messages %}
+    <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show p-2.5 small" role="alert">
+        <i class="bi bi-info-circle-fill me-1"></i> {{ message }}
+        <button type="button" class="btn-close p-2" data-bs-dismiss="alert"></button>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
 <!-- Audit Table Card -->
 <div class="card">
     <div class="card-header-clean">
@@ -57,6 +68,7 @@
                     <th>{% trans "Target Model" %}</th>
                     <th>{% trans "Object ID" %}</th>
                     <th>{% trans "Details" %}</th>
+                    <th class="text-end">{% trans "Actions / Recovery" %}</th>
                 </tr>
             </thead>
             <tbody>
@@ -69,18 +81,35 @@
                             <span class="fw-semibold">{{ log.user.get_full_name|default:log.user.username|default:"System" }}</span>
                         </div>
                     </td>
-                    <td><span class="badge badge-soft-{% if log.action == 'CREATE' %}success{% elif log.action == 'UPDATE' %}warning{% else %}danger{% endif %}">{{ log.action|t }}</span></td>
+                    <td><span class="badge badge-soft-{% if log.action == 'CREATE' %}success{% elif log.action == 'UPDATE' %}warning{% elif log.action == 'RESTORE' %}info{% else %}danger{% endif %}">{{ log.action|t }}</span></td>
                     <td><span class="badge badge-soft-primary">{{ log.model_name|t }}</span></td>
                     <td class="fw-semibold">{{ log.object_id }}</td>
                     <td class="text-muted small">{{ log.details|default:"N/A" }}</td>
+                    <td class="text-end">
+                        {% if log.action == 'DELETE' or log.action == 'BULK_DELETE' %}
+                            {% if can_manage_admin %}
+                            <form method="POST" action="/audit/restore/{{ log.model_name }}/{{ log.object_id }}/" class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-outline-success fw-bold py-1 px-2.5" onclick="return confirm('Restore soft-deleted {{ log.model_name }} record #{{ log.object_id }}?')">
+                                    <i class="bi bi-arrow-counterclockwise me-1"></i> {% trans "Restore Record" %}
+                                </button>
+                            </form>
+                            {% else %}
+                            <span class="text-muted small">{% trans "Deleted Record" %}</span>
+                            {% endif %}
+                        {% else %}
+                            <span class="text-muted small">-</span>
+                        {% endif %}
+                    </td>
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="6" class="text-center text-muted py-4">{% trans "No audit logs recorded yet." %}</td>
+                    <td colspan="7" class="text-center text-muted py-4">{% trans "No audit logs recorded yet." %}</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
+    {% include "components/pagination.html" %}
 </div>
 {% endblock %}

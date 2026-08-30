@@ -7,10 +7,28 @@ from audit.models import AuditLog
 import datetime
 
 
+from accounts.permissions import login_required_custom, get_user_role, has_module_action_right
+
+
+@login_required_custom
 def event_list(request):
     """List, search, create, update, and delete festival events."""
     if request.method == "POST":
         action = request.POST.get("action")
+
+        if action == "create" and not has_module_action_right(request.user, "EVENTS", "add"):
+            messages.error(request, "Access Denied: You do not have permission to add festival events.")
+            return redirect("/events/")
+        elif action in ["update", "edit"] and not has_module_action_right(request.user, "EVENTS", "edit"):
+            messages.error(request, "Access Denied: You do not have permission to edit festival events.")
+            return redirect("/events/")
+        elif action == "delete" and not has_module_action_right(request.user, "EVENTS", "delete_single"):
+            messages.error(request, "Access Denied: You do not have permission to delete festival events.")
+            return redirect("/events/")
+        elif action == "bulk_delete" and not has_module_action_right(request.user, "EVENTS", "delete_bulk"):
+            messages.error(request, "Access Denied: You do not have permission to bulk delete festival events.")
+            return redirect("/events/")
+
 
         if action == "create":
             e_id = request.POST.get("event_id", "").strip() or f"EVT-2026-{Event.objects.count() + 1:03d}"
@@ -89,8 +107,21 @@ def event_list(request):
     total_budget = events_qs.aggregate(Sum("allocated_budget"))["allocated_budget__sum"] or 0
     total_spend = events_qs.aggregate(Sum("actual_spend"))["actual_spend__sum"] or 0
 
+    try:
+        per_page = int(request.GET.get("per_page", 10))
+        if per_page not in [10, 50, 100, 500]: per_page = 10
+    except (ValueError, TypeError):
+        per_page = 10
+
+    from django.core.paginator import Paginator
+    paginator = Paginator(events_qs, per_page)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
     context = {
-        "events": events_qs,
+        "events": page_obj,
+        "page_obj": page_obj,
+        "per_page": per_page,
         "total_budget": total_budget,
         "total_spend": total_spend,
         "search_query": search_query,
@@ -98,6 +129,7 @@ def event_list(request):
     return render(request, "events/event_list.html", context)
 
 
+@login_required_custom
 def event_add(request):
     """Dedicated Add Event View."""
     if request.method == "POST":

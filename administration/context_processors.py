@@ -98,9 +98,30 @@ def site_settings(request):
     # Merge database settings over defaults
     merged_settings = {**defaults, **settings_dict}
 
+    # Fetch all financial years & session active term
+    try:
+        from administration.models import FinancialYear
+        all_financial_years = list(FinancialYear.objects.all())
+        active_year_id = request.session.get("active_year_id")
+        
+        selected_financial_year = None
+        if active_year_id:
+            selected_financial_year = next((fy for fy in all_financial_years if fy.id == active_year_id), None)
+        
+        if not selected_financial_year:
+            selected_financial_year = next((fy for fy in all_financial_years if fy.is_active), None) or (all_financial_years[0] if all_financial_years else None)
+    except Exception:
+        all_financial_years = []
+        selected_financial_year = None
+
+    is_archived_term = bool(selected_financial_year and (selected_financial_year.is_locked or not selected_financial_year.is_active))
+
     return {
         "site_settings": merged_settings,
         "SITE_NAME": merged_settings["SITE_NAME"],
         "SITE_SLOGAN": merged_settings["SITE_SLOGAN"],
         "CURRENCY_SYMBOL": merged_settings["CURRENCY_SYMBOL"],
+        "all_financial_years": all_financial_years,
+        "selected_financial_year": selected_financial_year,
+        "is_archived_term": is_archived_term,
     }

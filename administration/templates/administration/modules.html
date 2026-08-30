@@ -1,0 +1,313 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Sidebar Modules Management" %} | {% trans "Administration" %}{% endblock %}
+{% block page_heading %}{% trans "Sidebar Modules Management" %}{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Messages Header -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show shadow-sm" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4 gap-3">
+        <div>
+            <h4 class="fw-bold mb-1"><i class="bi bi-layout-sidebar-inset text-primary me-2"></i>{% trans "Dynamic Sidebar Modules" %}</h4>
+            <p class="text-muted small mb-0">{% trans "Create, configure menu navigation URLs, parent-child dynamic dropdown hierarchy, and define lookup rights." %}</p>
+        </div>
+        <div class="d-flex gap-2">
+            <button class="btn btn-primary fw-semibold shadow-sm" data-bs-toggle="modal" data-bs-target="#createModuleModal">
+                <i class="bi bi-plus-lg me-1"></i> {% trans "Create New Module" %}
+            </button>
+            <button class="btn btn-outline-danger fw-semibold" onclick="submitBulkDelete()" id="bulkDeleteBtn" disabled>
+                <i class="bi bi-trash me-1"></i> {% trans "Bulk Delete" %}
+            </button>
+            <button class="btn btn-outline-dark fw-semibold" onclick="window.print()">
+                <i class="bi bi-printer me-1"></i> {% trans "Print List" %}
+            </button>
+        </div>
+    </div>
+
+    <!-- Modules Data Table Card -->
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-white py-3">
+            <h6 class="card-title fw-bold mb-0 text-dark"><i class="bi bi-list-nested me-2 text-primary"></i>{% trans "Configured System Modules" %}</h6>
+        </div>
+        <div class="card-body p-0">
+            <form id="bulkDeleteForm" action="/administration/modules/" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="bulk_delete">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="ps-3" style="width: 40px;">
+                                    <input class="form-check-input" type="checkbox" id="selectAll" onclick="toggleSelectAll(this)">
+                                </th>
+                                <th>{% trans "Order" %}</th>
+                                <th>{% trans "Module Code" %}</th>
+                                <th>{% trans "Menu Name" %}</th>
+                                <th>{% trans "Menu URL" %}</th>
+                                <th>{% trans "Hierarchy" %}</th>
+                                <th>{% trans "Available Rights" %}</th>
+                                <th class="text-end pe-3">{% trans "Actions" %}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for mod in modules_list %}
+                            <tr>
+                                <td class="ps-3">
+                                    <input class="form-check-input row-checkbox" type="checkbox" name="selected_ids" value="{{ mod.id }}" onclick="updateBulkBtn()">
+                                </td>
+                                <td><span class="badge bg-light text-dark border">{{ mod.display_order }}</span></td>
+                                <td><code class="fw-bold text-primary">{{ mod.code }}</code></td>
+                                <td>
+                                    <i class="bi {{ mod.icon_class }} me-2 text-muted"></i>
+                                    <strong>{{ mod.name }}</strong>
+                                </td>
+                                <td>
+                                    <span class="text-monospace small text-dark bg-light px-2 py-1 rounded border">{{ mod.url }}</span>
+                                </td>
+                                <td>
+                                    {% if mod.parent %}
+                                        <span class="badge bg-info text-dark"><i class="bi bi-diagram-2 me-1"></i>Child of {{ mod.parent.name }}</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary"><i class="bi bi-folder-fill me-1"></i>Top-Level Parent</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <div class="d-flex flex-wrap gap-1">
+                                        {% for right in mod.available_rights %}
+                                            <span class="badge bg-light text-dark border small">{{ right }}</span>
+                                        {% empty %}
+                                            <span class="text-muted small">None</span>
+                                        {% endfor %}
+                                    </div>
+                                </td>
+                                <td class="text-end pe-3">
+                                    <button type="button" class="btn btn-sm btn-outline-primary me-1" onclick="editModule('{{ mod.id }}', '{{ mod.name|escapejs }}', '{{ mod.url|escapejs }}', '{{ mod.parent_id|default:'' }}', '{{ mod.icon_class }}', '{{ mod.display_order }}')">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-danger" onclick="deleteModule('{{ mod.id }}', '{{ mod.name|escapejs }}')">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="8" class="text-center py-4 text-muted">
+                                    <i class="bi bi-inbox fs-2 d-block mb-2"></i>
+                                    {% trans "No system modules found. Click 'Create New Module' to add." %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Create Module Modal -->
+<div class="modal fade" id="createModuleModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content border-0 shadow-lg">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title fw-bold"><i class="bi bi-plus-circle me-2"></i>{% trans "Create New Sidebar Module" %}</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="/administration/modules/" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="create">
+                <div class="modal-body p-4">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">{% trans "Module Code" %} <span class="text-danger">*</span></label>
+                            <input type="text" name="code" class="form-control" placeholder="e.g. VENDOR_DIRECTORY" required uppercase>
+                            <small class="text-muted">{% trans "Unique identifier string" %}</small>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">{% trans "Menu Name" %} <span class="text-danger">*</span></label>
+                            <input type="text" name="name" class="form-control" placeholder="e.g. Vendor Directory" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">{% trans "Menu Navigation URL" %} <span class="text-danger">*</span></label>
+                            <input type="text" name="url" class="form-control" placeholder="e.g. /vendors/ or #" required>
+                            <small class="text-muted">{% trans "Target route defined in config URLs" %}</small>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">{% trans "Parent / Child Dropdown Lookup" %}</label>
+                            <select name="parent_id" class="form-select">
+                                <option value="">{% trans "-- None (Top-Level Parent Module) --" %}</option>
+                                {% for parent in parent_modules %}
+                                    <option value="{{ parent.id }}">{{ parent.name }} (Parent)</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">{% trans "Bootstrap Icon Class" %}</label>
+                            <input type="text" name="icon_class" class="form-control" value="bi-folder">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">{% trans "Display Order" %}</label>
+                            <input type="number" name="display_order" class="form-control" value="10">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-semibold">{% trans "Module Action Rights Lookup Values" %}</label>
+                            <div class="row g-2 border rounded p-3 bg-light">
+                                {% for code, label in default_rights %}
+                                <div class="col-md-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="rights" value="{{ code }}" id="right_create_{{ code }}" checked>
+                                        <label class="form-check-label fw-medium" for="right_create_{{ code }}">
+                                            {{ label }} (<code>{{ code }}</code>)
+                                        </label>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Cancel" %}</button>
+                    <button type="submit" class="btn btn-primary fw-semibold"><i class="bi bi-save me-1"></i>{% trans "Save Module" %}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Module Modal -->
+<div class="modal fade" id="editModuleModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content border-0 shadow-lg">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title fw-bold"><i class="bi bi-pencil-square me-2"></i>{% trans "Edit Sidebar Module" %}</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="/administration/modules/" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="edit">
+                <input type="hidden" name="module_id" id="edit_module_id">
+                <div class="modal-body p-4">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">{% trans "Menu Name" %} <span class="text-danger">*</span></label>
+                            <input type="text" name="name" id="edit_name" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">{% trans "Menu Navigation URL" %} <span class="text-danger">*</span></label>
+                            <input type="text" name="url" id="edit_url" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">{% trans "Parent / Child Dropdown Lookup" %}</label>
+                            <select name="parent_id" id="edit_parent_id" class="form-select">
+                                <option value="">{% trans "-- None (Top-Level Parent Module) --" %}</option>
+                                {% for parent in parent_modules %}
+                                    <option value="{{ parent.id }}">{{ parent.name }} (Parent)</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">{% trans "Bootstrap Icon Class" %}</label>
+                            <input type="text" name="icon_class" id="edit_icon_class" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">{% trans "Display Order" %}</label>
+                            <input type="number" name="display_order" id="edit_display_order" class="form-control">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-semibold">{% trans "Module Action Rights Lookup Values" %}</label>
+                            <div class="row g-2 border rounded p-3 bg-light">
+                                {% for code, label in default_rights %}
+                                <div class="col-md-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="rights" value="{{ code }}" id="right_edit_{{ code }}" checked>
+                                        <label class="form-check-label fw-medium" for="right_edit_{{ code }}">
+                                            {{ label }} (<code>{{ code }}</code>)
+                                        </label>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Cancel" %}</button>
+                    <button type="submit" class="btn btn-dark fw-semibold"><i class="bi bi-check2-circle me-1"></i>{% trans "Update Module" %}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Single Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModuleModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title fw-bold"><i class="bi bi-exclamation-triangle me-2"></i>{% trans "Confirm Module Deletion" %}</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="/administration/modules/" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="delete">
+                <input type="hidden" name="module_id" id="delete_module_id">
+                <div class="modal-body py-4">
+                    <p class="mb-0">{% trans "Are you sure you want to delete module" %} <strong id="delete_module_name"></strong>? {% trans "This action cannot be undone." %}</p>
+                </div>
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Cancel" %}</button>
+                    <button type="submit" class="btn btn-danger fw-semibold">{% trans "Delete Module" %}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function editModule(id, name, url, parentId, icon, order) {
+    document.getElementById('edit_module_id').value = id;
+    document.getElementById('edit_name').value = name;
+    document.getElementById('edit_url').value = url;
+    document.getElementById('edit_parent_id').value = parentId;
+    document.getElementById('edit_icon_class').value = icon;
+    document.getElementById('edit_display_order').value = order;
+    var modal = new bootstrap.Modal(document.getElementById('editModuleModal'));
+    modal.show();
+}
+
+function deleteModule(id, name) {
+    document.getElementById('delete_module_id').value = id;
+    document.getElementById('delete_module_name').innerText = name;
+    var modal = new bootstrap.Modal(document.getElementById('deleteModuleModal'));
+    modal.show();
+}
+
+function toggleSelectAll(master) {
+    var checkboxes = document.querySelectorAll('.row-checkbox');
+    checkboxes.forEach(cb => cb.checked = master.checked);
+    updateBulkBtn();
+}
+
+function updateBulkBtn() {
+    var checked = document.querySelectorAll('.row-checkbox:checked').length;
+    document.getElementById('bulkDeleteBtn').disabled = checked === 0;
+}
+
+function submitBulkDelete() {
+    if (confirm("{% trans 'Are you sure you want to delete selected modules?' %}")) {
+        document.getElementById('bulkDeleteForm').submit();
+    }
+}
+</script>
+{% endblock %}

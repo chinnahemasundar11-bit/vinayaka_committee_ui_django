@@ -17,6 +17,27 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         self.stdout.write("Seeding master data...")
 
+        # Reset Postgres primary key sequences if on PostgreSQL
+        from django.db import connection
+        if connection.vendor == "postgresql":
+            existing_tables = connection.introspection.table_names()
+            tables = [
+                "auth_user", "administration_lookup_type", "administration_lookup_value",
+                "administration_site_setting", "administration_financial_year",
+                "administration_fund_source", "administration_expense_category",
+                "administration_payment_method", "audit_auditlog", "events_event",
+                "expenses_expense_voucher", "funds_fund_receipt", "members_member"
+            ]
+            with connection.cursor() as cursor:
+                for table in tables:
+                    if table in existing_tables:
+                        try:
+                            cursor.execute(
+                                f"SELECT setval(pg_get_serial_sequence('{table}', 'id'), coalesce(max(id), 1), max(id) IS NOT null) FROM \"{table}\";"
+                            )
+                        except Exception:
+                            pass
+
         # 1. Superuser
         if not User.objects.filter(username="9876543210").exists():
             User.objects.create_superuser("9876543210", "admin@vinayaka.org", "admin123")
@@ -93,5 +114,56 @@ class Command(BaseCommand):
         ExpenseVoucher.objects.get_or_create(voucher_number="EXP-2026-001", defaults={"category": cat_dec, "vendor_name": "Royal Decorators", "description": "Stage & Mandapam Decoration Flowers & Cloth", "amount_spent": 8500, "expense_date": datetime.date(2026, 8, 12), "payment_method": pay_cash, "status": "Approved"})
         ExpenseVoucher.objects.get_or_create(voucher_number="EXP-2026-002", defaults={"category": cat_lgt, "vendor_name": "ABC Electricals", "description": "500W Sound System & Festival LED Lights", "amount_spent": 12000, "expense_date": datetime.date(2026, 8, 11), "payment_method": pay_upi, "status": "Approved"})
         ExpenseVoucher.objects.get_or_create(voucher_number="EXP-2026-003", defaults={"category": cat_food, "vendor_name": "Sri Laxmi Mart", "description": "Grocery Purchase for Mahaprasadam Cooking", "amount_spent": 35000, "expense_date": datetime.date(2026, 8, 9), "payment_method": pay_cash, "status": "Approved"})
+
+        # 10. Enterprise Workflow Definitions & Email Configuration Module
+        from workflows.models import WorkflowDefinition, WorkflowStepDefinition, WorkflowEmailConfig
+
+        wf_exp, _ = WorkflowDefinition.objects.get_or_create(
+            name="Expense Voucher Approval Workflow",
+            module_code="EXPENSE",
+            defaults={"description": "Multi-step approval process for festival expenditures with threshold limits."}
+        )
+        s1, _ = WorkflowStepDefinition.objects.get_or_create(
+            workflow=wf_exp, step_order=1,
+            defaults={"step_name": "Treasurer Financial Audit", "assigned_role": "Treasurer", "approval_threshold": 0}
+        )
+        s2, _ = WorkflowStepDefinition.objects.get_or_create(
+            workflow=wf_exp, step_order=2,
+            defaults={"step_name": "President Final Approval", "assigned_role": "President", "approval_threshold": 5000}
+        )
+
+        # Status-wise Email Templates Configuration
+        WorkflowEmailConfig.objects.get_or_create(
+            trigger_event="ON_SUBMIT",
+            recipient_type="SUBMITTER",
+            defaults={
+                "email_subject_template": "[Vinayaka Portal] Submission Confirmation: {module_code} #{item_number}",
+                "email_body_template": "Hello {submitted_by},\n\nYour submission for {module_code} item #{item_number} of amount ₹{amount} has been received and initiated into workflow '{workflow_name}'.\n\nCurrent Step: {step_name} ({assigned_role}).\n\nThank you,\nVinayaka Youth Committee"
+            }
+        )
+        WorkflowEmailConfig.objects.get_or_create(
+            trigger_event="ON_ASSIGNMENT",
+            recipient_type="ASSIGNED_ROLE",
+            defaults={
+                "email_subject_template": "[Vinayaka Portal] Action Required: Task Assigned for #{item_number}",
+                "email_body_template": "Hello,\n\nA new task step '{step_name}' has been assigned to your role ({assigned_role}) for item #{item_number}.\n\nWorkflow: {workflow_name}\nModule: {module_code}\nSubmitted By: {submitted_by}\n\nPlease sign in to open your Task Inbox (/workflows/my-tasks/) and perform your review.\n\nThank you,\nVinayaka Youth Committee"
+            }
+        )
+        WorkflowEmailConfig.objects.get_or_create(
+            trigger_event="ON_APPROVE",
+            recipient_type="SUBMITTER",
+            defaults={
+                "email_subject_template": "[Vinayaka Portal] Approved: Item #{item_number} Action Passed",
+                "email_body_template": "Hello {submitted_by},\n\nGreat news! Step '{step_name}' for item #{item_number} has been APPROVED by {performed_by}.\n\nComments: {comments}\nOverall Status: {status}\n\nThank you,\nVinayaka Youth Committee"
+            }
+        )
+        WorkflowEmailConfig.objects.get_or_create(
+            trigger_event="ON_REJECT",
+            recipient_type="SUBMITTER",
+            defaults={
+                "email_subject_template": "[Vinayaka Portal] Update Required / Rejected: Item #{item_number}",
+                "email_body_template": "Hello {submitted_by},\n\nYour submission for item #{item_number} was marked as {action_taken} by {performed_by} at step '{step_name}'.\n\nComments: {comments}\n\nPlease review your submission details.\n\nThank you,\nVinayaka Youth Committee"
+            }
+        )
 
         self.stdout.write(self.style.SUCCESS("Master data and sample records successfully seeded!"))

@@ -837,21 +837,57 @@ body.modal-open .bulk-actions-toolbar {
     box-shadow: var(--shadow-md);
 }
 
+/* --- Mobile Sidebar Backdrop Overlay --- */
+.sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.65);
+    backdrop-filter: blur(4px);
+    z-index: 1039;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sidebar-overlay.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
 /* --- Mobile Breakpoints --- */
 @media (max-width: 991.98px) {
     .sidebar {
         transform: translateX(-100%);
+        z-index: 1040;
     }
     .sidebar.show {
         transform: translateX(0);
-        box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+        box-shadow: 0 0 50px rgba(0, 0, 0, 0.6);
     }
     .main-content {
         margin-left: 0;
         width: 100%;
     }
     .topbar {
-        padding: 0 16px;
+        padding: 0 12px;
+        gap: 6px;
+    }
+    .topbar-left {
+        flex-shrink: 0 !important;
+        min-width: max-content;
+        gap: 6px;
+    }
+    .topbar-left #menuBtn {
+        flex-shrink: 0 !important;
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        z-index: 1036 !important;
+    }
+    .topbar-right {
+        gap: 4px;
+        flex-shrink: 1;
+        min-width: 0;
     }
     .content-area {
         padding: 16px;

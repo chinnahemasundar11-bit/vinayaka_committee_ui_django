@@ -175,3 +175,58 @@ class PaymentMethod(AuditModel):
 
     def __str__(self):
         return self.name
+
+
+DEFAULT_MODULE_RIGHTS = [
+    ("add", "Add Record"),
+    ("edit", "Edit Record"),
+    ("delete_single", "Single Delete"),
+    ("delete_bulk", "Bulk Delete"),
+    ("print_single", "Single Print"),
+    ("print_bulk", "Bulk Print"),
+]
+
+
+class AppModule(AuditModel):
+    """Dynamic Sidebar Navigation & System Module Registry."""
+    code = models.CharField(max_length=50, unique=True, help_text="Unique module code e.g. FUND_RECEIPTS")
+    name = models.CharField(max_length=100, help_text="Menu display name e.g. Funds Received")
+    url = models.CharField(max_length=200, help_text="Navigation URL matching config URLs e.g. /funds/")
+    parent = models.ForeignKey(
+        "self", on_delete=models.CASCADE, null=True, blank=True, related_name="children",
+        help_text="Parent module for multi-level navigation tree"
+    )
+    icon_class = models.CharField(max_length=50, default="bi-folder", help_text="Bootstrap icon class")
+    display_order = models.IntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+    available_rights = models.JSONField(
+        default=list,
+        help_text="List of right codes supported by module (add, edit, delete_single, delete_bulk, print_single, print_bulk)"
+    )
+
+    class Meta:
+        db_table = "administration_app_module"
+        ordering = ["display_order", "name"]
+
+    def __str__(self):
+        if self.parent:
+            return f"{self.parent.name} -> {self.name} [{self.code}]"
+        return f"{self.name} [{self.code}]"
+
+
+class RolePermission(AuditModel):
+    """Matrix mapping system roles to module rights."""
+    role = models.ForeignKey(LookupValue, on_delete=models.CASCADE, related_name="role_permissions")
+    module = models.ForeignKey(AppModule, on_delete=models.CASCADE, related_name="role_permissions")
+    assigned_rights = models.JSONField(
+        default=list,
+        help_text="List of assigned right codes for this role and module"
+    )
+
+    class Meta:
+        db_table = "administration_role_permission"
+        unique_together = ["role", "module"]
+
+    def __str__(self):
+        return f"{self.role.value} - {self.module.name} ({len(self.assigned_rights)} rights)"
+

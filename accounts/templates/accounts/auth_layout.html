@@ -1,0 +1,136 @@
+{% load static i18n i18n_extras %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE|default:'en' }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ site_settings.HEADER_TITLE|default:"Vinayaka Chavithi Youth Committee" }} | {% block page_title %}{% trans "Portal Authentication" %}{% endblock %}</title>
+    <!-- Google Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/app.css' %}">
+    <style>
+        :root {
+            --primary: {{ site_settings.PRIMARY_COLOR|default:"#8b1e24" }};
+            --primary-hover: {{ site_settings.PRIMARY_HOVER_BG|default:"#6c1419" }};
+            --accent-gold: {{ site_settings.ACCENT_COLOR|default:"#f59e0b" }};
+            --body-font: {{ site_settings.BODY_FONT_FAMILY|default:"'Inter', sans-serif" }};
+            --heading-font: {{ site_settings.HEADING_FONT_FAMILY|default:"'Outfit', sans-serif" }};
+        }
+        body {
+            font-family: var(--body-font) !important;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #2e0818 100%) !important;
+            color: #f8fafc;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--heading-font) !important;
+        }
+        .auth-navbar {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 12px 0;
+            z-index: 1030;
+        }
+        .auth-main-wrapper {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 16px;
+        }
+        .auth-card {
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+            color: #0f172a;
+            overflow: hidden;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header: Logo, Site Title, Language Switcher, and Home Button -->
+    <header class="auth-navbar sticky-top">
+        <div class="container d-flex align-items-center justify-content-between">
+            <a href="/" class="d-flex align-items-center gap-3 text-decoration-none">
+                <div class="brand-icon" style="width:45px; height:55px; display:flex; align-items:center; justify-content:center;">
+                    {% if site_settings.SITE_LOGO_URL %}
+                        <img src="{{ site_settings.SITE_LOGO_URL }}" alt="{{ site_settings.SITE_NAME }}" style="max-height: 60px; max-width: 52px; object-fit: contain;">
+                    {% else %}
+                        <i class="bi {{ site_settings.SITE_LOGO_ICON|default:'bi-flower1' }}" style="font-size:24px; color:#f59e0b;"></i>
+                    {% endif %}
+                </div>
+                <div>
+                    <h4 class="text-white mb-0 fw-bold fs-5">{{ site_settings.SITE_NAME|default:"Vinayaka Youth Committee" }}</h4>
+                    <span class="text-warning text-uppercase fw-bold" style="font-size:10.5px; letter-spacing:1.2px;">{{ site_settings.HEADER_SUBTITLE|default:"Youth Festival Portal" }}</span>
+                </div>
+            </a>
+
+            <div class="d-flex align-items-center gap-2">
+                {% if site_settings.ENABLE_MULTILANG != "false" and site_settings.SHOW_LANG_LOGIN != "false" %}
+                <!-- Language Selector Dropdown -->
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-outline-light d-flex align-items-center gap-1 dropdown-toggle px-2.5 py-1.5 fw-bold" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="white-space: nowrap; font-size: 0.825rem;">
+                        <i class="bi bi-globe2 text-warning me-1"></i>
+                        {% get_current_language as CURRENT_LANG %}
+                        {% get_available_languages as AVAILABLE_LANGS %}
+                        {% get_language_info for CURRENT_LANG as current_lang_info %}
+                        <span>{{ current_lang_info.name_local|title }}</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0">
+                        {% for lang_code, lang_name in AVAILABLE_LANGS %}
+                        <li>
+                            <form action="{% url 'set_language' %}" method="post" class="d-inline w-100">
+                                {% csrf_token %}
+                                <input name="next" type="hidden" value="{{ request.path }}">
+                                <input name="language" type="hidden" value="{{ lang_code }}">
+                                <button type="submit" class="dropdown-item py-2 d-flex align-items-center justify-content-between {% if lang_code == CURRENT_LANG %}active fw-bold{% endif %}" style="font-size: 0.875rem;">
+                                    <span>{{ lang_name }}</span>
+                                    {% if lang_code == CURRENT_LANG %}<i class="bi bi-check2 text-success ms-2"></i>{% endif %}
+                                </button>
+                            </form>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+
+                <!-- Home Button -> Redirects to Landing Page (/) -->
+                <a href="/" class="btn btn-sm btn-warning text-dark fw-bold px-3 py-1.5 shadow-sm d-flex align-items-center gap-1.5" style="font-size: 0.85rem; border-radius: 8px;">
+                    <i class="bi bi-house-door-fill fs-6"></i>
+                    <span class="d-none d-sm-inline">{% trans "Home" %}</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Centered Between Header & Footer -->
+    <main class="auth-main-wrapper">
+        <div class="container d-flex justify-content-center">
+            {% block auth_content %}{% endblock %}
+        </div>
+    </main>
+
+    <!-- Footer identical to Landing Page -->
+    <footer class="py-3 bg-dark text-white text-center small border-top border-secondary">
+        <div class="container">
+            <p class="mb-0 text-white fw-bold" style="font-size: 0.9rem; color: #ffffff !important; letter-spacing: 0.3px;">
+                {{ site_settings.FOOTER_TEXT|default:"© 2026 Vinayaka Youth Committee. All Rights Reserved." }}
+            </p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap & App Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'js/app.js' %}"></script>
+</body>
+</html>

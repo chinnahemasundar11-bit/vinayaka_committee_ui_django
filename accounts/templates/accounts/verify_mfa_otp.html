@@ -1,0 +1,63 @@
+{% extends "accounts/auth_layout.html" %}
+{% load static i18n %}
+
+{% block page_title %}{% trans "2-Step MFA OTP Verification" %}{% endblock %}
+
+{% block auth_content %}
+<div class="auth-card p-4 p-md-5" style="max-width: 460px;">
+    <div class="text-center mb-4">
+        <div class="d-inline-flex align-items-center justify-content-center bg-primary-subtle text-primary rounded-circle mb-3" style="width: 64px; height: 64px;">
+            <i class="bi bi-shield-lock-fill display-6"></i>
+        </div>
+        <h4 class="fw-bold text-dark mb-1">{% trans "2-Step MFA Verification" %}</h4>
+        <p class="text-muted small mb-0">{% trans "Enter the 6-digit OTP code sent to your registered email / mobile for" %} <strong class="text-dark">{{ user_obj.username }}</strong></p>
+    </div>
+
+    {% if messages %}
+    <div class="mb-3">
+        {% for message in messages %}
+        <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show small" role="alert">
+            <i class="bi bi-info-circle-fill me-1"></i> {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <form method="POST" action="/accounts/verify-mfa-otp/">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="verify">
+        
+        <div class="mb-4">
+            <label class="form-label fw-bold text-dark small text-uppercase mb-1">{% trans "Enter 6-Digit OTP Code" %} <span class="text-danger">*</span></label>
+            <div class="input-group">
+                <span class="input-group-text bg-light text-muted"><i class="bi bi-key-fill"></i></span>
+                <input class="form-control text-center fw-extrabold text-dark py-2" style="letter-spacing: 10px; font-size: 1.25rem;" name="otp_code" type="text" maxlength="6" pattern="[0-9]{6}" required placeholder="000000" autofocus autocomplete="off">
+            </div>
+            <div class="form-text text-muted small mt-2 d-flex justify-content-between align-items-center">
+                <span><i class="bi bi-clock-history me-1"></i> {% trans "Code expires in 10 minutes" %}</span>
+            </div>
+        </div>
+
+        <button class="btn btn-primary w-100 py-2.5 fw-bold shadow-sm d-flex align-items-center justify-content-center gap-2 mb-3" type="submit">
+            <i class="bi bi-check-circle-fill"></i>
+            <span>{% trans "Verify OTP & Sign In" %}</span>
+        </button>
+    </form>
+
+    <form method="POST" action="/accounts/verify-mfa-otp/" class="text-center mb-3">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="resend">
+        <span class="text-muted small">{% trans "Didn't receive the code?" %}</span>
+        <button type="submit" class="btn btn-link btn-sm text-primary fw-bold p-0 ms-1 text-decoration-none">
+            <i class="bi bi-arrow-repeat me-1"></i>{% trans "Resend OTP" %}
+        </button>
+    </form>
+
+    <div class="text-center pt-3 border-top">
+        <a href="/accounts/login/" class="small text-primary text-decoration-none fw-bold">
+            <i class="bi bi-arrow-left me-1"></i> {% trans "Back to Login" %}
+        </a>
+    </div>
+</div>
+{% endblock %}

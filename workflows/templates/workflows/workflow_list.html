@@ -1,0 +1,191 @@
+{% extends "base.html" %}
+{% load i18n i18n_extras %}
+{% block title %}{% trans "Workflows & Approvals" %} | {{ SITE_NAME }}{% endblock %}
+{% block page_heading %}{% trans "Workflow Definitions & Multi-Step Engine" %}{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
+    <div>
+        <h4 class="mb-1 fw-bold">{% trans "Enterprise Workflows & Role Assignments" %}</h4>
+        <p class="text-muted small mb-0">{% trans "Configure dynamic multi-step approval processes and role-based task steps" %}</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a href="/workflows/email-configs/" class="btn btn-outline-primary">
+            <i class="bi bi-envelope-gear me-1"></i> {% trans "Status-Wise Email Configs" %}
+        </a>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createWorkflowModal">
+            <i class="bi bi-plus-lg me-1"></i> {% trans "Create New Workflow" %}
+        </button>
+    </div>
+</div>
+
+{% if messages %}
+<div class="mb-3">
+    {% for message in messages %}
+    <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<!-- Workflows Accordion Cards -->
+<div class="row g-4">
+    {% for wf in workflows %}
+    <div class="col-12">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white py-3 d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center gap-3">
+                    <span class="badge bg-danger px-3 py-2 fs-6">{{ wf.module_code }}</span>
+                    <div>
+                        <h5 class="mb-0 fw-bold text-dark">{{ wf.name }}</h5>
+                        <small class="text-muted">{{ wf.description|default:"Dynamic Workflow Process" }}</small>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#addStepModal{{ wf.id }}">
+                        <i class="bi bi-plus-circle me-1"></i> Add Step
+                    </button>
+                    <form method="POST" action="/workflows/" onsubmit="return confirm('Delete workflow definition?');" class="d-inline">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="delete_workflow">
+                        <input type="hidden" name="workflow_id" value="{{ wf.id }}">
+                        <button type="submit" class="btn btn-sm btn-light text-danger"><i class="bi bi-trash"></i></button>
+                    </form>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th style="width: 10%;">Step #</th>
+                                <th style="width: 30%;">Step Name</th>
+                                <th style="width: 30%;">Assigned System Role</th>
+                                <th style="width: 30%;">Min. Threshold Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for step in wf.steps.all %}
+                            <tr>
+                                <td><span class="badge rounded-circle bg-secondary px-2 py-1">{{ step.step_order }}</span></td>
+                                <td class="fw-semibold text-dark">{{ step.step_name }}</td>
+                                <td><span class="badge bg-light text-dark border px-3 py-1.5"><i class="bi bi-person-badge text-primary me-1"></i>{{ step.assigned_role }}</span></td>
+                                <td class="fw-bold text-danger">
+                                    {% if step.approval_threshold > 0 %}
+                                        ₹ {{ step.approval_threshold|floatformat:2 }}
+                                    {% else %}
+                                        <span class="text-muted small">No Minimum Threshold</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="4" class="text-center py-4 text-muted">No steps configured for this workflow. Click 'Add Step' above.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add Step Modal for Workflow -->
+    <div class="modal fade" id="addStepModal{{ wf.id }}" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header bg-white border-bottom">
+                    <h5 class="modal-title fw-bold text-dark"><i class="bi bi-node-plus text-primary me-2"></i>Add Task Step to {{ wf.name }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form method="POST" action="/workflows/">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="add_step">
+                    <input type="hidden" name="workflow_id" value="{{ wf.id }}">
+                    <div class="modal-body p-4">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Step Name <span class="text-danger">*</span></label>
+                            <input type="text" name="step_name" class="form-control" placeholder="e.g. Secretary Verification" required>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Assigned System Role <span class="text-danger">*</span></label>
+                                <select name="assigned_role" class="form-select" required>
+                                    <option value="Treasurer">Treasurer</option>
+                                    <option value="President">President</option>
+                                    <option value="Secretary">Secretary</option>
+                                    <option value="Super Admin">Super Admin</option>
+                                    <option value="Committee Member">Committee Member</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Sequence Order</label>
+                                <input type="number" name="step_order" class="form-control" value="{{ wf.steps.count|add:1 }}" required>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label fw-bold">Approval Threshold Amount (₹)</label>
+                                <input type="number" step="0.01" name="approval_threshold" class="form-control" value="0.00" placeholder="0.00">
+                                <small class="text-muted">Step only triggers if item amount exceeds this value.</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer bg-light border-top">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary px-4 fw-bold">Save Task Step</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12 text-center py-5">
+        <i class="bi bi-diagram-3 text-muted display-3 mb-3 d-block"></i>
+        <h5 class="fw-bold text-dark">No Active Workflows Configured</h5>
+        <p class="text-muted">Click 'Create New Workflow' above to define multi-step role processes.</p>
+    </div>
+    {% endfor %}
+</div>
+{% include "components/pagination.html" %}
+
+<!-- Create Workflow Modal -->
+<div class="modal fade" id="createWorkflowModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg">
+            <div class="modal-header bg-white border-bottom">
+                <h5 class="modal-title fw-bold text-dark"><i class="bi bi-diagram-3-fill text-danger me-2"></i>Create New Workflow Process</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="POST" action="/workflows/">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="create_workflow">
+                <div class="modal-body p-4">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Workflow Process Name <span class="text-danger">*</span></label>
+                        <input type="text" name="name" class="form-control" placeholder="e.g. High Value Expense Approval" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Target Application Module <span class="text-danger">*</span></label>
+                        <select name="module_code" class="form-select" required>
+                            <option value="EXPENSE">Expenses & Vouchers</option>
+                            <option value="FUND">Fund Contributions & Receipts</option>
+                            <option value="EVENT">Festival Events & Programs</option>
+                            <option value="MEMBER">Youth Committee Members</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Description / Purpose</label>
+                        <textarea name="description" class="form-control" rows="3" placeholder="Briefly describe the governance rule..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer bg-light border-top">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger px-4 fw-bold">Initialize Workflow</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

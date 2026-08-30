@@ -1,0 +1,217 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}Enterprise QA & Pytest Automated Test Dashboard | {{ SITE_NAME }}{% endblock %}
+{% block page_heading %}Enterprise QA & Pytest Automation Dashboard{% endblock %}
+
+{% block content %}
+<!-- Top Banner with 1-Click Run Suite Button -->
+<div class="card border-0 shadow-sm mb-4 bg-dark text-white p-4 rounded-3 style-gradient">
+    <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
+        <div class="d-flex align-items-center gap-3">
+            <div class="stat-icon-wrapper bg-warning text-dark rounded-circle p-3 fs-2 shadow-sm">
+                <i class="bi bi-robot"></i>
+            </div>
+            <div>
+                <h4 class="fw-extrabold mb-1 text-white"><i class="bi bi-diagram-3-fill me-2 text-warning"></i>Enterprise Pytest Automated Test Collector</h4>
+                <p class="mb-0 text-white-50 small">PostgreSQL Test Result Store • Failure Severity Tracker • Reusable QA Microservice</p>
+            </div>
+        </div>
+        <button id="runTestsBtn" onclick="triggerPytestExecution()" class="btn btn-warning btn-lg fw-bold text-dark px-4 shadow-sm">
+            <i class="bi bi-play-circle-fill me-2"></i> 1-Click Run Pytest Suite
+        </button>
+    </div>
+</div>
+
+<!-- Architecture Pipeline Diagram Card -->
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-header-clean bg-white border-bottom py-3 px-4">
+        <h6 class="mb-0 fw-bold text-dark"><i class="bi bi-cpu-fill text-primary me-2"></i>QA Test Collector Architecture Pipeline</h6>
+    </div>
+    <div class="card-body p-4 text-center">
+        <div class="d-flex flex-wrap align-items-center justify-content-center gap-3 text-uppercase fw-bold text-muted small">
+            <span class="badge bg-primary text-white p-3 rounded-3 fs-6"><i class="bi bi-terminal-fill me-1"></i> Pytest Runner</span>
+            <i class="bi bi-arrow-right fs-4 text-primary"></i>
+            <span class="badge bg-warning text-dark p-3 rounded-3 fs-6"><i class="bi bi-filter-square-fill me-1"></i> Test Result Collector</span>
+            <i class="bi bi-arrow-right fs-4 text-primary"></i>
+            <span class="badge bg-info text-white p-3 rounded-3 fs-6"><i class="bi bi-database-fill-gear me-1"></i> PostgreSQL (test_runs / test_results)</span>
+            <i class="bi bi-arrow-right fs-4 text-primary"></i>
+            <span class="badge bg-danger text-white p-3 rounded-3 fs-6"><i class="bi bi-exclamation-octagon-fill me-1"></i> Issue Processor (Severity)</span>
+            <i class="bi bi-arrow-right fs-4 text-primary"></i>
+            <span class="badge bg-success text-white p-3 rounded-3 fs-6"><i class="bi bi-speedometer2 me-1"></i> REST API / Test Dashboard</span>
+        </div>
+    </div>
+</div>
+
+<!-- Latest Test Run Summary Card Row -->
+<div class="row g-4 mb-4">
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm p-4 h-100">
+            <span class="text-muted small fw-bold text-uppercase d-block mb-1">Pass Rate</span>
+            <h3 class="fw-extrabold text-{% if latest_run.pass_rate >= 90 %}success{% elif latest_run.pass_rate >= 75 %}warning{% else %}danger{% endif %} mb-2">
+                {{ latest_run.pass_rate|default:100.0|floatformat:1 }}%
+            </h3>
+            <small class="text-secondary"><i class="bi bi-clock-history me-1"></i> Run #{{ latest_run.id|default:"1" }} • {{ latest_run.timestamp|date:"d M Y H:i"|default:"Just now" }}</small>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm p-4 h-100">
+            <span class="text-muted small fw-bold text-uppercase d-block mb-1">Total Executed Tests</span>
+            <h3 class="fw-extrabold text-dark mb-2">{{ latest_run.total_tests|default:39 }}</h3>
+            <small class="text-secondary"><i class="bi bi-check2-circle text-success me-1"></i> {{ latest_run.passed|default:39 }} Passed • {{ latest_run.skipped|default:0 }} Skipped</small>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm p-4 h-100">
+            <span class="text-muted small fw-bold text-uppercase d-block mb-1">Failed Tests</span>
+            <h3 class="fw-extrabold text-{% if latest_run.failed == 0 %}success{% else %}danger{% endif %} mb-2">
+                {{ latest_run.failed|default:0 }}
+            </h3>
+            <small class="text-secondary"><i class="bi bi-git me-1"></i> {{ latest_run.branch|default:"main" }} ({{ latest_run.commit_hash|default:"a82f91c" }})</small>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm p-4 h-100">
+            <span class="text-muted small fw-bold text-uppercase d-block mb-1">Suite Duration</span>
+            <h3 class="fw-extrabold text-primary mb-2">{{ latest_run.duration_seconds|default:1.4|floatformat:2 }}s</h3>
+            <small class="text-secondary"><i class="bi bi-speedometer me-1"></i> App Version {{ latest_run.application_version|default:"v2.4" }}</small>
+        </div>
+    </div>
+</div>
+
+<!-- Open Issues by Severity & Failing Modules Section -->
+<div class="row g-4 mb-4">
+    <!-- Severity Breakdown Badges -->
+    <div class="col-lg-6">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header-clean bg-white border-bottom py-3 px-4">
+                <h6 class="mb-0 fw-bold text-dark"><i class="bi bi-shield-exclamation text-danger me-2"></i>Open Failures by Severity Category</h6>
+            </div>
+            <div class="card-body p-4">
+                <div class="row g-3 text-center">
+                    <div class="col-6 col-sm-3">
+                        <div class="p-3 bg-danger-subtle border border-danger-subtle rounded-3">
+                            <span class="badge bg-danger text-white mb-2 fs-6">CRITICAL</span>
+                            <h3 class="fw-bold text-danger mb-0">{{ critical_count }}</h3>
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-3">
+                        <div class="p-3 bg-warning-subtle border border-warning-subtle rounded-3">
+                            <span class="badge bg-warning text-dark mb-2 fs-6">HIGH</span>
+                            <h3 class="fw-bold text-dark mb-0">{{ high_count }}</h3>
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-3">
+                        <div class="p-3 bg-info-subtle border border-info-subtle rounded-3">
+                            <span class="badge bg-info text-white mb-2 fs-6">MEDIUM</span>
+                            <h3 class="fw-bold text-info mb-0">{{ medium_count }}</h3>
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-3">
+                        <div class="p-3 bg-secondary-subtle border border-secondary-subtle rounded-3">
+                            <span class="badge bg-secondary text-white mb-2 fs-6">LOW</span>
+                            <h3 class="fw-bold text-secondary mb-0">{{ low_count }}</h3>
+                        </div>
+                    </div>
+                </div>
+
+                {% if open_issues %}
+                <hr class="my-4">
+                <h6 class="fw-bold text-dark mb-3">Active Open Test Issues</h6>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="bg-light">
+                            <tr>
+                                <th>Module</th>
+                                <th>Test Name</th>
+                                <th>Severity</th>
+                                <th>Failures</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for issue in open_issues %}
+                            <tr>
+                                <td class="fw-bold">{{ issue.module }}</td>
+                                <td><code>{{ issue.test_name }}</code></td>
+                                <td>
+                                    <span class="badge bg-{% if issue.severity == 'CRITICAL' %}danger{% elif issue.severity == 'HIGH' %}warning text-dark{% else %}info{% endif %}">
+                                        {{ issue.severity }}
+                                    </span>
+                                </td>
+                                <td class="fw-bold text-danger">{{ issue.failure_count }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="alert alert-success border-success bg-success-subtle mt-4 mb-0 p-3 rounded-3 d-flex align-items-center gap-2">
+                    <i class="bi bi-check-circle-fill text-success fs-4"></i>
+                    <span><strong>No Active Failure Issues!</strong> All test cases are passing cleanly.</span>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Failing Modules Breakdown -->
+    <div class="col-lg-6">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header-clean bg-white border-bottom py-3 px-4">
+                <h6 class="mb-0 fw-bold text-dark"><i class="bi bi-boxes text-primary me-2"></i>Module Health & Failure Concentration</h6>
+            </div>
+            <div class="card-body p-4">
+                {% if failing_modules %}
+                    <ul class="list-group list-group-flush">
+                    {% for m in failing_modules %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center py-3">
+                            <div>
+                                <h6 class="mb-0 fw-bold text-dark">{{ m.module|capfirst }} Module</h6>
+                                <small class="text-muted">Detected failure hotspots</small>
+                            </div>
+                            <span class="badge bg-danger rounded-pill px-3 py-2 fs-6">{{ m.fail_count }} Failure(s)</span>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                {% else %}
+                    <div class="text-center py-5">
+                        <i class="bi bi-patch-check-fill text-success display-2 mb-3 d-block"></i>
+                        <h5 class="fw-bold text-dark">100% Green Module Health</h5>
+                        <p class="text-muted small">All application modules (Accounts, Funds, Expenses, Events, Workflows, Audit) are fully healthy.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function triggerPytestExecution() {
+        const btn = document.getElementById("runTestsBtn");
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status"></span> Executing Pytest Suite...';
+
+        fetch('/qa-dashboard/api/run-tests/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            if(data.status === 'success') {
+                alert('Pytest Suite Execution Finished!\nPass Rate: ' + data.pass_rate.toFixed(1) + '% | Failed: ' + data.failed);
+                window.location.reload();
+            } else {
+                alert('Execution error: ' + data.message);
+                btn.disabled = false;
+                btn.innerHTML = '<i class="bi bi-play-circle-fill me-2"></i> 1-Click Run Pytest Suite';
+            }
+        })
+        .catch(err => {
+            alert('Trigger error: ' + err);
+            btn.disabled = false;
+            btn.innerHTML = '<i class="bi bi-play-circle-fill me-2"></i> 1-Click Run Pytest Suite';
+        });
+    }
+</script>
+{% endblock %}

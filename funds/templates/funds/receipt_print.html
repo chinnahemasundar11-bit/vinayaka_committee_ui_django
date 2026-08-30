@@ -1,0 +1,288 @@
+{% load static i18n %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receipt #{{ receipt.receipt_number }} - {{ site_settings.SITE_NAME|default:"Vinayaka Youth Committee" }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f1f5f9;
+            font-family: 'Inter', sans-serif;
+            color: #1e293b;
+        }
+        .receipt-container {
+            max-width: 800px;
+            margin: 30px auto;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            padding: 40px;
+            position: relative;
+            border: 2px solid #e2e8f0;
+        }
+        .receipt-header {
+            border-bottom: 2px solid #8b1e24;
+            padding-bottom: 20px;
+            margin-bottom: 25px;
+        }
+        .committee-title {
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+            color: #8b1e24;
+            letter-spacing: 0.5px;
+        }
+        .receipt-badge {
+            background-color: #fef3c7;
+            color: #92400e;
+            font-weight: 700;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            border: 1px solid #fde68a;
+        }
+        .receipt-table th {
+            background-color: #f8fafc;
+            color: #475569;
+            font-weight: 600;
+            width: 30%;
+        }
+        .amount-box {
+            background: linear-gradient(135deg, #fef2f2 0%, #fff1f2 100%);
+            border: 2px dashed #8b1e24;
+            border-radius: 12px;
+            padding: 16px 24px;
+        }
+        .watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-30deg);
+            font-size: 5rem;
+            font-family: 'Cinzel', serif;
+            color: rgba(139, 30, 36, 0.04);
+            font-weight: 800;
+            pointer-events: none;
+            user-select: none;
+            white-space: nowrap;
+        }
+        .print-actions {
+            max-width: 800px;
+            margin: 0 auto 20px auto;
+        }
+        @media print {
+            .print-actions {
+                display: none !important;
+            }
+            body {
+                background-color: #ffffff;
+            }
+            .receipt-container {
+                box-shadow: none;
+                border: 1px solid #000;
+                margin: 0;
+                width: 100%;
+                max-width: 100%;
+                border-radius: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Non-printable Top Action Bar -->
+    <div class="print-actions d-flex align-items-center justify-content-between pt-3">
+        <a href="/funds/" class="btn btn-outline-secondary fw-semibold">
+            <i class="bi bi-arrow-left me-1"></i> Back to Funds List
+        </a>
+        <div class="d-flex gap-2">
+            <button onclick="printBluetoothThermalReceipt()" class="btn btn-warning fw-semibold shadow-sm px-3 text-dark">
+                <i class="bi bi-bluetooth me-1"></i> Bluetooth Thermal Printer
+            </button>
+            <a href="{{ whatsapp_url }}" target="_blank" class="btn btn-success fw-semibold shadow-sm px-3">
+                <i class="bi bi-whatsapp me-1"></i> Send WhatsApp Receipt
+            </a>
+            <button onclick="window.print()" class="btn btn-danger fw-semibold shadow-sm px-4">
+                <i class="bi bi-printer me-1"></i> Print Receipt / Save PDF
+            </button>
+        </div>
+    </div>
+
+    <!-- Official Printable Receipt Document -->
+    <div class="receipt-container">
+        <div class="watermark">{{ site_settings.SITE_NAME|default:"OFFICIAL RECEIPT" }}</div>
+
+        <!-- Header Block -->
+        <div class="receipt-header d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center gap-3">
+                {% if site_settings.SITE_LOGO_URL %}
+                    <img src="{{ site_settings.SITE_LOGO_URL }}" alt="Logo" style="max-height: 80px; max-width: 80px; object-fit: contain;">
+                {% else %}
+                    <div style="width: 70px; height: 70px; background: #8b1e24; color: #ffffff; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 2.2rem;">
+                        <i class="bi bi-flower1"></i>
+                    </div>
+                {% endif %}
+                <div>
+                    <h2 class="committee-title mb-1 h3">{{ site_settings.SITE_NAME|default:"Vinayaka Chavithi Youth Committee" }}</h2>
+                    <p class="text-muted mb-0 small">{{ site_settings.SITE_SLOGAN|default:"Ganesh Utsav Celebration & Festival Finance Portal" }}</p>
+                    {% if site_settings.CONTACT_PHONE %}<small class="text-muted d-block"><i class="bi bi-telephone me-1"></i> Phone: {{ site_settings.CONTACT_PHONE }}</small>{% endif %}
+                </div>
+            </div>
+            <div class="text-end">
+                <span class="receipt-badge d-inline-block mb-2">OFFICIAL RECEIPT</span>
+                <div class="fw-bold text-dark fs-5">No: {{ receipt.receipt_number }}</div>
+                <small class="text-muted">Date: {{ receipt.date_received|date:"d M Y" }}</small>
+            </div>
+        </div>
+
+        <!-- Receipt Body Details -->
+        <div class="mb-4">
+            <table class="table table-bordered receipt-table align-middle">
+                <tbody>
+                    <tr>
+                        <th>Donor Name</th>
+                        <td class="fw-bold text-dark fs-6">{{ receipt.donor_name }}</td>
+                    </tr>
+                    <tr>
+                        <th>Mobile Number</th>
+                        <td>{{ receipt.donor_phone|default:"N/A" }}</td>
+                    </tr>
+                    <tr>
+                        <th>Contribution Category</th>
+                        <td><span class="badge bg-primary px-3 py-2 fs-6">{{ receipt.fund_source.name }}</span></td>
+                    </tr>
+                    <tr>
+                        <th>Payment Channel</th>
+                        <td>
+                            <i class="bi {{ receipt.payment_method.icon_name|default:'bi-cash-stack' }} me-1 text-danger"></i>
+                            <strong>{{ receipt.payment_method.name }}</strong>
+                            {% if receipt.reference_number %}
+                                <span class="text-muted ms-2">(Ref / Ref No: {{ receipt.reference_number }})</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% if receipt.remarks %}
+                    <tr>
+                        <th>Remarks / Purpose</th>
+                        <td>{{ receipt.remarks }}</td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Amount Box -->
+        <div class="amount-box mb-4 d-flex align-items-center justify-content-between">
+            <div>
+                <span class="text-muted small text-uppercase fw-bold d-block">Amount Received in Words</span>
+                <div class="fw-bold text-dark fs-6 mt-1" style="font-style: italic;">
+                    "{{ amount_in_words }}"
+                </div>
+            </div>
+            <div class="text-end ps-3">
+                <span class="text-muted small text-uppercase fw-bold d-block">Total Amount</span>
+                <div class="fw-bold text-danger fs-2" style="font-family: 'Cinzel', serif;">
+                    {{ site_settings.CURRENCY_SYMBOL|default:"₹" }} {{ receipt.amount|floatformat:2 }}
+                </div>
+            </div>
+        </div>
+
+        {% if site_settings.UPI_QR_PRINT_ENABLE != "false" %}
+        <!-- UPI Payment & Verification Stamp -->
+        <div class="row align-items-center bg-light border rounded-3 p-3 mb-4 g-3">
+            <div class="col-auto">
+                {% if site_settings.UPI_QR_IMAGE_URL %}
+                    <img src="{{ site_settings.UPI_QR_IMAGE_URL }}" alt="UPI QR Code" style="width: 100px; height: 100px; border-radius: 8px; object-fit: contain;" class="border p-1 bg-white shadow-sm">
+                {% else %}
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=110x110&data=upi%3A%2F%2Fpay%3Fpa%3D{{ site_settings.UPI_ID|default:'vinayaka.committee@upi'|urlencode }}%26pn%3D{{ site_settings.UPI_PAYEE_NAME|default:'Vinayaka Youth Committee'|urlencode }}%26am%3D{{ receipt.amount }}%26tn%3DFestival%2BContribution%26cu%3DINR" alt="UPI QR Code" style="width: 100px; height: 100px; border-radius: 8px;" class="border p-1 bg-white shadow-sm">
+                {% endif %}
+            </div>
+            <div class="col">
+                <h6 class="fw-bold text-dark mb-1"><i class="bi bi-qr-code-scan text-primary me-1"></i> Scan & Verify / Direct Payment via UPI</h6>
+                <div class="small text-muted mb-1">UPI ID: <strong>{{ site_settings.UPI_ID|default:"vinayaka.committee@upi" }}</strong></div>
+                <div class="small text-muted mb-1">Payee Name: <strong>{{ site_settings.UPI_PAYEE_NAME|default:"Vinayaka Youth Committee" }}</strong></div>
+                <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill small px-2 py-0.5">
+                    <i class="bi bi-check-circle-fill me-1"></i> {{ site_settings.UPI_QR_NOTE|default:"Compatible with Google Pay, PhonePe, Paytm & BHIM" }}
+                </span>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Footer & Signatures -->
+        <div class="row align-items-end mt-5 pt-3">
+            <div class="col-6">
+                <small class="text-muted d-block mb-1">Generated By: {{ request.user.get_full_name|default:request.user.username }}</small>
+                <small class="text-muted d-block">System Verification: Verified & Recorded</small>
+            </div>
+            <div class="col-6 text-end">
+                <div class="d-inline-block text-center pe-3">
+                    <div style="border-bottom: 2px solid #000; width: 180px; margin-bottom: 5px;"></div>
+                    <span class="fw-bold small d-block">Authorized Signatory</span>
+                    <span class="text-muted style-italic" style="font-size: 0.75rem;">Vinayaka Youth Committee</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function printBluetoothThermalReceipt() {
+            if (!navigator.bluetooth) {
+                alert("Web Bluetooth is not supported in this browser. Please use Chrome/Edge on Android or desktop, or use standard System Print.");
+                return;
+            }
+            try {
+                const device = await navigator.bluetooth.requestDevice({
+                    acceptAllDevices: true,
+                    optionalServices: ['00001101-0000-1000-8000-00805f9b34fb']
+                });
+                const server = await device.gatt.connect();
+                const service = await server.getPrimaryService('00001101-0000-1000-8000-00805f9b34fb');
+                const characteristics = await service.getCharacteristics();
+
+                const encoder = new TextEncoder();
+                let bytes = [];
+                
+                // ESC @ (Initialize)
+                bytes.push(0x1B, 0x40);
+                
+                // Center Align & Header
+                bytes.push(0x1B, 0x61, 0x01);
+                bytes.push(...encoder.encode("{{ site_settings.SITE_NAME|default:'VINAYAKA YOUTH COMMITTEE' }}\n"));
+                bytes.push(...encoder.encode("OFFICIAL DONATION RECEIPT\n"));
+                bytes.push(...encoder.encode("--------------------------------\n"));
+                
+                // Left Align & Details
+                bytes.push(0x1B, 0x61, 0x00);
+                bytes.push(...encoder.encode("Receipt No: {{ receipt.receipt_number }}\n"));
+                bytes.push(...encoder.encode("Date      : {{ receipt.date_received|date:'d M Y' }}\n"));
+                bytes.push(...encoder.encode("Donor Name: {{ receipt.donor_name }}\n"));
+                bytes.push(...encoder.encode("Category  : {{ receipt.fund_source.name }}\n"));
+                bytes.push(...encoder.encode("Payment   : {{ receipt.payment_method.name }}\n"));
+                bytes.push(...encoder.encode("--------------------------------\n"));
+                
+                // Bold Amount
+                bytes.push(0x1B, 0x45, 0x01);
+                bytes.push(...encoder.encode("AMOUNT: {{ site_settings.CURRENCY_SYMBOL|default:'INR' }} {{ receipt.amount|floatformat:2 }}\n"));
+                bytes.push(0x1B, 0x45, 0x00);
+                bytes.push(...encoder.encode("--------------------------------\n"));
+                
+                // Center Footer
+                bytes.push(0x1B, 0x61, 0x01);
+                bytes.push(...encoder.encode("May Lord Ganesha Bless You!\n\n\n\n"));
+                
+                // Cut Paper
+                bytes.push(0x1D, 0x56, 0x01);
+
+                const data = new Uint8Array(bytes);
+                await characteristics[0].writeValue(data);
+                alert("Receipt printed successfully on Bluetooth Thermal Printer!");
+            } catch (err) {
+                alert("Bluetooth Thermal Printer: " + err.message + "\nFallback: Standard System Print is active.");
+            }
+        }
+    </script>
+</body>
+</html>

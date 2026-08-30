@@ -1,0 +1,22 @@
+{
+  "short_name": "VinayakaFunds",
+  "name": "Vinayaka Youth Committee Festival Portal",
+  "description": "Ganesh Utsav Finance Management & Offline Receipt Collector",
+  "icons": [
+    {
+      "src": "/static/images/logo.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/static/images/logo.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/funds/add/",
+  "background_color": "#8b1e24",
+  "theme_color": "#8b1e24",
+  "display": "standalone",
+  "orientation": "portrait"
+}

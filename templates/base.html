@@ -11,6 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@300;400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="manifest" href="{% static 'manifest.json' %}">
     <link rel="stylesheet" href="{% static 'css/app.css' %}">
     <style id="dynamic-theme-styles">
         :root {
@@ -187,95 +188,114 @@
         </div>
 
         <nav class="sidebar-nav">
-            <!-- Top-level Dashboard -->
-            <a href="/dashboard/" class="nav-link">
-                <span class="nav-link-content">
-                    <i class="bi bi-grid-1x2-fill menu-icon"></i>
-                    <span>{% trans "Dashboard" %}</span>
-                </span>
-            </a>
-
-            <!-- Category 1: Finance Management Dropdown -->
-            <a class="nav-link" data-bs-toggle="collapse" href="#financeSubmenu" role="button" aria-expanded="false" aria-controls="financeSubmenu">
-                <span class="nav-link-content">
-                    <i class="bi bi-wallet2 menu-icon"></i>
-                    <span>{% trans "Finance Management" %}</span>
-                </span>
-                <i class="bi bi-chevron-right chevron-icon"></i>
-            </a>
-            <div class="collapse" id="financeSubmenu">
-                <div class="sidebar-submenu">
-                    <a href="/funds/" class="submenu-link"><i class="bi bi-circle-fill" style="font-size: 5px;"></i> {% trans "Funds Received" %}</a>
-                    <a href="/expenses/" class="submenu-link"><i class="bi bi-circle-fill" style="font-size: 5px;"></i> {% trans "Expenses" %}</a>
-                    <a href="/reports/" class="submenu-link"><i class="bi bi-circle-fill" style="font-size: 5px;"></i> {% trans "Reports & Analytics" %}</a>
-                </div>
-            </div>
-
-            <!-- Category 2: Committee & Events Dropdown -->
-            <a class="nav-link" data-bs-toggle="collapse" href="#committeeSubmenu" role="button" aria-expanded="false" aria-controls="committeeSubmenu">
-                <span class="nav-link-content">
-                    <i class="bi bi-people-fill menu-icon"></i>
-                    <span>{% trans "Committee & Events" %}</span>
-                </span>
-                <i class="bi bi-chevron-right chevron-icon"></i>
-            </a>
-            <div class="collapse" id="committeeSubmenu">
-                <div class="sidebar-submenu">
-                    <a href="/members/" class="submenu-link"><i class="bi bi-circle-fill" style="font-size: 5px;"></i> {% trans "Committee Members" %}</a>
-                    <a href="/events/" class="submenu-link"><i class="bi bi-circle-fill" style="font-size: 5px;"></i> {% trans "Festival Events" %}</a>
-                </div>
-            </div>
-
-            <!-- Category 3: Administration Dropdown -->
-            <a class="nav-link" data-bs-toggle="collapse" href="#adminSubmenu" role="button" aria-expanded="false" aria-controls="adminSubmenu">
-                <span class="nav-link-content">
-                    <i class="bi bi-gear-fill menu-icon"></i>
-                    <span>{% trans "Administration" %}</span>
-                </span>
-                <i class="bi bi-chevron-right chevron-icon"></i>
-            </a>
-            <div class="collapse" id="adminSubmenu">
-                <div class="sidebar-submenu">
-                    <a href="/administration/" class="submenu-link"><i class="bi bi-circle-fill" style="font-size: 5px;"></i> {% trans "Master Overview" %}</a>
-                    <a href="/administration/users/" class="submenu-link"><i class="bi bi-circle-fill" style="font-size: 5px;"></i> {% trans "Users & Access" %}</a>
-                    <a href="/administration/roles/" class="submenu-link"><i class="bi bi-circle-fill" style="font-size: 5px;"></i> {% trans "Roles & Permissions" %}</a>
-                    <a href="/administration/payment-methods/" class="submenu-link"><i class="bi bi-circle-fill" style="font-size: 5px;"></i> {% trans "Payment Methods" %}</a>
-                    <a href="/administration/fund-sources/" class="submenu-link"><i class="bi bi-circle-fill" style="font-size: 5px;"></i> {% trans "Fund Sources" %}</a>
-                    <a href="/administration/expense-categories/" class="submenu-link"><i class="bi bi-circle-fill" style="font-size: 5px;"></i> {% trans "Expense Categories" %}</a>
-                    <a href="/administration/financial-years/" class="submenu-link"><i class="bi bi-circle-fill" style="font-size: 5px;"></i> {% trans "Financial Years" %}</a>
-                    <a href="/administration/site-settings/" class="submenu-link"><i class="bi bi-circle-fill" style="font-size: 5px;"></i> {% trans "Site Settings UI" %}</a>
-                </div>
-            </div>
-
-            <!-- Top-level Audit Logs -->
-            <a href="/audit/" class="nav-link">
-                <span class="nav-link-content">
-                    <i class="bi bi-clock-history menu-icon"></i>
-                    <span>{% trans "Audit Logs" %}</span>
-                </span>
-            </a>
+            {% for item in sidebar_modules_tree %}
+                {% with parent=item.module is_accessible=item.is_accessible children=item.children %}
+                    {% if children %}
+                        <!-- Parent Category Dropdown with Children -->
+                        <a class="nav-link" data-bs-toggle="collapse" href="#submenu_{{ parent.id }}" role="button" aria-expanded="false" aria-controls="submenu_{{ parent.id }}">
+                            <span class="nav-link-content">
+                                <i class="bi {{ parent.icon_class }} menu-icon"></i>
+                                <span>{{ parent.name }}</span>
+                            </span>
+                            <i class="bi bi-chevron-right chevron-icon"></i>
+                        </a>
+                        <div class="collapse" id="submenu_{{ parent.id }}">
+                            <div class="sidebar-submenu">
+                                {% for child in children %}
+                                    <a href="{{ child.url }}" class="submenu-link">
+                                        <i class="bi {{ child.icon_class|default:'bi-circle-fill' }}" style="font-size: {% if child.icon_class %}0.85rem{% else %}5px{% endif %}; me-1;"></i>
+                                        {{ child.name }}
+                                    </a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% elif is_accessible and parent.url != '#' %}
+                        <!-- Standalone Top-Level Menu -->
+                        <a href="{{ parent.url }}" class="nav-link">
+                            <span class="nav-link-content">
+                                <i class="bi {{ parent.icon_class }} menu-icon"></i>
+                                <span>{{ parent.name }}</span>
+                            </span>
+                        </a>
+                    {% endif %}
+                {% endwith %}
+            {% empty %}
+                <a href="/dashboard/" class="nav-link">
+                    <span class="nav-link-content">
+                        <i class="bi bi-grid-1x2-fill menu-icon"></i>
+                        <span>{% trans "Dashboard" %}</span>
+                    </span>
+                </a>
+            {% endfor %}
         </nav>
+
     </aside>
+    <!-- Mobile Sidebar Backdrop Overlay -->
+    <div id="sidebarOverlay" class="sidebar-overlay d-lg-none"></div>
 
     <!-- Main Content Area -->
     <main class="main-content">
         <!-- Clean Top Navigation Header -->
         <header class="topbar">
-            <div class="topbar-left">
-                <button class="btn btn-light d-lg-none py-1 px-2 me-1" id="menuBtn" type="button"><i class="bi bi-list fs-5"></i></button>
-                <h2 class="page-heading">{% block page_heading %}{% trans "Dashboard" %}{% endblock %}</h2>
+            <div class="topbar-left d-flex align-items-center me-auto">
+                <button class="btn btn-primary d-lg-none py-1 px-2.5 shadow-sm border-0 d-flex align-items-center justify-content-center flex-shrink-0" id="menuBtn" type="button" aria-label="Toggle Sidebar Navigation" style="min-width: 40px; height: 38px; z-index: 1036;">
+                    <i class="bi bi-list fs-4 text-white"></i>
+                </button>
+                <h2 class="page-heading mb-0 text-truncate ms-2 d-none d-sm-block" style="max-width: 220px;">{% block page_heading %}{% trans "Dashboard" %}{% endblock %}</h2>
             </div>
-            
-            <div class="topbar-right">
+            <div class="topbar-right d-flex align-items-center gap-1.5 flex-shrink-1">
+                <!-- Offline Queue Sync Badge -->
+                <div id="offlineQueueBadge" class="badge bg-warning text-dark me-1 d-none d-flex align-items-center gap-1 shadow-sm px-2 py-1" onclick="syncOfflineReceipts()" style="cursor: pointer;" title="Click to sync offline receipts">
+                    <i class="bi bi-wifi-off text-danger fs-6"></i>
+                    <span class="d-none d-md-inline"><strong id="offlineQueueCount">0</strong> Pending Sync</span>
+                </div>
+
+                <!-- Festival Term Switcher Dropdown -->
+                <div class="dropdown me-1">
+                    <button class="btn btn-sm btn-light border d-flex align-items-center gap-1 dropdown-toggle px-2 py-1.5 fw-bold text-dark shadow-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 0.8rem;">
+                        <i class="bi bi-calendar-event text-danger fs-6"></i>
+                        <span class="d-none d-sm-inline">{{ selected_financial_year.name|default:"FY 2026-2027" }}</span>
+                        <span class="d-inline d-sm-none">26-27</span>
+                        {% if is_archived_term %}
+                            <span class="badge bg-warning text-dark px-1 py-0.5 rounded-pill small ms-1" style="font-size: 0.6rem;">RO</span>
+                        {% endif %}
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0" style="min-width: 220px;">
+                        <li class="dropdown-header text-uppercase fw-bold text-muted small px-3 py-1.5">
+                            <i class="bi bi-clock-history me-1"></i> Select Festival Term
+                        </li>
+                        <li><hr class="dropdown-divider my-1"></li>
+                        {% for fy in all_financial_years %}
+                        <li>
+                            <form action="/administration/switch-year/{{ fy.id }}/" method="post" class="d-inline w-100">
+                                {% csrf_token %}
+                                <input name="next" type="hidden" value="{{ request.path }}">
+                                <button type="submit" class="dropdown-item py-2 d-flex align-items-center justify-content-between {% if selected_financial_year.id == fy.id %}active fw-bold{% endif %}" style="font-size: 0.875rem;">
+                                    <span>{{ fy.name }}</span>
+                                    {% if fy.is_locked %}
+                                        <span class="badge bg-secondary rounded-pill small">Locked</span>
+                                    {% elif fy.is_active %}
+                                        <span class="badge bg-success rounded-pill small">Active</span>
+                                    {% endif %}
+                                </button>
+                            </form>
+                        </li>
+                        {% empty %}
+                        <li><span class="dropdown-item text-muted small">FY 2026 - 2027 (Active)</span></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
                 {% if site_settings.ENABLE_MULTILANG != "false" and site_settings.SHOW_LANG_HEADER != "false" %}
                 <!-- Multi-Language Selector Dropdown -->
-                <div class="dropdown me-2">
-                    <button class="btn btn-sm btn-light border d-flex align-items-center gap-1 dropdown-toggle px-2 py-1.5 fw-bold text-dark shadow-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 0.85rem;">
+                <div class="dropdown me-1">
+                    <button class="btn btn-sm btn-light border d-flex align-items-center gap-1 dropdown-toggle px-2 py-1.5 fw-bold text-dark shadow-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 0.8rem;">
                         <i class="bi bi-globe2 text-primary fs-6"></i>
                         {% get_current_language as CURRENT_LANG %}
                         {% get_available_languages as AVAILABLE_LANGS %}
                         {% get_language_info for CURRENT_LANG as current_lang_info %}
-                        <span>{{ current_lang_info.name_local|title }}</span>
+                        <span class="d-none d-sm-inline">{{ current_lang_info.name_local|title }}</span>
+                        <span class="d-inline d-sm-none">{{ CURRENT_LANG|upper }}</span>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0" style="min-width: 160px;">
                         {% for lang_code, lang_name in AVAILABLE_LANGS %}
@@ -298,21 +318,42 @@
                 <!-- User Profile Menu (High Z-Index Floating Dropdown) -->
                 <div class="top-user dropdown">
                     <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle gap-2" data-bs-toggle="dropdown" aria-expanded="false">
-                        <div class="avatar-badge">VC</div>
+                        <div class="avatar-badge">{{ user_avatar_initials }}</div>
                         <div class="user-info d-none d-xl-block">
-                            <span class="user-name">Committee Admin</span>
-                            <span class="user-role">Treasurer / Super Admin</span>
+                            <span class="user-name">{{ user_display_name }}</span>
+                            <span class="user-role">{{ user_role }}</span>
                         </div>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0">
+                        {% if is_admin_user %}
                         <li><a class="dropdown-item py-2" href="/administration/users/"><i class="bi bi-person me-2 text-primary"></i> {% trans "User Profile" %}</a></li>
                         <li><a class="dropdown-item py-2" href="/administration/site-settings/"><i class="bi bi-sliders me-2 text-primary"></i> {% trans "Site Settings UI" %}</a></li>
                         <li><hr class="dropdown-divider"></li>
+                        {% endif %}
                         <li><a class="dropdown-item py-2 text-danger fw-semibold" href="{% url 'logout' %}"><i class="bi bi-box-arrow-right me-2"></i> {% trans "Sign Out" %}</a></li>
                     </ul>
                 </div>
             </div>
         </header>
+
+        {% if is_archived_term %}
+        <!-- Read-Only Archived Festival Term Warning Banner -->
+        <div class="alert alert-warning border-warning d-flex align-items-center justify-content-between mx-4 mt-3 mb-0 shadow-sm rounded-3 py-2 px-3" role="alert">
+            <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-archive-fill text-warning fs-5"></i>
+                <div>
+                    <strong class="text-dark">Historical Festival Term:</strong>
+                    <span class="text-secondary small ms-1">You are viewing archived financial data for <strong>{{ selected_financial_year.name }}</strong> (Read-Only Mode).</span>
+                </div>
+            </div>
+            <form action="/administration/switch-year/0/" method="post" class="d-inline">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-sm btn-outline-dark fw-bold px-3 py-1">
+                    <i class="bi bi-arrow-return-left me-1"></i> Return to Active Term
+                </button>
+            </form>
+        </div>
+        {% endif %}
 
         <!-- Main Content View -->
         <div class="content-area">
@@ -341,6 +382,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script src="{% static 'js/app.js' %}"></script>
+<script src="{% static 'js/offline_collector.js' %}"></script>
 {% block scripts %}{% endblock %}
 </body>
 </html>

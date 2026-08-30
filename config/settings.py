@@ -11,7 +11,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.environ.get("SECRET_KEY", "django-insecure-vinayaka-youth-committee-secret-key-change-in-prod")
 DEBUG = os.environ.get("DEBUG", "True").lower() == "true"
-ALLOWED_HOSTS = [h.strip() for h in os.environ.get("ALLOWED_HOSTS", "*").split(",") if h.strip()]
+ALLOWED_HOSTS = ['*','https://vinayaka-committee-ui-django.onrender.com','localhost','localhost:8000']
 
 INSTALLED_APPS = [
     "django.contrib.admin",

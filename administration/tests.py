@@ -157,3 +157,59 @@ class AdministrationModelTest(TestCase):
         res_after = c.get("/administration/backups/")
         self.assertEqual(res_after.status_code, 200)
         self.assertContains(res_after, "festival_db_backup_")
+
+    def test_user_management_and_role_assignment(self):
+        from django.test import Client
+        from members.models import Member
+        from accounts.permissions import get_user_role
+
+        c = Client()
+        admin_u = User.objects.create_superuser("admin_usr_mgr", "mgr@test.com", "pass123")
+        c.force_login(admin_u)
+
+        # 1. Test Users listing page
+        res = c.get("/administration/users/")
+        self.assertEqual(res.status_code, 200)
+        self.assertContains(res, "System Users & Access Control")
+        self.assertContains(res, "Edit & Role")
+
+        # 2. Test Creating user with role assignment
+        res_create = c.post("/administration/users/", data={
+            "action": "create",
+            "username": "9911223344",
+            "full_name": "Ravi Teja",
+            "email": "ravi@test.com",
+            "password": "password123",
+            "system_role": "Chief Treasurer",
+            "is_active": "on"
+        })
+        self.assertEqual(res_create.status_code, 302)
+
+        # Verify user and member created with role
+        new_user = User.objects.get(username="9911223344")
+        self.assertEqual(new_user.first_name, "Ravi")
+        self.assertEqual(new_user.last_name, "Teja")
+        self.assertEqual(get_user_role(new_user), "Chief Treasurer")
+
+        member = Member.objects.get(mobile_number="9911223344")
+        self.assertEqual(member.system_role, "Chief Treasurer")
+
+        # 3. Test Editing user and updating role to Super Admin
+        res_edit = c.post("/administration/users/", data={
+            "action": "edit",
+            "user_id": new_user.id,
+            "full_name": "Ravi Teja Updated",
+            "email": "ravi_updated@test.com",
+            "system_role": "Super Admin",
+            "is_active": "on"
+        })
+        self.assertEqual(res_edit.status_code, 302)
+
+        new_user.refresh_from_db()
+        self.assertTrue(new_user.is_superuser)
+        self.assertEqual(get_user_role(new_user), "Super Admin")
+
+        member.refresh_from_db()
+        self.assertEqual(member.system_role, "Super Admin")
+        self.assertEqual(member.full_name, "Ravi Teja Updated")
+

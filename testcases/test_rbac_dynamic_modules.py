@@ -15,8 +15,8 @@ class RBACDynamicModulesTestCase(TestCase):
         
         # Roles LookupType
         self.role_type, _ = LookupType.objects.get_or_create(code="SYSTEM_ROLE", defaults={"name": "System Roles"})
-        self.admin_role = LookupValue.objects.create(lookup_type=self.role_type, code="SUPER_ADMIN", value="Super Admin")
-        self.treasurer_role = LookupValue.objects.create(lookup_type=self.role_type, code="TREASURER", value="Chief Treasurer")
+        self.admin_role, _ = LookupValue.objects.get_or_create(lookup_type=self.role_type, code="SUPER_ADMIN", defaults={"value": "Super Admin"})
+        self.treasurer_role, _ = LookupValue.objects.get_or_create(lookup_type=self.role_type, code="TREASURER", defaults={"value": "Chief Treasurer"})
         
         # Parent Module
         self.parent_mod = AppModule.objects.create(

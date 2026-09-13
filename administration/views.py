@@ -1,15 +1,16 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.models import User
+from django.utils import timezone
+from django.db.models import Q
 from .models import (
     SiteSetting, LookupType, LookupValue, FinancialYear,
     FundSource, ExpenseCategory, PaymentMethod,
     AppModule, RolePermission, DEFAULT_MODULE_RIGHTS
 )
 from audit.models import AuditLog
-
-
-from accounts.permissions import admin_required
+from members.models import Member
+from accounts.permissions import admin_required, get_user_role
 
 
 def paginate_queryset(request, queryset, default_per_page=10):
@@ -33,30 +34,185 @@ def index(request):
 
 @admin_required
 def users(request):
-    """System users management view."""
+    """System users management view with full role assignment and profile sync."""
+    role_type = LookupType.objects.filter(code="SYSTEM_ROLE").first()
+    roles_qs = LookupValue.objects.filter(lookup_type=role_type, is_active=True).order_by("display_order", "value") if role_type else []
+    available_roles = [r.value for r in roles_qs] if roles_qs else [
+        "Super Admin", "President", "Vice President", "Secretary",
+        "Joint Secretary", "Chief Treasurer", "Treasurer", "Joint Treasurer",
+        "Event Coordinator", "Committee Member"
+    ]
+    if "Super Admin" not in available_roles:
+        available_roles.insert(0, "Super Admin")
+
     if request.method == "POST":
         action = request.POST.get("action")
         if action == "create":
             username = request.POST.get("username", "").strip()
             name = request.POST.get("full_name", "").strip()
+            email = request.POST.get("email", "").strip()
             password = request.POST.get("password", "admin123").strip()
-            if username:
+            role_name = request.POST.get("system_role", "Committee Member").strip()
+            is_active = request.POST.get("is_active") in ["on", "true", "True", "1", True] if "is_active" in request.POST else True
+
+            if not username:
+                messages.error(request, "Mobile number or username is required.")
+            elif User.objects.filter(username=username).exists():
+                messages.error(request, f"User with username/mobile '{username}' already exists.")
+            else:
                 first_name = name.split()[0] if name else ""
                 last_name = " ".join(name.split()[1:]) if len(name.split()) > 1 else ""
-                user = User.objects.create_user(username=username, password=password, first_name=first_name, last_name=last_name)
-                AuditLog.objects.create(user=request.user if request.user.is_authenticated else None, action="CREATE", model_name="User", object_id=str(user.id), details=f"Created user {username}")
-                messages.success(request, f"User '{username}' created successfully!")
+                user = User.objects.create_user(
+                    username=username,
+                    email=email,
+                    password=password,
+                    first_name=first_name,
+                    last_name=last_name
+                )
+                user.is_active = is_active
+                if role_name == "Super Admin":
+                    user.is_superuser = True
+                    user.is_staff = True
+                else:
+                    user.is_superuser = False
+                    user.is_staff = False
+                user.save()
+
+                # Sync or create corresponding Member profile
+                member = Member.all_objects.filter(mobile_number=username).first()
+                if member:
+                    member.is_deleted = False
+                    member.system_role = role_name
+                    member.status = "Active" if is_active else "Inactive"
+                    if name:
+                        member.full_name = name
+                    member.save()
+                else:
+                    base_num = Member.all_objects.count() + 1
+                    m_id = f"MBR-2026-{base_num:03d}"
+                    while Member.all_objects.filter(member_id=m_id).exists():
+                        base_num += 1
+                        m_id = f"MBR-2026-{base_num:03d}"
+                    Member.objects.create(
+                        member_id=m_id,
+                        full_name=name or username,
+                        mobile_number=username,
+                        committee_position=role_name,
+                        system_role=role_name,
+                        joining_date=timezone.now().date(),
+                        status="Active" if is_active else "Inactive"
+                    )
+
+                AuditLog.objects.create(
+                    user=request.user if request.user.is_authenticated else None,
+                    action="CREATE",
+                    model_name="User",
+                    object_id=str(user.id),
+                    details=f"Created user {username} with role {role_name}"
+                )
+                messages.success(request, f"User '{username}' created successfully with role '{role_name}'!")
+
+        elif action == "edit":
+            u_id = request.POST.get("user_id")
+            user_obj = get_object_or_404(User, id=u_id)
+            name = request.POST.get("full_name", "").strip()
+            email = request.POST.get("email", "").strip()
+            password = request.POST.get("password", "").strip()
+            role_name = request.POST.get("system_role", "").strip()
+            is_active = request.POST.get("is_active") in ["on", "true", "True", "1", True]
+
+            if name:
+                user_obj.first_name = name.split()[0]
+                user_obj.last_name = " ".join(name.split()[1:]) if len(name.split()) > 1 else ""
+            user_obj.email = email
+            user_obj.is_active = is_active
+
+            if password:
+                user_obj.set_password(password)
+
+            if role_name:
+                if role_name == "Super Admin":
+                    user_obj.is_superuser = True
+                    user_obj.is_staff = True
+                else:
+                    user_obj.is_superuser = False
+                    user_obj.is_staff = False
+
+            user_obj.save()
+
+            # Sync or create Member profile
+            if role_name:
+                member = Member.all_objects.filter(mobile_number=user_obj.username).first()
+                if member:
+                    member.is_deleted = False
+                    member.system_role = role_name
+                    member.status = "Active" if is_active else "Inactive"
+                    if name:
+                        member.full_name = name
+                    member.save()
+                else:
+                    base_num = Member.all_objects.count() + 1
+                    m_id = f"MBR-2026-{base_num:03d}"
+                    while Member.all_objects.filter(member_id=m_id).exists():
+                        base_num += 1
+                        m_id = f"MBR-2026-{base_num:03d}"
+                    Member.objects.create(
+                        member_id=m_id,
+                        full_name=name or user_obj.get_full_name() or user_obj.username,
+                        mobile_number=user_obj.username,
+                        committee_position=role_name,
+                        system_role=role_name,
+                        joining_date=timezone.now().date(),
+                        status="Active" if is_active else "Inactive"
+                    )
+
+            AuditLog.objects.create(
+                user=request.user if request.user.is_authenticated else None,
+                action="UPDATE",
+                model_name="User",
+                object_id=str(user_obj.id),
+                details=f"Updated user {user_obj.username} (Role: {role_name}, Active: {is_active})"
+            )
+            messages.success(request, f"User '{user_obj.username}' updated successfully with role '{role_name}'!")
+
         elif action == "delete":
             u_id = request.POST.get("user_id")
             user_obj = get_object_or_404(User, id=u_id)
             uname = user_obj.username
             user_obj.delete()
-            AuditLog.objects.create(user=request.user if request.user.is_authenticated else None, action="DELETE", model_name="User", object_id=str(u_id), details=f"Deleted user {uname}")
+            AuditLog.objects.create(
+                user=request.user if request.user.is_authenticated else None,
+                action="DELETE",
+                model_name="User",
+                object_id=str(u_id),
+                details=f"Deleted user {uname}"
+            )
             messages.success(request, f"User '{uname}' deleted successfully.")
+
         return redirect("/administration/users/")
 
-    page_obj, per_page = paginate_queryset(request, User.objects.all())
-    return render(request, "administration/users.html", {"users_list": page_obj, "page_obj": page_obj, "per_page": per_page})
+    search_query = request.GET.get("q", "").strip()
+    users_qs = User.objects.all().order_by("-date_joined")
+    if search_query:
+        users_qs = users_qs.filter(
+            Q(username__icontains=search_query) |
+            Q(first_name__icontains=search_query) |
+            Q(last_name__icontains=search_query) |
+            Q(email__icontains=search_query)
+        )
+
+    page_obj, per_page = paginate_queryset(request, users_qs)
+
+    for u in page_obj:
+        u.current_role = get_user_role(u)
+
+    return render(request, "administration/users.html", {
+        "users_list": page_obj,
+        "page_obj": page_obj,
+        "per_page": per_page,
+        "available_roles": available_roles,
+        "search_query": search_query,
+    })
 
 
 @admin_required

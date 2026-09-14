@@ -98,11 +98,22 @@ def has_module_action_right(user, module_code, right_code):
 
     from administration.models import RolePermission, LookupValue
     role_obj = LookupValue.objects.filter(lookup_type__code="SYSTEM_ROLE", value=role_name).first()
+    treasurer_roles = ["Chief Treasurer", "Treasurer", "Joint Treasurer"]
+    leader_roles = ["President", "Vice President", "Secretary", "Joint Secretary"]
+
     if not role_obj:
+        if module_code in ["FUNDS_RECEIVED", "EXPENSES"] and role_name in treasurer_roles:
+            return True
+        if module_code == "MEMBERS" and role_name in leader_roles:
+            return True
         return False
 
     perm = RolePermission.objects.filter(role=role_obj, module__code=module_code).first()
     if not perm:
+        if module_code in ["FUNDS_RECEIVED", "EXPENSES"] and role_name in treasurer_roles:
+            return True
+        if module_code == "MEMBERS" and role_name in leader_roles:
+            return True
         return False
 
     return right_code in (perm.assigned_rights or [])
@@ -130,4 +141,72 @@ def module_right_required(module_code, right_code):
             return redirect("/dashboard/")
         return _wrapped_view
     return decorator
+
+
+def has_module_access(user, module_code):
+    """
+    Evaluates whether the given user has access to a given module.
+    Returns True if user is superuser / Super Admin, or if user's role has at least one assigned right.
+    """
+    if not user or not user.is_authenticated:
+        return False
+
+    if user.is_superuser:
+        return True
+
+    role_name = get_user_role(user)
+    if role_name == "Super Admin":
+        return True
+
+    from administration.models import RolePermission, LookupValue
+    role_obj = LookupValue.objects.filter(lookup_type__code="SYSTEM_ROLE", value=role_name).first()
+    treasurer_roles = ["Chief Treasurer", "Treasurer", "Joint Treasurer"]
+    leader_roles = ["President", "Vice President", "Secretary", "Joint Secretary"]
+
+    if not role_obj:
+        if module_code in ["FUNDS_RECEIVED", "EXPENSES"] and role_name in treasurer_roles:
+            return True
+        if module_code in ["MEMBERS", "EVENTS"] and (role_name in leader_roles or role_name == "Event Coordinator"):
+            return True
+        if module_code in ["REPORTS", "DASHBOARD", "MY_TASKS", "AUDIT_LOGS"]:
+            return True
+        return False
+
+    perm = RolePermission.objects.filter(role=role_obj, module__code=module_code).first()
+    if not perm:
+        if module_code in ["FUNDS_RECEIVED", "EXPENSES"] and role_name in treasurer_roles:
+            return True
+        if module_code in ["MEMBERS", "EVENTS"] and (role_name in leader_roles or role_name == "Event Coordinator"):
+            return True
+        if module_code in ["REPORTS", "DASHBOARD", "MY_TASKS", "AUDIT_LOGS"]:
+            return True
+        return False
+
+    return bool(perm.assigned_rights and len(perm.assigned_rights) > 0)
+
+
+def module_access_required(module_code):
+    """
+    Decorator requiring the user to have module-level access (at least one right assigned).
+    """
+    def decorator(view_func):
+        @wraps(view_func)
+        def _wrapped_view(request, *args, **kwargs):
+            if not request.user.is_authenticated:
+                messages.warning(request, _("Please sign in to access this page."))
+                return redirect("/accounts/login/?next=" + request.path)
+
+            if has_module_access(request.user, module_code):
+                return view_func(request, *args, **kwargs)
+
+            messages.error(
+                request,
+                _("Access Denied: You do not have permission to access the %(mod)s module.")
+                % {"mod": module_code.replace("_", " ").title()}
+            )
+            return redirect("/dashboard/")
+        return _wrapped_view
+    return decorator
+
+
 

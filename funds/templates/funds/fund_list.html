@@ -19,11 +19,11 @@
     <div class="d-flex gap-2">
         {% if can_print_bulk %}
         <button class="btn btn-outline-dark" onclick="window.print()"><i class="bi bi-printer me-1"></i> Print Ledger</button>
-        {% endif %}
         <a href="/funds/export-csv/?q={{ search_query }}" class="btn btn-outline-success">
             <i class="bi bi-file-earmark-excel me-1"></i> {% trans "Export CSV" %}
         </a>
-        {% if can_add or can_manage_finance %}
+        {% endif %}
+        {% if can_add %}
         <a href="/funds/add/" class="btn btn-primary">
             <i class="bi bi-plus-lg"></i> {% trans "Record New Contribution" %}
         </a>
@@ -115,11 +115,13 @@
                     <td class="text-end">
                         <div class="d-flex gap-1 justify-content-end">
                             <a href="{{ receipt.whatsapp_url }}" target="_blank" class="btn btn-sm btn-light text-success" title="Send WhatsApp Receipt"><i class="bi bi-whatsapp"></i></a>
-                            {% if can_manage_finance %}
+                            {% if can_edit %}
                             <button class="btn btn-sm btn-light" data-bs-toggle="modal" data-bs-target="#editFundModal{{ receipt.id }}" title="Edit Record"><i class="bi bi-pencil"></i></button>
                             {% endif %}
+                            {% if can_print %}
                             <a href="/funds/{{ receipt.id }}/print/" target="_blank" class="btn btn-sm btn-light" title="Print / PDF Receipt"><i class="bi bi-printer text-primary"></i></a>
-                            {% if can_manage_finance %}
+                            {% endif %}
+                            {% if can_delete %}
                             <button class="btn btn-sm btn-light text-danger" data-bs-toggle="modal" data-bs-target="#singleDeleteModal{{ receipt.id }}" title="Delete"><i class="bi bi-trash"></i></button>
                             {% endif %}
                         </div>

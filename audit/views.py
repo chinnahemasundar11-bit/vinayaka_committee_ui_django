@@ -3,7 +3,9 @@ from django.contrib import messages
 from django.db.models import Q
 from django.utils.translation import gettext as _
 from .models import AuditLog
-from accounts.permissions import login_required_custom, admin_required, get_user_role
+from accounts.permissions import (
+    login_required_custom, admin_required, get_user_role, module_access_required
+)
 
 from funds.models import FundReceipt
 from expenses.models import ExpenseVoucher
@@ -23,7 +25,7 @@ MODEL_MAP = {
 }
 
 
-@login_required_custom
+@module_access_required("AUDIT_LOGS")
 def index(request):
     """Audit Trail System Logs View."""
     search_query = request.GET.get("q", "").strip()

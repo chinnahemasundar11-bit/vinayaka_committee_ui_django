@@ -7,11 +7,15 @@ from audit.models import AuditLog
 import datetime
 
 
-from accounts.permissions import login_required_custom, get_user_role, has_module_action_right, treasurer_required
+from accounts.permissions import (
+    login_required_custom, get_user_role, has_module_action_right,
+    treasurer_required, module_access_required, module_right_required
+)
 
 
-@login_required_custom
+@module_access_required("FUNDS_RECEIVED")
 def fund_list(request):
+
     """List, search, create, update, and delete fund receipts."""
     if request.method == "POST":
         action = request.POST.get("action")
@@ -141,7 +145,7 @@ def fund_list(request):
     return render(request, "funds/fund_list.html", context)
 
 
-@treasurer_required
+@module_right_required("FUNDS_RECEIVED", "add")
 def fund_add(request):
     """Dedicated Add Fund Receipt View."""
     if request.method == "POST":
@@ -165,7 +169,7 @@ import csv
 from django.http import HttpResponse
 from administration.utils import amount_to_words
 
-@login_required_custom
+@module_right_required("FUNDS_RECEIVED", "print_single")
 def fund_receipt_print(request, receipt_id):
     """Render printable receipt view with amount in words and WhatsApp URL."""
     from .services import build_whatsapp_receipt_url
@@ -180,7 +184,7 @@ def fund_receipt_print(request, receipt_id):
     return render(request, "funds/receipt_print.html", context)
 
 
-@login_required_custom
+@module_right_required("FUNDS_RECEIVED", "print_bulk")
 def export_funds_csv(request):
     """Export filtered or full fund receipts register as downloadable CSV file."""
     search_query = request.GET.get("q", "").strip()

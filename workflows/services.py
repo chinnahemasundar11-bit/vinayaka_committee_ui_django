@@ -201,11 +201,23 @@ def process_task_action(instance_id, user, action_taken, comments=""):
             instance.status = "APPROVED"
             instance.save()
 
+            # Sync underlying object status
+            if instance.module_code == "EXPENSE":
+                from expenses.models import ExpenseVoucher
+                ExpenseVoucher.objects.filter(voucher_number=instance.object_id).update(status="Approved")
+
             send_workflow_email_notifications(instance, current_step, "ON_APPROVE", extra)
 
     elif action_taken in ["REJECTED", "CHANGES_REQUESTED"]:
         instance.status = "REJECTED"
         instance.save()
+
+        # Sync underlying object status
+        if instance.module_code == "EXPENSE":
+            from expenses.models import ExpenseVoucher
+            ExpenseVoucher.objects.filter(voucher_number=instance.object_id).update(
+                status="Rejected" if action_taken == "REJECTED" else "Changes Requested"
+            )
 
         send_workflow_email_notifications(instance, current_step, "ON_REJECT", extra)
 

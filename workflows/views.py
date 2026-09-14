@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.utils.translation import gettext as _
-from accounts.permissions import login_required_custom, admin_required, get_user_role
+from accounts.permissions import login_required_custom, admin_required, get_user_role, module_access_required
 from administration.models import LookupType, LookupValue
 from audit.models import AuditLog
 from .models import (

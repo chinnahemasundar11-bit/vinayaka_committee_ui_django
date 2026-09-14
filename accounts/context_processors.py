@@ -61,8 +61,8 @@ def user_permissions(request):
     for parent in parent_modules:
         children = [m for m in all_modules if m.parent_id == parent.id and m.id in accessible_module_ids]
         
-        # Parent is included if parent itself is accessible or has accessible children
-        if parent.id in accessible_module_ids or children:
+        # Parent is included if parent itself is directly accessible (non-# url) or has accessible children
+        if (parent.url != "#" and parent.id in accessible_module_ids) or children:
             sidebar_modules_tree.append({
                 "module": parent,
                 "is_accessible": parent.id in accessible_module_ids,

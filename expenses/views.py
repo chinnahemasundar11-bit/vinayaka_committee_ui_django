@@ -7,10 +7,13 @@ from audit.models import AuditLog
 import datetime
 
 
-from accounts.permissions import login_required_custom, get_user_role, has_module_action_right, treasurer_required
+from accounts.permissions import (
+    login_required_custom, get_user_role, has_module_action_right,
+    treasurer_required, module_access_required, module_right_required
+)
 
 
-@login_required_custom
+@module_access_required("EXPENSES")
 def expense_list(request):
     """List, search, create, update, and delete expense vouchers."""
     if request.method == "POST":
@@ -147,7 +150,7 @@ def expense_list(request):
     return render(request, "expenses/expense_list.html", context)
 
 
-@treasurer_required
+@module_right_required("EXPENSES", "add")
 def expense_add(request):
     """Dedicated Add Expense Voucher View."""
     if request.method == "POST":
@@ -170,7 +173,7 @@ def expense_add(request):
 import csv
 from django.http import HttpResponse
 
-@login_required_custom
+@module_right_required("EXPENSES", "print_bulk")
 def export_expenses_csv(request):
     """Export filtered or full expense register as downloadable CSV file."""
     search_query = request.GET.get("q", "").strip()

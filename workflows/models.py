@@ -64,6 +64,39 @@ class WorkflowInstance(AuditModel):
     def __str__(self):
         return f"{self.workflow.name} - {self.object_id} [{self.status}]"
 
+    @property
+    def target_details(self):
+        """Returns structured dictionary of details for the underlying object."""
+        if self.module_code == "EXPENSE":
+            from expenses.models import ExpenseVoucher
+            voucher = ExpenseVoucher.objects.filter(voucher_number=self.object_id).select_related("category", "payment_method").first()
+            if voucher:
+                return {
+                    "type": "Expense Voucher",
+                    "title": f"{voucher.voucher_number} - {voucher.vendor_name}",
+                    "amount": f"₹ {voucher.amount_spent:.2f}",
+                    "category": voucher.category.name if voucher.category else "-",
+                    "vendor": voucher.vendor_name,
+                    "date": voucher.expense_date.strftime("%d %b %Y") if voucher.expense_date else "-",
+                    "description": voucher.description,
+                    "payment_channel": voucher.payment_method.name if voucher.payment_method else "-",
+                }
+        elif self.module_code == "FUND":
+            from funds.models import FundReceipt
+            receipt = FundReceipt.objects.filter(receipt_number=self.object_id).select_related("fund_source", "payment_method").first()
+            if receipt:
+                return {
+                    "type": "Fund Receipt",
+                    "title": f"{receipt.receipt_number} - {receipt.donor_name}",
+                    "amount": f"₹ {receipt.amount:.2f}",
+                    "category": receipt.fund_source.name if receipt.fund_source else "-",
+                    "donor": receipt.donor_name,
+                    "date": receipt.date_received.strftime("%d %b %Y") if receipt.date_received else "-",
+                    "description": receipt.remarks or "-",
+                    "payment_channel": receipt.payment_method.name if receipt.payment_method else "-",
+                }
+        return None
+
 
 class WorkflowTaskAction(models.Model):
     """Audit Log of Task Actions performed by authorized role users."""

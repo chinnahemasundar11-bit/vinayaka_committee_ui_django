@@ -4,10 +4,12 @@ from funds.models import FundReceipt
 from expenses.models import ExpenseVoucher
 
 
-from accounts.permissions import login_required_custom
+from accounts.permissions import (
+    login_required_custom, module_access_required, module_right_required
+)
 
 
-@login_required_custom
+@module_access_required("REPORTS")
 def index(request):
     """Financial Reports & Balance Sheet Statement View."""
     total_funds = FundReceipt.objects.aggregate(Sum("amount"))["amount__sum"] or 0
@@ -35,7 +37,7 @@ def index(request):
 import csv
 from django.http import HttpResponse
 
-@login_required_custom
+@module_right_required("REPORTS", "print_bulk")
 def export_reports_csv(request):
     """Export full financial statement report (Income & Expense Ledger) as CSV."""
     response = HttpResponse(content_type="text/csv; charset=utf-8")

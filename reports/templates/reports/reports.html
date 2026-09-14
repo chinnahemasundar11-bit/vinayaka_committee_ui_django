@@ -1,5 +1,6 @@
 {% extends "base.html" %}
-{% load i18n i18n_extras %}
+{% load i18n i18n_extras permission_tags %}
+{% has_right 'REPORTS' 'print_bulk' as can_print_bulk %}
 {% block title %}{% trans "Reports & Analytics" %} | {{ SITE_NAME }}{% endblock %}
 {% block page_heading %}{% trans "Reports & Balance Sheet" %}{% endblock %}
 
@@ -11,10 +12,12 @@
         <p class="text-muted small mb-0">{% trans "Generate and print committee financial balance sheets and category breakdowns" %}</p>
     </div>
     <div class="d-flex gap-2">
+        {% if can_print_bulk %}
         <a href="/reports/export-csv/" class="btn btn-outline-success">
             <i class="bi bi-file-earmark-excel me-1"></i> {% trans "Export Statement CSV" %}
         </a>
         <button class="btn btn-outline-secondary" onclick="window.print()"><i class="bi bi-printer me-1"></i> {% trans "Print Balance Sheet" %}</button>
+        {% endif %}
     </div>
 </div>
 

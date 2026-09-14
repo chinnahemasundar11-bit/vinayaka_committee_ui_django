@@ -7,10 +7,13 @@ from audit.models import AuditLog
 import datetime
 
 
-from accounts.permissions import login_required_custom, get_user_role, has_module_action_right
+from accounts.permissions import (
+    login_required_custom, get_user_role, has_module_action_right,
+    module_access_required, module_right_required
+)
 
 
-@login_required_custom
+@module_access_required("EVENTS")
 def event_list(request):
     """List, search, create, update, and delete festival events."""
     if request.method == "POST":
@@ -129,7 +132,7 @@ def event_list(request):
     return render(request, "events/event_list.html", context)
 
 
-@login_required_custom
+@module_right_required("EVENTS", "add")
 def event_add(request):
     """Dedicated Add Event View."""
     if request.method == "POST":

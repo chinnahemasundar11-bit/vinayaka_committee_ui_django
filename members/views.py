@@ -7,10 +7,13 @@ from audit.models import AuditLog
 import datetime
 
 
-from accounts.permissions import login_required_custom, get_user_role, has_module_action_right, leader_required
+from accounts.permissions import (
+    login_required_custom, get_user_role, has_module_action_right,
+    leader_required, module_access_required, module_right_required
+)
 
 
-@login_required_custom
+@module_access_required("MEMBERS")
 def member_list(request):
     """List, search, create, update, and delete committee members."""
     if request.method == "POST":
@@ -134,7 +137,7 @@ def member_list(request):
     return render(request, "members/member_list.html", context)
 
 
-@leader_required
+@module_right_required("MEMBERS", "add")
 def member_add(request):
     """Dedicated Add Committee Member View."""
     if request.method == "POST":
@@ -161,7 +164,7 @@ def member_add(request):
 import csv
 from django.http import HttpResponse
 
-@login_required_custom
+@module_right_required("MEMBERS", "print_bulk")
 def export_members_csv(request):
     """Export committee members directory as downloadable CSV file."""
     search_query = request.GET.get("q", "").strip()

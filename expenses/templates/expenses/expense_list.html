@@ -1,5 +1,11 @@
 {% extends "base.html" %}
-{% load i18n i18n_extras %}
+{% load i18n i18n_extras permission_tags %}
+{% has_right 'EXPENSES' 'add' as can_add %}
+{% has_right 'EXPENSES' 'edit' as can_edit %}
+{% has_right 'EXPENSES' 'delete_single' as can_delete %}
+{% has_right 'EXPENSES' 'delete_bulk' as can_delete_bulk %}
+{% has_right 'EXPENSES' 'print_single' as can_print %}
+{% has_right 'EXPENSES' 'print_bulk' as can_print_bulk %}
 {% block title %}{% trans "Expenses" %} | {{ SITE_NAME }}{% endblock %}
 {% block page_heading %}{% trans "Expense Voucher Ledger" %}{% endblock %}
 
@@ -11,10 +17,12 @@
         <p class="text-muted small mb-0">{% trans "Track all committee purchases, vendor bills, and operational expenses" %}</p>
     </div>
     <div class="d-flex gap-2">
+        {% if can_print_bulk %}
         <a href="/expenses/export-csv/?q={{ search_query }}" class="btn btn-outline-success">
             <i class="bi bi-file-earmark-excel me-1"></i> {% trans "Export CSV" %}
         </a>
-        {% if can_manage_finance %}
+        {% endif %}
+        {% if can_add %}
         <a href="/expenses/add/" class="btn btn-primary">
             <i class="bi bi-plus-lg"></i> {% trans "Record New Expense" %}
         </a>
@@ -97,9 +105,15 @@
                     <td class="text-end fw-bold text-danger">{{ CURRENCY_SYMBOL }} {{ voucher.amount_spent|floatformat:2 }}</td>
                     <td class="text-end">
                         <div class="d-flex gap-1 justify-content-end">
+                            {% if can_edit %}
                             <button class="btn btn-sm btn-light" data-bs-toggle="modal" data-bs-target="#editExpenseModal{{ voucher.id }}" title="Edit Record"><i class="bi bi-pencil"></i></button>
+                            {% endif %}
+                            {% if can_print %}
                             <button class="btn btn-sm btn-light" data-bs-toggle="modal" data-bs-target="#singlePrintExpenseModal{{ voucher.id }}" title="Print Voucher"><i class="bi bi-printer text-primary"></i></button>
+                            {% endif %}
+                            {% if can_delete %}
                             <button class="btn btn-sm btn-light text-danger" data-bs-toggle="modal" data-bs-target="#singleDeleteModal{{ voucher.id }}" title="Delete"><i class="bi bi-trash"></i></button>
+                            {% endif %}
                         </div>
 
                         <!-- Edit Expense Modal for Voucher -->

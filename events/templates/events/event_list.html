@@ -1,5 +1,11 @@
 {% extends "base.html" %}
-{% load i18n i18n_extras %}
+{% load i18n i18n_extras permission_tags %}
+{% has_right 'EVENTS' 'add' as can_add %}
+{% has_right 'EVENTS' 'edit' as can_edit %}
+{% has_right 'EVENTS' 'delete_single' as can_delete %}
+{% has_right 'EVENTS' 'delete_bulk' as can_delete_bulk %}
+{% has_right 'EVENTS' 'print_single' as can_print %}
+{% has_right 'EVENTS' 'print_bulk' as can_print_bulk %}
 {% block title %}{% trans "Events" %} | {{ SITE_NAME }}{% endblock %}
 {% block page_heading %}{% trans "Festival Events & Programs" %}{% endblock %}
 
@@ -11,10 +17,14 @@
         <p class="text-muted small mb-0">{% trans "Plan, track budgets, and manage key cultural & religious festival events" %}</p>
     </div>
     <div class="d-flex gap-2">
+        {% if can_print_bulk %}
         <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#bulkPrintEventModal"><i class="bi bi-printer text-primary me-1"></i> {% trans "Print Schedule" %}</button>
+        {% endif %}
+        {% if can_add %}
         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createEventModal">
             <i class="bi bi-calendar-plus-fill me-1"></i> {% trans "Add New Event" %}
         </button>
+        {% endif %}
     </div>
 </div>
 
@@ -65,9 +75,15 @@
             </div>
             <div class="card-footer bg-transparent border-top-0 p-3 pt-0 text-end">
                 <div class="d-flex gap-1 justify-content-end">
+                    {% if can_edit %}
                     <button class="btn btn-sm btn-light" data-bs-toggle="modal" data-bs-target="#editEventModal{{ event.id }}" title="Edit Event"><i class="bi bi-pencil me-1"></i> {% trans "Edit" %}</button>
+                    {% endif %}
+                    {% if can_print %}
                     <button class="btn btn-sm btn-light" data-bs-toggle="modal" data-bs-target="#singlePrintEventModal{{ event.id }}" title="Print Event"><i class="bi bi-printer text-primary me-1"></i> {% trans "Print" %}</button>
+                    {% endif %}
+                    {% if can_delete %}
                     <button class="btn btn-sm btn-light text-danger" data-bs-toggle="modal" data-bs-target="#singleDeleteModal{{ event.id }}" title="Delete Event"><i class="bi bi-trash"></i></button>
+                    {% endif %}
                 </div>
 
                 <!-- Edit Event Modal -->
